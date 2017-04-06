@@ -1,4 +1,4 @@
 # Repository
 
 /owner/settings-ly.jar  
-AndroidStudio设置
+AndroidStudio设置jar包
