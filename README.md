@@ -1,4 +1,6 @@
 # Repository
 
-/owner/settings-ly.jar  
-AndroidStudio设置jar包
+####/owner
+	个人仓库
+####/utils  
+	工具类
