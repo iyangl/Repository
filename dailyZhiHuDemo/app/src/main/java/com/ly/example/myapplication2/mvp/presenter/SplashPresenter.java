@@ -2,7 +2,7 @@ package com.ly.example.myapplication2.mvp.presenter;
 
 import android.text.TextUtils;
 
-import com.ly.example.myapplication2.api.apibean.CreativesBean;
+import com.ly.example.myapplication2.api.apibean.CreativesListBean;
 import com.ly.example.myapplication2.mvp.model.SplashModel;
 import com.ly.example.myapplication2.mvp.model.imodel.ISplashModel;
 import com.ly.example.myapplication2.mvp.view.iview.ISplashView;
@@ -27,10 +27,10 @@ public class SplashPresenter {
         String imageUrl = "";
         boolean needUpdate = false;
         Long seconds = 0L;
-        CreativesBean creativesBean = iSplashModel.hasLaunchImages();
-        if (creativesBean != null) {
-            needUpdate = iSplashModel.needUpdateLaunchImages(creativesBean);
-            imageUrl = creativesBean.getUrl();
+        CreativesListBean creativesListBean = iSplashModel.hasLaunchImages();
+        if (creativesListBean != null) {
+            needUpdate = iSplashModel.needUpdateLaunchImages(creativesListBean);
+            imageUrl = creativesListBean.getCreatives().get(0).getUrl();
             seconds = 3000L;
         }
         if (!TextUtils.isEmpty(imageUrl)) {

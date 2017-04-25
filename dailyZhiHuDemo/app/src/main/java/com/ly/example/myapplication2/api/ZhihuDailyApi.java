@@ -1,7 +1,7 @@
 package com.ly.example.myapplication2.api;
 
 import com.ly.example.myapplication2.api.apibean.CommentsBean;
-import com.ly.example.myapplication2.api.apibean.CreativesBean;
+import com.ly.example.myapplication2.api.apibean.CreativesListBean;
 import com.ly.example.myapplication2.api.apibean.ExtraBean;
 import com.ly.example.myapplication2.api.apibean.NewsBean;
 import com.ly.example.myapplication2.api.apibean.NewsDetailBean;
@@ -11,8 +11,6 @@ import com.ly.example.myapplication2.api.apibean.SectionsBean;
 import com.ly.example.myapplication2.api.apibean.ThemeNewsBean;
 import com.ly.example.myapplication2.api.apibean.ThemesBean;
 import com.ly.example.myapplication2.api.apibean.VersionBean;
-
-import java.util.List;
 
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -27,10 +25,10 @@ public interface ZhihuDailyApi {
      * number 为任意非负整数，返回值均相同。
      *
      * @param DPI 所需的图片dpi
-     * @return {@link CreativesBean}
+     * @return {@link CreativesListBean}
      */
     @GET("7/prefetch-launch-images/{DPI}")
-    Observable<List<CreativesBean>> prefetchLaunchImages(@Path("DPI") String DPI);
+    Observable<CreativesListBean> prefetchLaunchImages(@Path("DPI") String DPI);
 
     /**
      * Android: http://news-at.zhihu.com/api/4/version/android/2.3.0

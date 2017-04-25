@@ -1,9 +1,10 @@
-package com.ly.example.myapplication2;
+package com.ly.example.myapplication2.mvp.view;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.ly.example.myapplication2.R;
 import com.ly.example.myapplication2.databinding.ActivityMainBinding;
 import com.ly.example.myapplication2.mvp.presenter.MainPresenter;
 import com.ly.example.myapplication2.mvp.view.iview.IMainView;
@@ -19,7 +20,8 @@ public class MainActivity extends AppCompatActivity implements IMainView {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         MainPresenter mainPresenter = new MainPresenter(this);
 
-        boolean has_launch_images = getIntent().getBooleanExtra(Constant.Share_prf.HAS_LAUNCH_IMAGES, false);
-        mainPresenter.prefetchLaunchImages(has_launch_images);
+        boolean need_prefetch_images = getIntent().getBooleanExtra(
+                Constant.Intent_Extra.NEED_PREFETCH_IMAGES, false);
+        mainPresenter.prefetchLaunchImages(need_prefetch_images);
     }
 }
