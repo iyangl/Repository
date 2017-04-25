@@ -1,8 +1,13 @@
 package com.ly.example.myapplication2.api.apibean;
 
+import android.databinding.BaseObservable;
+import android.databinding.Bindable;
+
+import com.ly.example.myapplication2.BR;
+
 import java.util.List;
 
-public class NewsBean {
+public class NewsBean extends BaseObservable {
 
     /**
      * 日期
@@ -17,31 +22,37 @@ public class NewsBean {
      */
     private List<TopStoriesBean> top_stories;
 
+    @Bindable
     public String getDate() {
         return date;
     }
 
     public void setDate(String date) {
         this.date = date;
+        notifyPropertyChanged(BR.date);
     }
 
+    @Bindable
     public List<StoriesBean> getStories() {
         return stories;
     }
 
     public void setStories(List<StoriesBean> stories) {
         this.stories = stories;
+        notifyPropertyChanged(BR.stories);
     }
 
+    @Bindable
     public List<TopStoriesBean> getTop_stories() {
         return top_stories;
     }
 
     public void setTop_stories(List<TopStoriesBean> top_stories) {
         this.top_stories = top_stories;
+        notifyPropertyChanged(BR.top_stories);
     }
 
-    public static class StoriesBean {
+    public static class StoriesBean extends BaseObservable {
 
         /**
          * 新闻标题
@@ -61,12 +72,14 @@ public class NewsBean {
          */
         private List<String> images;
 
+        @Bindable
         public String getTitle() {
             return title;
         }
 
         public void setTitle(String title) {
             this.title = title;
+            notifyPropertyChanged(BR.title);
         }
 
         public String getGa_prefix() {
@@ -93,12 +106,14 @@ public class NewsBean {
             this.id = id;
         }
 
+        @Bindable
         public List<String> getImages() {
             return images;
         }
 
         public void setImages(List<String> images) {
             this.images = images;
+            notifyPropertyChanged(BR.images);
         }
     }
 
