@@ -1,35 +1,60 @@
 package com.ly.example.myapplication2.adapter;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.ly.example.myapplication2.R;
 import com.ly.example.myapplication2.api.apibean.NewsBean;
+import com.ly.example.myapplication2.databinding.ItemMainNewsBannerBinding;
+import com.ly.example.myapplication2.databinding.ItemMainNewsDateBinding;
 import com.ly.example.myapplication2.databinding.ItemMainNewsListBinding;
+import com.youth.banner.BannerConfig;
+import com.youth.banner.loader.ImageLoader;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class NewsListAdapter extends BaseRecyclerViewAdapter<NewsBean.StoriesBean, NewsListAdapter.NewsListViewHolder> {
+import timber.log.Timber;
 
-    public NewsListAdapter() {
-        super();
-    }
 
-    public NewsListAdapter(List<NewsBean.StoriesBean> storiesBean) {
-        super();
-        dataLists = storiesBean;
+public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAdapter.NewsBaseViewHolder> {
+    /**
+     * 顶部轮播图
+     */
+    private static final int NEWS_BANNER = 1;
+    /**
+     * 时间
+     */
+    private static final int NEWS_DATE = 2;
+    /**
+     * 信息列表
+     */
+    private static final int NEWS_LIST = 3;
+
+    @Override
+    public NewsListAdapter.NewsBaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        switch (viewType) {
+            case NEWS_BANNER:
+                View bannerView = View.inflate(parent.getContext(), R.layout.item_main_news_banner, null);
+                return new NewsBannerViewHolder(bannerView);
+            case NEWS_DATE:
+                View dateView = View.inflate(parent.getContext(), R.layout.item_main_news_date, null);
+                return new NewsDateViewHolder(dateView);
+            case NEWS_LIST:
+                View listView = View.inflate(parent.getContext(), R.layout.item_main_news_list, null);
+                return new NewsListViewHolder(listView);
+        }
+        return null;
     }
 
     @Override
-    public NewsListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = View.inflate(parent.getContext(), R.layout.item_main_news_list, null);
-        return new NewsListViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(NewsListViewHolder holder, int position) {
+    public void onBindViewHolder(NewsListAdapter.NewsBaseViewHolder holder, int position) {
         holder.bind(dataLists.get(position));
     }
 
@@ -38,16 +63,116 @@ public class NewsListAdapter extends BaseRecyclerViewAdapter<NewsBean.StoriesBea
         return dataLists.size();
     }
 
-    public static class NewsListViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public int getItemViewType(int position) {
+        if (dataLists.get(position) instanceof String) {
+            return NEWS_DATE;
+        } else if (dataLists.get(position) instanceof List) {
+            return NEWS_BANNER;
+        } else if (dataLists.get(position) instanceof NewsBean.StoriesBean) {
+            return NEWS_LIST;
+        }
+        return -1;
+    }
+
+    private static class NewsListViewHolder extends NewsBaseViewHolder {
         private ItemMainNewsListBinding binding;
 
-        public NewsListViewHolder(View itemView) {
+        NewsListViewHolder(View itemView) {
             super(itemView);
             binding = DataBindingUtil.bind(itemView);
         }
 
-        public void bind(NewsBean.StoriesBean storiesBean) {
-            binding.setStoriesbean(storiesBean);
+        public void bind(Object storiesBean) {
+            Timber.i("NewsDateViewHolder bind: %s", storiesBean);
+            if (!(storiesBean instanceof NewsBean.StoriesBean)) {
+                return;
+            }
+            binding.setStoriesbean((NewsBean.StoriesBean) storiesBean);
+            binding.executePendingBindings();
         }
+    }
+
+    private static class NewsBannerViewHolder extends NewsBaseViewHolder {
+        private ItemMainNewsBannerBinding binding;
+
+        NewsBannerViewHolder(View itemView) {
+            super(itemView);
+            binding = DataBindingUtil.bind(itemView);
+        }
+
+        public void bind(Object topStoriesBeanList) {
+            Timber.i("NewsDateViewHolder bind: %s", topStoriesBeanList);
+            if (!(topStoriesBeanList instanceof List)) {
+                return;
+            }
+            List<String> imageUrls = new ArrayList<>();
+            List<String> titles = new ArrayList<>();
+            for (NewsBean.TopStoriesBean topStoriesBean : (List<NewsBean.TopStoriesBean>) topStoriesBeanList) {
+                imageUrls.add(topStoriesBean.getImage());
+                titles.add(topStoriesBean.getTitle());
+            }
+            binding.itemMainNewsBanner.setImageLoader(new GlideImageLoader())
+                    .setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE)
+                    .setImages(imageUrls)
+                    .setBannerTitles(titles)
+                    .setDelayTime(3000)
+                    .start();
+            binding.executePendingBindings();
+        }
+    }
+
+    private static class NewsDateViewHolder extends NewsBaseViewHolder {
+        private ItemMainNewsDateBinding binding;
+
+        NewsDateViewHolder(View itemView) {
+            super(itemView);
+            binding = DataBindingUtil.bind(itemView);
+        }
+
+        public void bind(Object date) {
+            Timber.i("NewsDateViewHolder bind: %s", date);
+            if (!(date instanceof String)) {
+                return;
+            }
+            binding.setDate((String) date);
+            binding.executePendingBindings();
+        }
+    }
+
+    static class NewsBaseViewHolder extends RecyclerView.ViewHolder {
+
+        NewsBaseViewHolder(View itemView) {
+            super(itemView);
+        }
+
+        public void bind(Object obj) {
+        }
+    }
+
+
+    private static class GlideImageLoader extends ImageLoader {
+        @Override
+        public void displayImage(Context context, Object path, ImageView imageView) {
+            Timber.i("GlideImageLoader displayImage: %s %s", path, imageView);
+            Glide.with(context).load((String) path).error(R.drawable.image_small_default).into(imageView);
+        }
+    }
+
+    public void loadNewsData(NewsBean newsBean, boolean isClear) {
+        Timber.i("loadNewsData: %s  %b", newsBean, isClear);
+        if (isClear) {
+            dataLists.clear();
+        }
+        if (newsBean.getTop_stories() != null && newsBean.getTop_stories().size() > 0) {
+            dataLists.add(newsBean.getTop_stories());
+        }
+        if (!TextUtils.isEmpty(newsBean.getDate())) {
+            dataLists.add(newsBean.getDate());
+        }
+        if (newsBean.getStories() != null && newsBean.getStories().size() > 0) {
+            dataLists.addAll(newsBean.getStories());
+        }
+        notifyDataSetChanged();
     }
 }

@@ -72,6 +72,21 @@ public class NewsBean extends BaseObservable {
          */
         private List<String> images;
 
+        /**
+         * 是否多图
+         */
+        private boolean multipic;
+
+        @Bindable
+        public boolean getMultipic() {
+            return multipic;
+        }
+
+        public void setMultipic(boolean multipic) {
+            this.multipic = multipic;
+            notifyPropertyChanged(BR.multipic);
+        }
+
         @Bindable
         public String getTitle() {
             return title;
@@ -114,6 +129,17 @@ public class NewsBean extends BaseObservable {
         public void setImages(List<String> images) {
             this.images = images;
             notifyPropertyChanged(BR.images);
+        }
+
+        @Override
+        public String toString() {
+            return "StoriesBean{" +
+                    "title='" + title + '\'' +
+                    ", ga_prefix='" + ga_prefix + '\'' +
+                    ", type=" + type +
+                    ", id=" + id +
+                    ", images=" + images +
+                    '}';
         }
     }
 
@@ -176,5 +202,25 @@ public class NewsBean extends BaseObservable {
         public void setId(int id) {
             this.id = id;
         }
+
+        @Override
+        public String toString() {
+            return "TopStoriesBean{" +
+                    "title='" + title + '\'' +
+                    ", ga_prefix='" + ga_prefix + '\'' +
+                    ", type=" + type +
+                    ", id=" + id +
+                    ", image='" + image + '\'' +
+                    '}';
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "NewsBean{" +
+                "date='" + date + '\'' +
+                ", stories=" + stories +
+                ", top_stories=" + top_stories +
+                '}';
     }
 }

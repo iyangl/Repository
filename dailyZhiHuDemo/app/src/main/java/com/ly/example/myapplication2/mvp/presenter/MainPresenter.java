@@ -2,6 +2,8 @@ package com.ly.example.myapplication2.mvp.presenter;
 
 import com.ly.example.myapplication2.api.ApiFactory;
 import com.ly.example.myapplication2.api.apibean.CreativesListBean;
+import com.ly.example.myapplication2.api.apibean.NewsBean;
+import com.ly.example.myapplication2.mvp.RequestImp;
 import com.ly.example.myapplication2.mvp.model.MainModel;
 import com.ly.example.myapplication2.mvp.model.imodel.IMainModel;
 import com.ly.example.myapplication2.mvp.view.iview.IMainView;
@@ -44,5 +46,33 @@ public class MainPresenter {
                         iMainModel.savePrefetchLaunchImages(creativesBeen);
                     }
                 });
+    }
+
+    public void loadNewsData(final boolean isClear) {
+        iMainModel.loadNewsData(new RequestImp<NewsBean>() {
+            @Override
+            public void onSuccess(NewsBean data) {
+                iMainView.loadNewsData(data, isClear);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                iMainView.loadNewsError(e);
+            }
+        });
+    }
+
+    public void loadBeforeData(String before) {
+        iMainModel.loadBeforeData(before, new RequestImp<NewsBean>() {
+            @Override
+            public void onSuccess(NewsBean data) {
+                iMainView.loadNewsData(data, false);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                iMainView.loadNewsError(e);
+            }
+        });
     }
 }

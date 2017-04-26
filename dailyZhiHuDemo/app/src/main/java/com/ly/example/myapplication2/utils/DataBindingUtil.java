@@ -10,7 +10,7 @@ import java.util.List;
 
 public class DataBindingUtil {
 
-    @BindingAdapter("bind:image")
+    @BindingAdapter("image")
     public static void imageLoader(ImageView imageView, List<String> imageUrls) {
         Glide.with((Activity) imageView.getContext()).load(imageUrls.get(0)).into(imageView);
     }
