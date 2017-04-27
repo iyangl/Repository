@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<data>
+
+    <import type="com.ly.example.myapplication2.api.apibean.NewsBean.StoriesBean"/>
+
+    <import type="android.view.View"/>
+
+    <variable
+        name="storiesbean"
+        type="StoriesBean"/>
+
+</data>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="92dp"
+        android:layout_margin="2dp"
+        android:background="@drawable/item_main_news_back"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_toLeftOf="@+id/rl_item_main_news_images"
+            android:gravity="left"
+            android:lines="3"
+            android:text="@{storiesbean.title}"
+            android:textSize="20sp"/>
+
+        <RelativeLayout
+            android:id="@+id/rl_item_main_news_images"
+            android:layout_width="78dp"
+            android:layout_height="78dp"
+            android:layout_alignParentRight="true"
+            android:layout_margin="8dp">
+
+            <ImageView
+                android:id="@+id/iv_item_main_news_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/image_small_default"
+                android:scaleType="centerCrop"
+                app:image="@{storiesbean.images}"/>
+
+            <ImageView
+                android:layout_width="39dp"
+                android:layout_height="16dp"
+                android:layout_alignBottom="@+id/iv_item_main_news_image"
+                android:layout_alignRight="@+id/iv_item_main_news_image"
+                android:background="@drawable/home_pic"
+                android:scaleType="centerCrop"
+                android:visibility="@{storiesbean.multipic ? View.VISIBLE : View.GONE}"
+                />
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+</LinearLayout>
+
+
+</layout>
+

@@ -3,12 +3,19 @@
     >
 
     <android.support.v4.widget.DrawerLayout
+        android:id="@+id/dl_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/toolbar_main"
+                layout="@layout/include_toolbar"/>
+
 
             <android.support.v4.widget.SwipeRefreshLayout
                 android:id="@+id/srf_main"
@@ -24,9 +31,9 @@
 
         </LinearLayout>
 
-        <android.support.design.widget.NavigationView
-            android:id="@+id/navi"
-            android:layout_width="200dp"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_main_start"
+            android:layout_width="260dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"/>
 

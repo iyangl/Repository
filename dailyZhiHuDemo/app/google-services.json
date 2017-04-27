@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "837836242828",
+    "firebase_url": "https://dailyzhihudemo.firebaseio.com",
+    "project_id": "dailyzhihudemo",
+    "storage_bucket": "dailyzhihudemo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:837836242828:android:6e3ab04846e45a35",
+        "android_client_info": {
+          "package_name": "com.ly.example.myapplication2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "837836242828-7fhbdo49t2m8vrbclknl3v2oqfcggdeu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBbm4hEYJuPYoIOu1hLdSTFEV1qaHe6T4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

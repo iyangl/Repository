@@ -6,6 +6,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
+import android.view.View;
 import android.widget.Toast;
 
 import com.ly.example.myapplication2.R;
@@ -15,6 +17,7 @@ import com.ly.example.myapplication2.databinding.ActivityMainBinding;
 import com.ly.example.myapplication2.mvp.presenter.MainPresenter;
 import com.ly.example.myapplication2.mvp.view.iview.IMainView;
 import com.ly.example.myapplication2.utils.Constant;
+import com.ly.example.myapplication2.utils.StringFormat;
 import com.ly.example.myapplication2.utils.ToastUtil;
 
 public class MainActivity extends AppCompatActivity implements IMainView {
@@ -22,7 +25,14 @@ public class MainActivity extends AppCompatActivity implements IMainView {
     private ActivityMainBinding binding;
     private MainPresenter mainPresenter;
     private NewsListAdapter newsListAdapter;
+    /**
+     * 是否正在上拉加载更多
+     */
     private boolean isLoading;
+    /**
+     * 记录将要加载多少天之前的信息
+     */
+    private int beforeDays = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +45,25 @@ public class MainActivity extends AppCompatActivity implements IMainView {
     }
 
     private void initView() {
+
         initRecyclerView();
-        initDrawerLayout();
         initSwipeRefreshLayout();
+        initToolbar();
+    }
+
+    private void initToolbar() {
+        binding.toolbarMain.toolbar.setNavigationIcon(R.drawable.three_lines);
+        binding.toolbarMain.toolbar.setTitle(R.string.shouye);
+        binding.toolbarMain.toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+        binding.toolbarMain.toolbar.inflateMenu(R.menu.toolbar_menu);
+        binding.toolbarMain.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.dlMain.openDrawer(Gravity.START);
+            }
+        });
+        /*setSupportActionBar(binding.toolbarMain.toolbar);*/
+        binding.toolbarMain.toolbar.setPopupTheme(R.style.Theme_Design_Light);
     }
 
     private void initSwipeRefreshLayout() {
@@ -50,10 +76,6 @@ public class MainActivity extends AppCompatActivity implements IMainView {
                 mainPresenter.loadNewsData(true);
             }
         });
-    }
-
-    private void initDrawerLayout() {
-
     }
 
     private void initRecyclerView() {
@@ -74,7 +96,8 @@ public class MainActivity extends AppCompatActivity implements IMainView {
                     }
                     if (!isLoading) {
                         isLoading = true;
-                        mainPresenter.loadBeforeData("20170426");
+                        mainPresenter.loadBeforeData(StringFormat.getDateBefore(beforeDays));
+                        beforeDays++;
                     }
                 }
                 super.onScrolled(recyclerView, dx, dy);
@@ -109,4 +132,5 @@ public class MainActivity extends AppCompatActivity implements IMainView {
         Toast.makeText(MainActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
         ToastUtil.showErrorMsg(throwable.getMessage());
     }
+
 }

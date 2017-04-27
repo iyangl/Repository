@@ -11,4 +11,12 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="Theme.ToolBar.DailyZhiHu" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="actionOverflowButtonStyle">@style/ActionButton.Overflow.DailyZhiHu</item>
+    </style>
+
+    <style name="ActionButton.Overflow.DailyZhiHu" parent="android:style/Widget.Holo.Light.ActionButton.Overflow">
+        <item name="android:src">@drawable/main_menu_more_overflow_mtrl_alpha</item>
+    </style>
+
 </resources>

@@ -4,11 +4,12 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.ly.example.myapplication2.utils.StringFormat;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static junit.framework.Assert.assertEquals;
-import static org.junit.Assert.*;
 
 /**
  * Instrumentation test, which will execute on an Android device.
@@ -23,5 +24,13 @@ public class ExampleInstrumentedTest {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         assertEquals("com.ly.example.myapplication2", appContext.getPackageName());
+    }
+
+    @Test
+    public void testStringFormat() {
+        String newsDate = StringFormat.formatNewsDate("20170426");
+        System.out.println("" + newsDate);
+        String dateBefore = StringFormat.getDateBefore(3);
+        System.out.println("" + dateBefore);
     }
 }

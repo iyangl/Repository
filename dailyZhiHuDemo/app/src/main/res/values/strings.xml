@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">曰抱</string>
     <string name="splash_image">Splash Image</string>
+    <string name="shouye">首页</string>
+    <string name="toolbar_message">消息提示</string>
+    <string name="toolbar_setting">系统设置</string>
+    <string name="toolbar_night">夜间模式</string>
 </resources>
