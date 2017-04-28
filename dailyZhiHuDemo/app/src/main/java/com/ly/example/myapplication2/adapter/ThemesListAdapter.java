@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import com.ly.example.myapplication2.R;
 import com.ly.example.myapplication2.api.apibean.ThemesBean;
 import com.ly.example.myapplication2.databinding.ItemThemesHeaderBinding;
+import com.ly.example.myapplication2.databinding.ItemThemesHomeBinding;
 import com.ly.example.myapplication2.databinding.ItemThemesListBinding;
-import com.ly.example.myapplication2.databinding.ItemThmeesHomeBinding;
 
 public class ThemesListAdapter extends BaseRecyclerViewAdapter<ThemesBean.OthersBean,
         ThemesListAdapter.BaseThemesViewHolder> implements View.OnClickListener {
@@ -27,7 +27,7 @@ public class ThemesListAdapter extends BaseRecyclerViewAdapter<ThemesBean.Others
                 View header = View.inflate(parent.getContext(), R.layout.item_themes_header, null);
                 return new ThemesHeaderViewHolder(header);
             case THEMES_HOME:
-                View home = View.inflate(parent.getContext(), R.layout.item_thmees_home, null);
+                View home = View.inflate(parent.getContext(), R.layout.item_themes_home, null);
                 home.setOnClickListener(this);
                 return new ThemesHomeViewHolder(home);
             case THEMES_LIST:
@@ -43,6 +43,7 @@ public class ThemesListAdapter extends BaseRecyclerViewAdapter<ThemesBean.Others
         if (position > 1) {
             holder.bind(dataLists.get(position - 2));
         }
+        holder.selected(position == lastSelectedPosition);
         holder.itemView.setTag(position);
     }
 
@@ -71,8 +72,9 @@ public class ThemesListAdapter extends BaseRecyclerViewAdapter<ThemesBean.Others
     public void onClick(View v) {
         if (onItemClickListener != null) {
             int tag = (int) v.getTag();
-            onItemClickListener.onClick(v, tag, lastSelectedPosition);
+            onItemClickListener.onClick(v, tag);
             lastSelectedPosition = tag;
+            notifyDataSetChanged();
         }
     }
 
@@ -83,6 +85,10 @@ public class ThemesListAdapter extends BaseRecyclerViewAdapter<ThemesBean.Others
         }
 
         void bind(Object o) {
+
+        }
+
+        void selected(boolean isSelected) {
 
         }
     }
@@ -99,12 +105,18 @@ public class ThemesListAdapter extends BaseRecyclerViewAdapter<ThemesBean.Others
     }
 
     private static class ThemesHomeViewHolder extends BaseThemesViewHolder {
-        private ItemThmeesHomeBinding binding;
+        private ItemThemesHomeBinding binding;
 
         ThemesHomeViewHolder(View itemView) {
             super(itemView);
             binding = DataBindingUtil.bind(itemView);
             binding.rlThemesHome.setSelected(true);
+        }
+
+        @Override
+        void selected(boolean isSelected) {
+            binding.setIsSelected(isSelected);
+            binding.executePendingBindings();
         }
     }
 
@@ -122,6 +134,12 @@ public class ThemesListAdapter extends BaseRecyclerViewAdapter<ThemesBean.Others
                 return;
             }
             binding.setOthers((ThemesBean.OthersBean) o);
+            binding.executePendingBindings();
+        }
+
+        @Override
+        void selected(boolean isSelected) {
+            binding.setIsSelected(isSelected);
             binding.executePendingBindings();
         }
     }

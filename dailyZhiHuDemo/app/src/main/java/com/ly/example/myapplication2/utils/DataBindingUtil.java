@@ -2,6 +2,7 @@ package com.ly.example.myapplication2.utils;
 
 import android.app.Activity;
 import android.databinding.BindingAdapter;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -13,5 +14,10 @@ public class DataBindingUtil {
     @BindingAdapter("image")
     public static void imageLoader(ImageView imageView, List<String> imageUrls) {
         Glide.with((Activity) imageView.getContext()).load(imageUrls.get(0)).into(imageView);
+    }
+
+    @BindingAdapter("selected")
+    public static void itemSelected(View view, boolean isSelected) {
+        view.setSelected(isSelected);
     }
 }

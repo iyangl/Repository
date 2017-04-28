@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -7,9 +8,13 @@
             name="others"
             type="com.ly.example.myapplication2.api.apibean.ThemesBean.OthersBean"/>
 
+        <variable
+            name="isSelected"
+            type="Boolean"/>
     </data>
 
     <RelativeLayout
+        app:selected="@{isSelected}"
         android:id="@+id/rl_item_themes_list"
         android:layout_width="300dp"
         android:layout_height="50dp"

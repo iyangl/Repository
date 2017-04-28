@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="isSelected"
+            type="Boolean"/>
+    </data>
 
     <RelativeLayout
         android:id="@+id/rl_themes_home"
         android:layout_width="300dp"
         android:layout_height="50dp"
-        android:background="@drawable/selector_item_themes_back">
+        android:background="@drawable/selector_item_themes_back"
+        app:selected="@{isSelected}">
 
         <TextView
             android:layout_width="300dp"

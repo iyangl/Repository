@@ -145,5 +145,9 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends RecyclerView.ViewHol
         notifyDataSetChanged();
     }
 
+    public boolean isEmpty() {
+        return dataLists.isEmpty();
+    }
+
 
 }

@@ -62,12 +62,6 @@ public class MainActivity extends AppCompatActivity implements IMainView {
         themesListAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onClick(View view, int... positions) {
-                binding.rvMainThemes.findViewHolderForAdapterPosition(positions[1]).itemView.setSelected(false);
-                view.setSelected(true);
-                int position = positions[0];
-                if(position == 1) {
-
-                }
             }
         });
     }
@@ -81,7 +75,9 @@ public class MainActivity extends AppCompatActivity implements IMainView {
             @Override
             public void onClick(View v) {
                 binding.dlMain.openDrawer(Gravity.START);
-                mainPresenter.loadThemesData();
+                if (themesListAdapter.isEmpty()) {
+                    mainPresenter.loadThemesData();
+                }
             }
         });
         /*setSupportActionBar(binding.toolbarMain.toolbar);*/
