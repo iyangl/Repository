@@ -20,6 +20,8 @@ import com.ly.example.myapplication2.utils.Constant;
 import com.ly.example.myapplication2.utils.StringFormat;
 import com.ly.example.myapplication2.utils.ToastUtil;
 
+import timber.log.Timber;
+
 public class MainActivity extends AppCompatActivity implements IMainView {
 
     private ActivityMainBinding binding;
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements IMainView {
 
     private void initToolbar() {
         binding.toolbarMain.toolbar.setNavigationIcon(R.drawable.three_lines);
-        binding.toolbarMain.toolbar.setTitle(R.string.shouye);
+        binding.toolbarMain.toolbar.setTitle(R.string.home);
         binding.toolbarMain.toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         binding.toolbarMain.toolbar.inflateMenu(R.menu.toolbar_menu);
         binding.toolbarMain.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -74,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements IMainView {
             @Override
             public void onRefresh() {
                 mainPresenter.loadNewsData(true);
+                beforeDays = 0;
             }
         });
     }
@@ -85,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements IMainView {
         binding.rvMain.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                changeTitleByScroll(recyclerView);
                 int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager())
                         .findLastVisibleItemPosition();
                 if (lastVisibleItemPosition + 1 == newsListAdapter.getItemCount()) {
@@ -96,13 +100,42 @@ public class MainActivity extends AppCompatActivity implements IMainView {
                     }
                     if (!isLoading) {
                         isLoading = true;
-                        mainPresenter.loadBeforeData(StringFormat.getDateBefore(beforeDays));
+                        mainPresenter.loadBeforeData(StringFormat.getDateDaysBefore(beforeDays));
                         beforeDays++;
                     }
                 }
                 super.onScrolled(recyclerView, dx, dy);
             }
         });
+    }
+
+    private int lastVisibleItemPositon;
+
+    /**
+     * 随着滑动更新toolbar标题为当前News日期
+     *
+     * @param recyclerView
+     */
+    private void changeTitleByScroll(RecyclerView recyclerView) {
+        int firstVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager())
+                .findFirstVisibleItemPosition();
+        if (firstVisibleItemPosition > 0) {
+            Object item = null;
+            if (lastVisibleItemPositon > firstVisibleItemPosition) {
+                item = newsListAdapter.getItem(firstVisibleItemPosition + 1);
+                if (item instanceof String) {
+                    item = StringFormat.getTomorrowDate((String) item);
+                }
+            } else {
+                item = newsListAdapter.getItem(firstVisibleItemPosition);
+            }
+            if (item instanceof String) {
+                binding.toolbarMain.toolbar.setTitle(StringFormat.formatNewsDate((String) item));
+            }
+        } else {
+            binding.toolbarMain.toolbar.setTitle(R.string.home);
+        }
+        lastVisibleItemPositon = firstVisibleItemPosition;
     }
 
     private void initEvent() {

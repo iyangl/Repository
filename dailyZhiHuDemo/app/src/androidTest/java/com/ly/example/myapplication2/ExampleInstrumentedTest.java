@@ -30,7 +30,7 @@ public class ExampleInstrumentedTest {
     public void testStringFormat() {
         String newsDate = StringFormat.formatNewsDate("20170426");
         System.out.println("" + newsDate);
-        String dateBefore = StringFormat.getDateBefore(3);
+        String dateBefore = StringFormat.getDateDaysBefore(3);
         System.out.println("" + dateBefore);
     }
 }

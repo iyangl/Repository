@@ -32,11 +32,26 @@ public class StringFormat {
         }
     }
 
-    public static String getDateBefore(int days) {
+    public static String getDateDaysBefore(int days) {
         Date date = new Date();
+        return getDateDaysBefore(date, days);
+    }
+
+    private static String getDateDaysBefore(Date date, int days) {
         long beforeTime = date.getTime() - (long) days * 24 * 60 * 60 * 1000;
         date.setTime(beforeTime);
         return sdf.format(date);
+    }
+
+    public static String getTomorrowDate(String date) {
+        try {
+            Date parseDate = sdf.parse(date);
+            date = getDateDaysBefore(parseDate, -1);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } finally {
+            return date;
+        }
     }
 
     /*获取星期几*/
