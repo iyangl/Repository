@@ -12,15 +12,16 @@ import android.widget.Toast;
 
 import com.ly.example.myapplication2.R;
 import com.ly.example.myapplication2.adapter.NewsListAdapter;
+import com.ly.example.myapplication2.adapter.OnItemClickListener;
+import com.ly.example.myapplication2.adapter.ThemesListAdapter;
 import com.ly.example.myapplication2.api.apibean.NewsBean;
+import com.ly.example.myapplication2.api.apibean.ThemesBean;
 import com.ly.example.myapplication2.databinding.ActivityMainBinding;
 import com.ly.example.myapplication2.mvp.presenter.MainPresenter;
 import com.ly.example.myapplication2.mvp.view.iview.IMainView;
 import com.ly.example.myapplication2.utils.Constant;
 import com.ly.example.myapplication2.utils.StringFormat;
 import com.ly.example.myapplication2.utils.ToastUtil;
-
-import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements IMainView {
 
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements IMainView {
      * 记录将要加载多少天之前的信息
      */
     private int beforeDays = 0;
+    private ThemesListAdapter themesListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +49,27 @@ public class MainActivity extends AppCompatActivity implements IMainView {
     }
 
     private void initView() {
-
         initRecyclerView();
         initSwipeRefreshLayout();
         initToolbar();
+        initLeftRecyclerView();
+    }
+
+    private void initLeftRecyclerView() {
+        binding.rvMainThemes.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        themesListAdapter = new ThemesListAdapter();
+        binding.rvMainThemes.setAdapter(themesListAdapter);
+        themesListAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onClick(View view, int... positions) {
+                binding.rvMainThemes.findViewHolderForAdapterPosition(positions[1]).itemView.setSelected(false);
+                view.setSelected(true);
+                int position = positions[0];
+                if(position == 1) {
+
+                }
+            }
+        });
     }
 
     private void initToolbar() {
@@ -62,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements IMainView {
             @Override
             public void onClick(View v) {
                 binding.dlMain.openDrawer(Gravity.START);
+                mainPresenter.loadThemesData();
             }
         });
         /*setSupportActionBar(binding.toolbarMain.toolbar);*/
@@ -166,4 +186,8 @@ public class MainActivity extends AppCompatActivity implements IMainView {
         ToastUtil.showErrorMsg(throwable.getMessage());
     }
 
+    @Override
+    public void loadThemesData(ThemesBean themesBean) {
+        themesListAdapter.setDataLists(themesBean.getOthers());
+    }
 }

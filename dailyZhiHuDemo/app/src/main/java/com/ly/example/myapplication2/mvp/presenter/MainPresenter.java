@@ -3,6 +3,7 @@ package com.ly.example.myapplication2.mvp.presenter;
 import com.ly.example.myapplication2.api.ApiFactory;
 import com.ly.example.myapplication2.api.apibean.CreativesListBean;
 import com.ly.example.myapplication2.api.apibean.NewsBean;
+import com.ly.example.myapplication2.api.apibean.ThemesBean;
 import com.ly.example.myapplication2.mvp.RequestImp;
 import com.ly.example.myapplication2.mvp.model.MainModel;
 import com.ly.example.myapplication2.mvp.model.imodel.IMainModel;
@@ -72,6 +73,20 @@ public class MainPresenter {
             @Override
             public void onError(Throwable e) {
                 iMainView.loadNewsError(e);
+            }
+        });
+    }
+
+    public void loadThemesData() {
+        iMainModel.loadThemesData(new RequestImp<ThemesBean>() {
+            @Override
+            public void onSuccess(ThemesBean data) {
+                iMainView.loadThemesData(data);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
             }
         });
     }

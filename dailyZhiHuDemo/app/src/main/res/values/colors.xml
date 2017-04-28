@@ -15,9 +15,9 @@
     <color name="item_left_divided">#E8E8E8</color>
     <color name="item_right_divided">#E6E6E6</color>
     <color name="setting_text">#303030</color>
-    <color name="section_selected">#06A4E8</color>
-    <color name="section_selected_back">#F0F0F0</color>
-    <color name="section_select_icon">#CCCCCC</color>
+    <color name="themes_text_color">#06A4E8</color>
+    <color name="themes_selected_back">#FFFFFF</color>
+    <color name="themes_selected">#F0F0F0</color>
     <color name="comments">#333333</color>
     <color name="comments_date">#B6B6B6</color>
     <color name="comments_quote">#767676</color>

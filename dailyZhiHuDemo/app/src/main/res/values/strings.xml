@@ -5,4 +5,7 @@
     <string name="toolbar_message">消息提示</string>
     <string name="toolbar_setting">系统设置</string>
     <string name="toolbar_night">夜间模式</string>
+    <string name="username">用户名</string>
+    <string name="account_favorite">我的收藏</string>
+    <string name="offline_download">离线下载</string>
 </resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:id="@+id/rl_themes_home"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:background="@drawable/selector_item_themes_back">
+
+        <TextView
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:drawableLeft="@drawable/home"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="@string/home"
+            android:textColor="@color/themes_text_color"
+            android:textSize="18sp"/>
+
+    </RelativeLayout>
+
+
+</layout>

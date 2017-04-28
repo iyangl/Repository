@@ -3,6 +3,7 @@ package com.ly.example.myapplication2.mvp.model;
 import com.ly.example.myapplication2.api.ApiFactory;
 import com.ly.example.myapplication2.api.apibean.CreativesListBean;
 import com.ly.example.myapplication2.api.apibean.NewsBean;
+import com.ly.example.myapplication2.api.apibean.ThemesBean;
 import com.ly.example.myapplication2.mvp.RequestImp;
 import com.ly.example.myapplication2.mvp.model.imodel.IMainModel;
 import com.ly.example.myapplication2.utils.Constant;
@@ -67,6 +68,29 @@ public class MainModel implements IMainModel {
                     @Override
                     public void onNext(NewsBean newsBean) {
                         requestImp.onSuccess(newsBean);
+                    }
+                });
+    }
+
+    @Override
+    public void loadThemesData(final RequestImp<ThemesBean> requestImp) {
+        ApiFactory.getApi().themes()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<ThemesBean>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        requestImp.onError(e);
+                    }
+
+                    @Override
+                    public void onNext(ThemesBean themesBean) {
+                        requestImp.onSuccess(themesBean);
                     }
                 });
     }
