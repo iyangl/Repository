@@ -3,6 +3,7 @@ package com.ly.example.myapplication2.mvp.model;
 import com.ly.example.myapplication2.api.ApiFactory;
 import com.ly.example.myapplication2.api.apibean.CreativesListBean;
 import com.ly.example.myapplication2.api.apibean.NewsBean;
+import com.ly.example.myapplication2.api.apibean.ThemeNewsBean;
 import com.ly.example.myapplication2.api.apibean.ThemesBean;
 import com.ly.example.myapplication2.mvp.RequestImp;
 import com.ly.example.myapplication2.mvp.model.imodel.IMainModel;
@@ -91,6 +92,52 @@ public class MainModel implements IMainModel {
                     @Override
                     public void onNext(ThemesBean themesBean) {
                         requestImp.onSuccess(themesBean);
+                    }
+                });
+    }
+
+    @Override
+    public void loadThemeNewsListData(int id, final RequestImp<ThemeNewsBean> requestImp) {
+        ApiFactory.getApi().themeNewsList(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<ThemeNewsBean>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        requestImp.onError(e);
+                    }
+
+                    @Override
+                    public void onNext(ThemeNewsBean themeNewsBean) {
+                        requestImp.onSuccess(themeNewsBean);
+                    }
+                });
+    }
+
+    @Override
+    public void loadThemeNewsListBefore(int themeId, int lastThemeNewsId, final RequestImp<ThemeNewsBean> requestImp) {
+        ApiFactory.getApi().themeNewsListBefore(themeId, lastThemeNewsId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<ThemeNewsBean>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        requestImp.onError(e);
+                    }
+
+                    @Override
+                    public void onNext(ThemeNewsBean themeNewsBean) {
+                        requestImp.onSuccess(themeNewsBean);
                     }
                 });
     }

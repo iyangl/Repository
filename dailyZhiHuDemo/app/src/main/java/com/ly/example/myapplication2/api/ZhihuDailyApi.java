@@ -127,6 +127,17 @@ public interface ZhihuDailyApi {
     Observable<ThemeNewsBean> themeNewsList(@Path("id") int id);
 
     /**
+     * URL:https://news-at.zhihu.com/api/4/theme/13/before/4739134
+     * 主题列表上拉加载更多时，加载以前的内容
+     *
+     * @param theme_id 主题id
+     * @param last_id  上次请求数据列表中最后一条的id
+     * @return {@link ThemeNewsBean}
+     */
+    @GET("4/theme/{theme_id}/before/{last_id}")
+    Observable<ThemeNewsBean> themeNewsListBefore(@Path("theme_id") int theme_id, @Path("last_id") int last_id);
+
+    /**
      * URL: http://news-at.zhihu.com/api/3/sections
      * 栏目总览
      *

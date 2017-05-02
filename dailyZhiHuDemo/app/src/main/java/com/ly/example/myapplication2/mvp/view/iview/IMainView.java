@@ -1,6 +1,7 @@
 package com.ly.example.myapplication2.mvp.view.iview;
 
 import com.ly.example.myapplication2.api.apibean.NewsBean;
+import com.ly.example.myapplication2.api.apibean.ThemeNewsBean;
 import com.ly.example.myapplication2.api.apibean.ThemesBean;
 
 public interface IMainView {
@@ -10,5 +11,7 @@ public interface IMainView {
     void loadNewsError(Throwable throwable);
 
     void loadThemesData(ThemesBean themesBean);
+
+    void loadThemesDataSuccess(ThemeNewsBean themeNewsBean, boolean isClear);
 
 }

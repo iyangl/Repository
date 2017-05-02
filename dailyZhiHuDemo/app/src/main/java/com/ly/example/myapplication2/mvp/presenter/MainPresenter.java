@@ -3,6 +3,7 @@ package com.ly.example.myapplication2.mvp.presenter;
 import com.ly.example.myapplication2.api.ApiFactory;
 import com.ly.example.myapplication2.api.apibean.CreativesListBean;
 import com.ly.example.myapplication2.api.apibean.NewsBean;
+import com.ly.example.myapplication2.api.apibean.ThemeNewsBean;
 import com.ly.example.myapplication2.api.apibean.ThemesBean;
 import com.ly.example.myapplication2.mvp.RequestImp;
 import com.ly.example.myapplication2.mvp.model.MainModel;
@@ -17,6 +18,7 @@ public class MainPresenter {
 
     private IMainView iMainView;
     private IMainModel iMainModel;
+    private int lastThemeNewsId = 1000000;
 
     public MainPresenter(IMainView iMainView) {
         this.iMainView = iMainView;
@@ -86,7 +88,41 @@ public class MainPresenter {
 
             @Override
             public void onError(Throwable e) {
+                iMainView.loadNewsError(e);
+            }
+        });
+    }
 
+    public void loadThemeNewsListData(int id, final boolean isClear) {
+        iMainModel.loadThemeNewsListData(id, new RequestImp<ThemeNewsBean>() {
+            @Override
+            public void onSuccess(ThemeNewsBean data) {
+                if (data != null && data.getStories() != null && data.getStories().size() > 0) {
+                    lastThemeNewsId = data.getStories().get(data.getStories().size() - 1).getId();
+                }
+                iMainView.loadThemesDataSuccess(data, isClear);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                iMainView.loadNewsError(e);
+            }
+        });
+    }
+
+    public void loadThemeNewsListBefore(int themeId) {
+        iMainModel.loadThemeNewsListBefore(themeId, lastThemeNewsId, new RequestImp<ThemeNewsBean>() {
+            @Override
+            public void onSuccess(ThemeNewsBean data) {
+                if (data != null && data.getStories() != null && data.getStories().size() > 0) {
+                    lastThemeNewsId = data.getStories().get(data.getStories().size() - 1).getId();
+                }
+                iMainView.loadThemesDataSuccess(data, false);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                iMainView.loadNewsError(e);
             }
         });
     }

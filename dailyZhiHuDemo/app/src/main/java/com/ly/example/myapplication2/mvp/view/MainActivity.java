@@ -15,6 +15,7 @@ import com.ly.example.myapplication2.adapter.NewsListAdapter;
 import com.ly.example.myapplication2.adapter.OnItemClickListener;
 import com.ly.example.myapplication2.adapter.ThemesListAdapter;
 import com.ly.example.myapplication2.api.apibean.NewsBean;
+import com.ly.example.myapplication2.api.apibean.ThemeNewsBean;
 import com.ly.example.myapplication2.api.apibean.ThemesBean;
 import com.ly.example.myapplication2.databinding.ActivityMainBinding;
 import com.ly.example.myapplication2.mvp.presenter.MainPresenter;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements IMainView {
      */
     private int beforeDays = 0;
     private ThemesListAdapter themesListAdapter;
+    private int selectedThemePosition = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,19 @@ public class MainActivity extends AppCompatActivity implements IMainView {
         themesListAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onClick(View view, int... positions) {
+                selectedThemePosition = positions[0] - 2;
+                if (positions[0] != positions[1]) {
+                    if (positions[0] == 1) {
+                        mainPresenter.loadNewsData(true);
+                        binding.toolbarMain.toolbar.setTitle(R.string.home);
+                    } else {
+                        mainPresenter.loadThemeNewsListData(
+                                themesListAdapter.getItem(selectedThemePosition).getId(), true);
+                        binding.toolbarMain.toolbar.setTitle(
+                                themesListAdapter.getItem(selectedThemePosition).getName());
+                    }
+                }
+                binding.dlMain.closeDrawer(Gravity.START);
             }
         });
     }
@@ -91,8 +106,13 @@ public class MainActivity extends AppCompatActivity implements IMainView {
         binding.srfMain.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mainPresenter.loadNewsData(true);
-                beforeDays = 0;
+                if (selectedThemePosition < 0) {
+                    mainPresenter.loadNewsData(true);
+                    beforeDays = 0;
+                } else {
+                    mainPresenter.loadThemeNewsListData(
+                            themesListAdapter.getItem(selectedThemePosition).getId(), true);
+                }
             }
         });
     }
@@ -116,8 +136,14 @@ public class MainActivity extends AppCompatActivity implements IMainView {
                     }
                     if (!isLoading) {
                         isLoading = true;
-                        mainPresenter.loadBeforeData(StringFormat.getDateDaysBefore(beforeDays));
-                        beforeDays++;
+                        if (selectedThemePosition < 0) {
+                            mainPresenter.loadBeforeData(StringFormat.getDateDaysBefore(beforeDays));
+                            beforeDays++;
+                        } else {
+                            mainPresenter.loadThemeNewsListBefore(
+                                    themesListAdapter.getItem(selectedThemePosition).getId());
+                            beforeDays = 0;
+                        }
                     }
                 }
                 super.onScrolled(recyclerView, dx, dy);
@@ -133,25 +159,27 @@ public class MainActivity extends AppCompatActivity implements IMainView {
      * @param recyclerView
      */
     private void changeTitleByScroll(RecyclerView recyclerView) {
-        int firstVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager())
-                .findFirstVisibleItemPosition();
-        if (firstVisibleItemPosition > 0) {
-            Object item = null;
-            if (lastVisibleItemPositon > firstVisibleItemPosition) {
-                item = newsListAdapter.getItem(firstVisibleItemPosition + 1);
+        if (selectedThemePosition < 0) {
+            int firstVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager())
+                    .findFirstVisibleItemPosition();
+            if (firstVisibleItemPosition > 0) {
+                Object item = null;
+                if (lastVisibleItemPositon > firstVisibleItemPosition) {
+                    item = newsListAdapter.getItem(firstVisibleItemPosition + 1);
+                    if (item instanceof String) {
+                        item = StringFormat.getTomorrowDate((String) item);
+                    }
+                } else {
+                    item = newsListAdapter.getItem(firstVisibleItemPosition);
+                }
                 if (item instanceof String) {
-                    item = StringFormat.getTomorrowDate((String) item);
+                    binding.toolbarMain.toolbar.setTitle(StringFormat.formatNewsDate((String) item));
                 }
             } else {
-                item = newsListAdapter.getItem(firstVisibleItemPosition);
+                binding.toolbarMain.toolbar.setTitle(R.string.home);
             }
-            if (item instanceof String) {
-                binding.toolbarMain.toolbar.setTitle(StringFormat.formatNewsDate((String) item));
-            }
-        } else {
-            binding.toolbarMain.toolbar.setTitle(R.string.home);
+            lastVisibleItemPositon = firstVisibleItemPosition;
         }
-        lastVisibleItemPositon = firstVisibleItemPosition;
     }
 
     private void initEvent() {
@@ -185,5 +213,12 @@ public class MainActivity extends AppCompatActivity implements IMainView {
     @Override
     public void loadThemesData(ThemesBean themesBean) {
         themesListAdapter.setDataLists(themesBean.getOthers());
+    }
+
+    @Override
+    public void loadThemesDataSuccess(ThemeNewsBean themeNewsBean, boolean isClear) {
+        isLoading = false;
+        binding.srfMain.setRefreshing(false);
+        newsListAdapter.loadNewsData(themeNewsBean, isClear);
     }
 }

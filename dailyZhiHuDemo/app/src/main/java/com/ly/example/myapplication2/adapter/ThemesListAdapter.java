@@ -72,7 +72,7 @@ public class ThemesListAdapter extends BaseRecyclerViewAdapter<ThemesBean.Others
     public void onClick(View v) {
         if (onItemClickListener != null) {
             int tag = (int) v.getTag();
-            onItemClickListener.onClick(v, tag);
+            onItemClickListener.onClick(v, tag, lastSelectedPosition);
             lastSelectedPosition = tag;
             notifyDataSetChanged();
         }

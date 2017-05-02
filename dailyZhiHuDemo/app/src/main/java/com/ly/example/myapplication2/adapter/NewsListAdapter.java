@@ -11,9 +11,12 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.ly.example.myapplication2.R;
 import com.ly.example.myapplication2.api.apibean.NewsBean;
+import com.ly.example.myapplication2.api.apibean.StoriesBean;
+import com.ly.example.myapplication2.api.apibean.ThemeNewsBean;
 import com.ly.example.myapplication2.databinding.ItemMainNewsBannerBinding;
 import com.ly.example.myapplication2.databinding.ItemMainNewsDateBinding;
 import com.ly.example.myapplication2.databinding.ItemMainNewsListBinding;
+import com.ly.example.myapplication2.databinding.ItemMainThemeHeaderBinding;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.loader.ImageLoader;
 
@@ -36,6 +39,11 @@ public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAda
      * 信息列表
      */
     private static final int NEWS_LIST = 3;
+    /**
+     * 主题头部
+     */
+    private static final int THEME_HEADER = 4;
+
 
     @Override
     public NewsListAdapter.NewsBaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -49,6 +57,9 @@ public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAda
             case NEWS_LIST:
                 View listView = View.inflate(parent.getContext(), R.layout.item_main_news_list, null);
                 return new NewsListViewHolder(listView);
+            case THEME_HEADER:
+                View headerView = View.inflate(parent.getContext(), R.layout.item_main_theme_header, null);
+                return new ThemeHeaderViewHolder(headerView);
         }
         return null;
     }
@@ -69,8 +80,10 @@ public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAda
             return NEWS_DATE;
         } else if (dataLists.get(position) instanceof List) {
             return NEWS_BANNER;
-        } else if (dataLists.get(position) instanceof NewsBean.StoriesBean) {
+        } else if (dataLists.get(position) instanceof StoriesBean) {
             return NEWS_LIST;
+        } else if (dataLists.get(position) instanceof ThemeNewsBean) {
+            return THEME_HEADER;
         }
         return -1;
     }
@@ -85,10 +98,10 @@ public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAda
 
         public void bind(Object storiesBean) {
             Timber.i("NewsDateViewHolder bind: %s", storiesBean);
-            if (!(storiesBean instanceof NewsBean.StoriesBean)) {
+            if (!(storiesBean instanceof StoriesBean)) {
                 return;
             }
-            binding.setStoriesbean((NewsBean.StoriesBean) storiesBean);
+            binding.setStoriesbean((StoriesBean) storiesBean);
             binding.executePendingBindings();
         }
     }
@@ -140,6 +153,23 @@ public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAda
         }
     }
 
+    static class ThemeHeaderViewHolder extends NewsBaseViewHolder {
+        private ItemMainThemeHeaderBinding binding;
+
+        ThemeHeaderViewHolder(View itemView) {
+            super(itemView);
+            binding = DataBindingUtil.bind(itemView);
+        }
+
+        @Override
+        public void bind(Object obj) {
+            if (!(obj instanceof ThemeNewsBean)) {
+                return;
+            }
+            binding.setThemenewsbean((ThemeNewsBean) obj);
+        }
+    }
+
     static class NewsBaseViewHolder extends RecyclerView.ViewHolder {
 
         NewsBaseViewHolder(View itemView) {
@@ -149,7 +179,6 @@ public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAda
         public void bind(Object obj) {
         }
     }
-
 
     private static class GlideImageLoader extends ImageLoader {
         @Override
@@ -161,6 +190,9 @@ public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAda
 
     public void loadNewsData(NewsBean newsBean, boolean isClear) {
         Timber.i("loadNewsData: %s  %b", newsBean, isClear);
+        if (newsBean == null) {
+            return;
+        }
         if (isClear) {
             dataLists.clear();
         }
@@ -172,6 +204,21 @@ public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAda
         }
         if (newsBean.getStories() != null && newsBean.getStories().size() > 0) {
             dataLists.addAll(newsBean.getStories());
+        }
+        notifyDataSetChanged();
+    }
+
+    public void loadNewsData(ThemeNewsBean themeNewsBean, boolean isClear) {
+        Timber.i("loadNewsData: %s  %b", themeNewsBean, isClear);
+        if (themeNewsBean == null) {
+            return;
+        }
+        if (isClear) {
+            dataLists.clear();
+            dataLists.add(themeNewsBean);
+        }
+        if (themeNewsBean.getStories() != null && themeNewsBean.getStories().size() > 0) {
+            dataLists.addAll(themeNewsBean.getStories());
         }
         notifyDataSetChanged();
     }

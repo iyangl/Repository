@@ -4,7 +4,7 @@
 
     <data>
 
-        <import type="com.ly.example.myapplication2.api.apibean.NewsBean.StoriesBean"/>
+        <import type="com.ly.example.myapplication2.api.apibean.StoriesBean"/>
 
         <import type="android.view.View"/>
 
@@ -30,31 +30,40 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toLeftOf="@+id/iv_item_main_news_image"
+                android:layout_toLeftOf="@+id/rl_item_main_news_images"
                 android:gravity="left"
                 android:lines="3"
                 android:text="@{storiesbean.title}"
                 android:textSize="20sp"/>
 
-
-            <ImageView
-                android:id="@+id/iv_item_main_news_image"
+            <RelativeLayout
+                android:id="@+id/rl_item_main_news_images"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_alignParentRight="true"
-                android:background="@drawable/image_small_default"
-                android:scaleType="centerCrop"
-                app:image="@{storiesbean.images}"/>
+                android:visibility="@{storiesbean.images==null ? View.GONE : View.VISIBLE}">
 
-            <ImageView
-                android:layout_width="39dp"
-                android:layout_height="16dp"
-                android:layout_alignBottom="@+id/iv_item_main_news_image"
-                android:layout_alignRight="@+id/iv_item_main_news_image"
-                android:background="@drawable/home_pic"
-                android:scaleType="centerCrop"
-                android:visibility="@{storiesbean.multipic ? View.VISIBLE : View.GONE}"
-                />
+                <ImageView
+                    android:id="@+id/iv_item_main_news_image"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/image_small_default"
+                    android:scaleType="centerCrop"
+                    android:visibility="@{storiesbean.images==null ? View.GONE : View.VISIBLE}"
+                    app:image="@{storiesbean.images[0]}"/>
+
+                <ImageView
+                    android:layout_width="39dp"
+                    android:layout_height="16dp"
+                    android:layout_alignBottom="@+id/iv_item_main_news_image"
+                    android:layout_alignRight="@+id/iv_item_main_news_image"
+                    android:background="@drawable/home_pic"
+                    android:scaleType="centerCrop"
+                    android:visibility="@{storiesbean.multipic ? View.VISIBLE : View.GONE}"
+                    />
+
+            </RelativeLayout>
 
         </RelativeLayout>
 
