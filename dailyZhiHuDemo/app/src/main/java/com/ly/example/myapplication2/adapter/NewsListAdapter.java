@@ -7,8 +7,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
-import com.bumptech.glide.Glide;
 import com.ly.example.myapplication2.R;
 import com.ly.example.myapplication2.api.apibean.NewsBean;
 import com.ly.example.myapplication2.api.apibean.StoriesBean;
@@ -17,8 +17,10 @@ import com.ly.example.myapplication2.databinding.ItemMainNewsBannerBinding;
 import com.ly.example.myapplication2.databinding.ItemMainNewsDateBinding;
 import com.ly.example.myapplication2.databinding.ItemMainNewsListBinding;
 import com.ly.example.myapplication2.databinding.ItemMainThemeHeaderBinding;
+import com.ly.example.myapplication2.utils.CommonUtils;
+import com.ly.example.myapplication2.utils.widgets.ImageLoader;
 import com.youth.banner.BannerConfig;
-import com.youth.banner.loader.ImageLoader;
+import com.youth.banner.loader.ImageLoaderInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -125,8 +127,12 @@ public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAda
                 imageUrls.add(topStoriesBean.getImage());
                 titles.add(topStoriesBean.getTitle());
             }
+            binding.itemMainNewsBanner.setLayoutParams(new RelativeLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    CommonUtils.dip2px(binding.itemMainNewsBanner.getContext(), 200)));
             binding.itemMainNewsBanner.setImageLoader(new GlideImageLoader())
-                    .setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE)
+                    .setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE)
+                    .setIndicatorGravity(BannerConfig.CENTER)
                     .setImages(imageUrls)
                     .setBannerTitles(titles)
                     .setDelayTime(3000)
@@ -180,11 +186,15 @@ public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAda
         }
     }
 
-    private static class GlideImageLoader extends ImageLoader {
+    private static class GlideImageLoader implements ImageLoaderInterface {
         @Override
-        public void displayImage(Context context, Object path, ImageView imageView) {
-            Timber.i("GlideImageLoader displayImage: %s %s", path, imageView);
-            Glide.with(context).load((String) path).error(R.drawable.image_small_default).into(imageView);
+        public void displayImage(Context context, Object path, View imageView) {
+            ImageLoader.loadImage(context, (String) path, (ImageView) imageView);
+        }
+
+        @Override
+        public View createImageView(Context context) {
+            return null;
         }
     }
 

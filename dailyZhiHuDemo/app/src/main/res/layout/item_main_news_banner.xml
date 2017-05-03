@@ -9,9 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         app:image_scale_type="center_crop"
-        app:title_height="50dp"
+        app:indicator_margin="2dp"
+        app:title_height="80dp"
         app:title_textcolor="@color/white"
-        app:title_textsize="25sp"/>
+        app:title_textsize="20sp"/>
 
 </layout>
 
