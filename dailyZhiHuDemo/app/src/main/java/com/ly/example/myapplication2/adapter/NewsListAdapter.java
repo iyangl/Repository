@@ -4,31 +4,36 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.bigkoo.convenientbanner.ConvenientBanner;
+import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
+import com.bigkoo.convenientbanner.holder.Holder;
+import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.ly.example.myapplication2.R;
 import com.ly.example.myapplication2.api.apibean.NewsBean;
 import com.ly.example.myapplication2.api.apibean.StoriesBean;
 import com.ly.example.myapplication2.api.apibean.ThemeNewsBean;
-import com.ly.example.myapplication2.databinding.ItemMainNewsBannerBinding;
+import com.ly.example.myapplication2.databinding.ItemBannerImagesBinding;
+import com.ly.example.myapplication2.databinding.ItemMainNewsConvenientbannerBinding;
 import com.ly.example.myapplication2.databinding.ItemMainNewsDateBinding;
 import com.ly.example.myapplication2.databinding.ItemMainNewsListBinding;
 import com.ly.example.myapplication2.databinding.ItemMainThemeHeaderBinding;
 import com.ly.example.myapplication2.utils.CommonUtils;
 import com.ly.example.myapplication2.utils.widgets.ImageLoader;
-import com.youth.banner.BannerConfig;
 import com.youth.banner.loader.ImageLoaderInterface;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
 
 
-public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAdapter.NewsBaseViewHolder> {
+public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAdapter.NewsBaseViewHolder> implements
+        View.OnClickListener {
     /**
      * 顶部轮播图
      */
@@ -51,13 +56,14 @@ public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAda
     public NewsListAdapter.NewsBaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
             case NEWS_BANNER:
-                View bannerView = View.inflate(parent.getContext(), R.layout.item_main_news_banner, null);
+                View bannerView = View.inflate(parent.getContext(), R.layout.item_main_news_convenientbanner, null);
                 return new NewsBannerViewHolder(bannerView);
             case NEWS_DATE:
                 View dateView = View.inflate(parent.getContext(), R.layout.item_main_news_date, null);
                 return new NewsDateViewHolder(dateView);
             case NEWS_LIST:
                 View listView = View.inflate(parent.getContext(), R.layout.item_main_news_list, null);
+                listView.setOnClickListener(this);
                 return new NewsListViewHolder(listView);
             case THEME_HEADER:
                 View headerView = View.inflate(parent.getContext(), R.layout.item_main_theme_header, null);
@@ -90,6 +96,11 @@ public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAda
         return -1;
     }
 
+    @Override
+    public void onClick(View v) {
+        Timber.e("NewsListAdapter onClick: %d", v.getId());
+    }
+
     private static class NewsListViewHolder extends NewsBaseViewHolder {
         private ItemMainNewsListBinding binding;
 
@@ -109,34 +120,37 @@ public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAda
     }
 
     private static class NewsBannerViewHolder extends NewsBaseViewHolder {
-        private ItemMainNewsBannerBinding binding;
+        private ItemMainNewsConvenientbannerBinding binding;
 
         NewsBannerViewHolder(View itemView) {
             super(itemView);
             binding = DataBindingUtil.bind(itemView);
         }
 
-        public void bind(Object topStoriesBeanList) {
+        public void bind(final Object topStoriesBeanList) {
             Timber.i("NewsDateViewHolder bind: %s", topStoriesBeanList);
             if (!(topStoriesBeanList instanceof List)) {
                 return;
             }
-            List<String> imageUrls = new ArrayList<>();
-            List<String> titles = new ArrayList<>();
-            for (NewsBean.TopStoriesBean topStoriesBean : (List<NewsBean.TopStoriesBean>) topStoriesBeanList) {
-                imageUrls.add(topStoriesBean.getImage());
-                titles.add(topStoriesBean.getTitle());
-            }
-            binding.itemMainNewsBanner.setLayoutParams(new RelativeLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    CommonUtils.dip2px(binding.itemMainNewsBanner.getContext(), 200)));
-            binding.itemMainNewsBanner.setImageLoader(new GlideImageLoader())
-                    .setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE)
-                    .setIndicatorGravity(BannerConfig.CENTER)
-                    .setImages(imageUrls)
-                    .setBannerTitles(titles)
-                    .setDelayTime(3000)
-                    .start();
+            binding.convenientBanner.setLayoutParams(new RelativeLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT
+                    , CommonUtils.dip2px(binding.convenientBanner.getContext(), 200)));
+            binding.convenientBanner.setPages(new CBViewHolderCreator<ImageHolderView>() {
+                @Override
+                public ImageHolderView createHolder() {
+                    return new ImageHolderView();
+                }
+            }, (List<NewsBean.TopStoriesBean>) topStoriesBeanList)
+                    .setPointViewVisible(true)
+                    .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL)
+                    .setPageIndicator(new int[]{R.drawable.dot_radius_selected, R.drawable.dot_radius_unselected})
+                    .startTurning(3000)
+                    .setOnItemClickListener(new OnItemClickListener() {
+                        @Override
+                        public void onItemClick(int position) {
+                            Timber.e("convenientBanner onItemClick : %s", ((List) topStoriesBeanList).get(position));
+                        }
+                    });
             binding.executePendingBindings();
         }
     }
@@ -231,5 +245,22 @@ public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAda
             dataLists.addAll(themeNewsBean.getStories());
         }
         notifyDataSetChanged();
+    }
+
+    private static class ImageHolderView implements Holder<NewsBean.TopStoriesBean> {
+        private ItemBannerImagesBinding binding;
+
+        @Override
+        public View createView(Context context) {
+            View view = LayoutInflater.from(context).inflate(R.layout.item_banner_images, null, false);
+            binding = DataBindingUtil.bind(view);
+            return view;
+        }
+
+        @Override
+        public void UpdateUI(Context context, int position, NewsBean.TopStoriesBean data) {
+            binding.setImageurl(data.getImage());
+            binding.setTitle(data.getTitle());
+        }
     }
 }

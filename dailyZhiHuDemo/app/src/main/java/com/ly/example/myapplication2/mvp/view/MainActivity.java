@@ -200,6 +200,9 @@ public class MainActivity extends AppCompatActivity implements IMainView {
         isLoading = false;
         binding.srfMain.setRefreshing(false);
         newsListAdapter.loadNewsData(newsBean, isClear);
+        if (isClear) {
+            binding.rvMain.scrollToPosition(0);
+        }
     }
 
     @Override
@@ -220,5 +223,8 @@ public class MainActivity extends AppCompatActivity implements IMainView {
         isLoading = false;
         binding.srfMain.setRefreshing(false);
         newsListAdapter.loadNewsData(themeNewsBean, isClear);
+        if (isClear) {
+            binding.rvMain.scrollToPosition(0);
+        }
     }
 }
