@@ -53,5 +53,9 @@ dependencies {
     compile 'com.youth.banner:banner:1.4.9'
     //convenientbanner
     compile 'com.bigkoo:convenientbanner:2.0.5'
+    //leakCanary
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
 
 }

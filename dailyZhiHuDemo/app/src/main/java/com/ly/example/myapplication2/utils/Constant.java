@@ -15,6 +15,11 @@ public class Constant {
          * 是否存在缓存图片url
          */
         public static final String NEED_PREFETCH_IMAGES = "need_prefetch_images";
+
+        /**
+         * 新闻id
+         */
+        public static final String NEWS_ID = "news_id";
     }
 
 }

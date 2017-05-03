@@ -1,5 +1,6 @@
 package com.ly.example.myapplication2.mvp.view;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -121,6 +122,14 @@ public class MainActivity extends AppCompatActivity implements IMainView {
         binding.rvMain.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         newsListAdapter = new NewsListAdapter();
         binding.rvMain.setAdapter(newsListAdapter);
+        newsListAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onClick(View view, int... positions) {
+                Intent intent = new Intent(MainActivity.this, NewsDetailActivity.class);
+                intent.putExtra(Constant.Intent_Extra.NEWS_ID, positions[0]);
+                startActivity(intent);
+            }
+        });
         binding.rvMain.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {

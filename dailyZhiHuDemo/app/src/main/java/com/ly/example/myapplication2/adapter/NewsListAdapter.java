@@ -51,6 +51,8 @@ public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAda
      */
     private static final int THEME_HEADER = 4;
 
+    private static com.ly.example.myapplication2.adapter.OnItemClickListener onItemClickListener;
+
 
     @Override
     public NewsListAdapter.NewsBaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -75,6 +77,7 @@ public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAda
     @Override
     public void onBindViewHolder(NewsListAdapter.NewsBaseViewHolder holder, int position) {
         holder.bind(dataLists.get(position));
+        holder.itemView.setTag(position);
     }
 
     @Override
@@ -98,8 +101,21 @@ public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAda
 
     @Override
     public void onClick(View v) {
-        Timber.e("NewsListAdapter onClick: %d", v.getId());
+        int tag = (int) v.getTag();
+        Object o = dataLists.get(tag);
+        Timber.e("NewsListAdapter onClick: %s", o);
+        if (onItemClickListener != null) {
+            if (o instanceof StoriesBean) {
+                int id = ((StoriesBean) o).getId();
+                onItemClickListener.onClick(v, id);
+            }
+        }
     }
+
+    public void setOnItemClickListener(com.ly.example.myapplication2.adapter.OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
 
     private static class NewsListViewHolder extends NewsBaseViewHolder {
         private ItemMainNewsListBinding binding;
@@ -149,6 +165,12 @@ public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAda
                         @Override
                         public void onItemClick(int position) {
                             Timber.e("convenientBanner onItemClick : %s", ((List) topStoriesBeanList).get(position));
+                            if (((List) topStoriesBeanList).get(position) instanceof NewsBean.TopStoriesBean) {
+                                int id = ((NewsBean.TopStoriesBean) ((List) topStoriesBeanList).get(position)).getId();
+                                if (onItemClickListener != null) {
+                                    onItemClickListener.onClick(null, id);
+                                }
+                            }
                         }
                     });
             binding.executePendingBindings();
