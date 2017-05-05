@@ -1,5 +1,6 @@
 package com.ly.example.myapplication2.api;
 
+import com.google.gson.JsonObject;
 import com.ly.example.myapplication2.api.apibean.CommentsBean;
 import com.ly.example.myapplication2.api.apibean.CreativesListBean;
 import com.ly.example.myapplication2.api.apibean.ExtraBean;
@@ -14,6 +15,7 @@ import com.ly.example.myapplication2.api.apibean.VersionBean;
 
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Url;
 import rx.Observable;
 
 public interface ZhihuDailyApi {
@@ -165,4 +167,13 @@ public interface ZhihuDailyApi {
      */
     @GET("4/story/{id}/recommenders")
     Observable<RecommendersBean> recommenders(@Path("id") int id);
+
+    /**
+     * 下载js和css
+     *
+     * @param url 路径
+     * @return 内容
+     */
+    @GET
+    Observable<JsonObject> downloadCJ(@Url String url);
 }

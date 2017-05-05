@@ -23,6 +23,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    //ADD THESE LINES:
+    packagingOptions {
+        exclude 'LICENSE.txt'
+    }
 }
 
 dependencies {

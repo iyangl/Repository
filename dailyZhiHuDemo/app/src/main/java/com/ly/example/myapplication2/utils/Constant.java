@@ -1,5 +1,7 @@
 package com.ly.example.myapplication2.utils;
 
+import com.ly.example.myapplication2.app;
+
 public class Constant {
 
     public static class Share_prf {
@@ -20,6 +22,19 @@ public class Constant {
          * 新闻id
          */
         public static final String NEWS_ID = "news_id";
+    }
+
+    public static class Storage {
+        /**
+         * data缓存目录
+         */
+        public static final String PACK_CACHE = app.getInstance().getCacheDir().getAbsolutePath() + "/";
+
+        /**
+         * 存放css目录
+         */
+        public static final String CSS_DIR = PACK_CACHE + "css/";
+
     }
 
 }

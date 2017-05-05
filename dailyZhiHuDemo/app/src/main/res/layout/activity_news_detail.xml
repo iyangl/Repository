@@ -12,7 +12,7 @@
             android:id="@+id/news_detail_toolbar"
             layout="@layout/include_toolbar"/>
 
-        <WebView
+        <com.ly.example.myapplication2.utils.widgets.CustomWebView
             android:id="@+id/wv_news_detail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
