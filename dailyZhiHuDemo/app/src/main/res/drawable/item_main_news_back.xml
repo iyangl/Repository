@@ -4,7 +4,7 @@
     <solid android:color="@color/item_background"/>
 
     <stroke
-        android:width="0.1dp"
+        android:width="0.03dp"
         android:color="@color/item_bottom_divided"
         />
 

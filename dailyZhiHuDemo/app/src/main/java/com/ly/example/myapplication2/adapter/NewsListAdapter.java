@@ -24,7 +24,7 @@ import com.ly.example.myapplication2.databinding.ItemMainNewsDateBinding;
 import com.ly.example.myapplication2.databinding.ItemMainNewsListBinding;
 import com.ly.example.myapplication2.databinding.ItemMainThemeHeaderBinding;
 import com.ly.example.myapplication2.utils.CommonUtils;
-import com.ly.example.myapplication2.utils.widgets.ImageLoader;
+import com.ly.example.myapplication2.widgets.ImageLoader;
 import com.youth.banner.loader.ImageLoaderInterface;
 
 import java.util.List;
@@ -51,7 +51,7 @@ public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAda
      */
     private static final int THEME_HEADER = 4;
 
-    private static com.ly.example.myapplication2.adapter.OnItemClickListener onItemClickListener;
+    private com.ly.example.myapplication2.adapter.OnItemClickListener onItemClickListener;
 
 
     @Override
@@ -135,7 +135,7 @@ public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAda
         }
     }
 
-    private static class NewsBannerViewHolder extends NewsBaseViewHolder {
+    private class NewsBannerViewHolder extends NewsBaseViewHolder {
         private ItemMainNewsConvenientbannerBinding binding;
 
         NewsBannerViewHolder(View itemView) {

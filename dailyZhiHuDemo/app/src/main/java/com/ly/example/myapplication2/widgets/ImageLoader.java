@@ -1,4 +1,4 @@
-package com.ly.example.myapplication2.utils.widgets;
+package com.ly.example.myapplication2.widgets;
 
 import android.content.Context;
 import android.widget.ImageView;
@@ -6,8 +6,8 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ly.example.myapplication2.R;
-import com.ly.example.myapplication2.utils.widgets.glide.GlideCircleTransform;
-import com.ly.example.myapplication2.utils.widgets.glide.GlideRoundTransform;
+import com.ly.example.myapplication2.widgets.glide.GlideCircleTransform;
+import com.ly.example.myapplication2.widgets.glide.GlideRoundTransform;
 
 import java.io.File;
 

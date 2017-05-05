@@ -1,13 +1,14 @@
 package com.ly.example.myapplication2.utils;
 
 import android.databinding.BindingAdapter;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.ly.example.myapplication2.api.apibean.ThemeNewsBean;
-import com.ly.example.myapplication2.utils.widgets.ImageLoader;
+import com.ly.example.myapplication2.widgets.ImageLoader;
 
 import java.util.List;
 
@@ -15,7 +16,9 @@ public class DataBindingUtil {
 
     @BindingAdapter("image")
     public static void imageLoader(ImageView imageView, String imageUrls) {
-        ImageLoader.loadImage(imageView.getContext(), imageUrls, imageView);
+        if (!TextUtils.isEmpty(imageUrls)) {
+            ImageLoader.loadImage(imageView.getContext(), imageUrls, imageView);
+        }
     }
 
     @BindingAdapter("selected")

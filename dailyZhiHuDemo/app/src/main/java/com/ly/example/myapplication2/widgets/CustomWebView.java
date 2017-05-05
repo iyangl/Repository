@@ -1,4 +1,4 @@
-package com.ly.example.myapplication2.utils.widgets;
+package com.ly.example.myapplication2.widgets;
 
 import android.content.Context;
 import android.util.AttributeSet;
