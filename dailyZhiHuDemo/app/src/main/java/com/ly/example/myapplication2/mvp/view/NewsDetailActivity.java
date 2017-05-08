@@ -12,13 +12,16 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import com.ly.example.myapplication2.R;
+import com.ly.example.myapplication2.api.apibean.ExtraBean;
 import com.ly.example.myapplication2.api.apibean.NewsDetailBean;
 import com.ly.example.myapplication2.databinding.ActivityNewsDetailBinding;
 import com.ly.example.myapplication2.mvp.presenter.NewsDetailPresenter;
 import com.ly.example.myapplication2.mvp.view.iview.INewsDetailView;
 import com.ly.example.myapplication2.utils.Constant;
+import com.ly.example.myapplication2.utils.StringFormat;
 import com.ly.example.myapplication2.utils.ToastUtil;
 import com.ly.example.myapplication2.widgets.BadgeActionProvider;
 import com.ly.example.myapplication2.widgets.CustomWebView;
@@ -31,6 +34,7 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
     private Toolbar mToolbar;
     private BadgeActionProvider commentActionProvider;
     private BadgeActionProvider praiseActionProvider;
+    private int newsId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,13 +42,15 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
         binding = DataBindingUtil.setContentView(this, R.layout.activity_news_detail);
         initToolbar();
 
-        int newsId = getIntent().getIntExtra(Constant.Intent_Extra.NEWS_ID, -1);
+        newsId = getIntent().getIntExtra(Constant.Intent_Extra.NEWS_ID, -1);
         if (newsId == -1) {
             return;
         }
+        initWebView();
         mNewsDetailPresenter = new NewsDetailPresenter(this);
         mNewsDetailPresenter.loadNewsDetail(newsId);
-        initWebView();
+        mNewsDetailPresenter.loadStoryExtra(newsId);
+
     }
 
     private void initWebView() {
@@ -80,6 +86,7 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
                 NewsDetailActivity.this.finish();
             }
         });
+        setSupportActionBar(mToolbar);
         mToolbar.inflateMenu(R.menu.toolbar_news_menu);
         initBadge();
         mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -112,7 +119,7 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
         commentActionProvider = (BadgeActionProvider) MenuItemCompat.getActionProvider(menuItem1);
         praiseActionProvider = (BadgeActionProvider) MenuItemCompat.getActionProvider(menuItem2);
         commentActionProvider.setIcon(R.drawable.comment);
-        praiseActionProvider.setIcon(R.drawable.praise);
+        praiseActionProvider.setIcon(R.drawable.selector_item_news_praise);
         commentActionProvider.setOnClickListener(0, onClickListener);// 设置点击监听。
         praiseActionProvider.setOnClickListener(1, onClickListener);// 设置点击监听。
     }
@@ -121,9 +128,16 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
         @Override
         public void onClick(int what) {
             if (what == 0) {
-                commentActionProvider.setBadge(commentActionProvider.getBadge() + 1);
             } else if (what == 1) {
-                praiseActionProvider.setBadge(praiseActionProvider.getBadge() + 1);
+                int data = 0;
+                if (praiseActionProvider.isSelected()) {
+                    praiseActionProvider.setBadge(String.valueOf(praiseActionProvider.getBadge() - 1));
+                } else {
+                    praiseActionProvider.setBadge(String.valueOf(praiseActionProvider.getBadge() + 1));
+                    data = 1;
+                }
+                praiseActionProvider.setSelected(!praiseActionProvider.isSelected());
+                mNewsDetailPresenter.voteStory(newsId, data);
             }
         }
     };
@@ -135,6 +149,18 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
         binding.setNews(newsDetailBean);
         mWebView.loadData(newsDetailBean, this);
         //        binding.wvNewsDetail.loadUrl(newsDetailBean.getShare_url());
+    }
+
+    @Override
+    public void loadStoryExtra(ExtraBean extraBean) {
+        commentActionProvider.setBadge(StringFormat.formatKNumber(extraBean.getComments()));
+        praiseActionProvider.setBadge(StringFormat.formatKNumber(extraBean.getPopularity()));
+        praiseActionProvider.setSelected(extraBean.getVote_status() == 1);
+    }
+
+    @Override
+    public void onErrorLoad(Throwable e) {
+        Toast.makeText(NewsDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
 

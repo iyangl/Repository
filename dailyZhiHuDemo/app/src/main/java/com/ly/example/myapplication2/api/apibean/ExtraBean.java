@@ -19,6 +19,32 @@ public class ExtraBean {
      */
     private int comments;
 
+    /**
+     * 0：未点赞  1：已点赞
+     */
+    private int vote_status;
+
+    /**
+     * 是否收藏
+     */
+    private Boolean favorite;
+
+    public int getVote_status() {
+        return vote_status;
+    }
+
+    public void setVote_status(int vote_status) {
+        this.vote_status = vote_status;
+    }
+
+    public Boolean getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(Boolean favorite) {
+        this.favorite = favorite;
+    }
+
     public int getLong_comments() {
         return long_comments;
     }
@@ -49,5 +75,17 @@ public class ExtraBean {
 
     public void setComments(int comments) {
         this.comments = comments;
+    }
+
+    @Override
+    public String toString() {
+        return "ExtraBean{" +
+                "long_comments=" + long_comments +
+                ", popularity=" + popularity +
+                ", short_comments=" + short_comments +
+                ", comments=" + comments +
+                ", vote_status=" + vote_status +
+                ", favorite=" + favorite +
+                '}';
     }
 }

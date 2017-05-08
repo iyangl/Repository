@@ -68,9 +68,21 @@ public class BadgeActionProvider extends ActionProvider {
         iv_badge.setImageResource(icon);
     }
 
+    public boolean isSelected() {
+        return iv_badge.isSelected();
+    }
+
+    public void setSelected(boolean isSelected) {
+        iv_badge.setSelected(isSelected);
+    }
+
     // 设置显示的数字。
-    public void setBadge(int i) {
-        tv_badge.setText(String.valueOf(i));
+    public void setBadge(String i) {
+        if (TextUtils.isEmpty(i) && TextUtils.equals(i, "0")) {
+            tv_badge.setText("...");
+        } else {
+            tv_badge.setText(String.valueOf(i));
+        }
     }
 
     public int getBadge() {

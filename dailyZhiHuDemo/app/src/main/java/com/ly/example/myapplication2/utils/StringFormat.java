@@ -77,4 +77,12 @@ public class StringFormat {
         }
     }
 
+    public static String formatKNumber(int number) {
+        float i = (float) number / 1000;
+        if (i >= 1) {
+            return String.format("%.1f", i) + "k";
+        }
+        return String.valueOf(number);
+    }
+
 }

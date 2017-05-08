@@ -1,6 +1,5 @@
 package com.ly.example.myapplication2.api;
 
-import com.google.gson.JsonObject;
 import com.ly.example.myapplication2.api.apibean.CommentsBean;
 import com.ly.example.myapplication2.api.apibean.CreativesListBean;
 import com.ly.example.myapplication2.api.apibean.ExtraBean;
@@ -13,9 +12,11 @@ import com.ly.example.myapplication2.api.apibean.ThemeNewsBean;
 import com.ly.example.myapplication2.api.apibean.ThemesBean;
 import com.ly.example.myapplication2.api.apibean.VersionBean;
 
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
-import retrofit2.http.Url;
 import rx.Observable;
 
 public interface ZhihuDailyApi {
@@ -169,11 +170,13 @@ public interface ZhihuDailyApi {
     Observable<RecommendersBean> recommenders(@Path("id") int id);
 
     /**
-     * 下载js和css
+     * 点赞
      *
-     * @param url 路径
-     * @return 内容
+     * @param id   消息id
+     * @param data 0：取消点赞  1：点赞
+     * @return 空字符串
      */
-    @GET
-    Observable<JsonObject> downloadCJ(@Url String url);
+    @FormUrlEncoded
+    @POST("4/vote/story/{id}")
+    Observable<ExtraBean> voteStory(@Path("id") int id, @Field("data") int data);
 }
