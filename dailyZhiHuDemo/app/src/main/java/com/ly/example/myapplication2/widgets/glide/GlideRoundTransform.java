@@ -1,4 +1,4 @@
-package com.ly.example.myapplication2.utils.widgets.glide;
+package com.ly.example.myapplication2.widgets.glide;
 
 import android.content.Context;
 import android.content.res.Resources;

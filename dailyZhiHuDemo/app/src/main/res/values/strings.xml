@@ -9,4 +9,8 @@
     <string name="account_favorite">我的收藏</string>
     <string name="offline_download">离线下载</string>
     <string name="editors">主编</string>
+    <string name="share">分享</string>
+    <string name="collect">收藏</string>
+    <string name="comments">回复</string>
+    <string name="zan">赞</string>
 </resources>

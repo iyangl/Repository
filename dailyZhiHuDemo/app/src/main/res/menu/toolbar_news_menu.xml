@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/item_toolbar_news_share"
+        android:icon="@drawable/share_alpha"
+        android:title="@string/share"
+        app:showAsAction="always"
+        />
+
+    <item
+        android:id="@+id/item_toolbar_news_collect"
+        android:icon="@drawable/selecotr_item_news_collect"
+        android:title="@string/collect"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/item_toolbar_news_comments"
+        android:title="@string/comments"
+        app:actionProviderClass="com.ly.example.myapplication2.widgets.BadgeActionProvider"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/item_toolbar_news_zan"
+        android:title="@string/zan"
+        app:actionProviderClass="com.ly.example.myapplication2.widgets.BadgeActionProvider"
+        app:showAsAction="always"/>
+</menu>

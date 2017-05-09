@@ -85,7 +85,7 @@ public class ToastUtil {
                 msgView.setBackgroundColor(msgViewBagColor);
                 msgView.setText(msg);
                 toast.setView(myToastView);
-                toast.setGravity(Gravity.TOP | Gravity.FILL_HORIZONTAL, 0, 0);// 顶部居中
+                toast.setGravity(Gravity.BOTTOM | Gravity.FILL_HORIZONTAL, 0, 0);// 顶部居中
                 toast.setDuration(Toast.LENGTH_SHORT);
                 toast.show();
 

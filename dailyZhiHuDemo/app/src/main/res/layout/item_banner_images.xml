@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="imageurl"
+            type="String"/>
+
+        <variable
+            name="title"
+            type="String"/>
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y200">
+
+        <ImageView
+            android:id="@+id/iv_item_banner_images"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:image="@{imageurl}"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/iv_item_banner_images"
+            android:background="@android:color/transparent"
+            android:paddingBottom="@dimen/y10"
+            android:layout_margin="@dimen/x10"
+            android:text="@{title}"
+            android:textColor="@color/white"
+            android:textSize="@dimen/x24"/>
+
+    </RelativeLayout>
+
+</layout>

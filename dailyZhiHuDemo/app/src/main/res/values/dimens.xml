@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="detail_top_image_margin">202dp</dimen>
+    <dimen name="detail_top_image_margin_negative">-202dp</dimen>
+    <dimen name="zero">0dp</dimen>
+</resources>

@@ -23,6 +23,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    //ADD THESE LINES:
+    packagingOptions {
+        exclude 'LICENSE.txt'
+    }
 }
 
 dependencies {
@@ -51,5 +56,11 @@ dependencies {
     compile 'com.jakewharton.timber:timber:4.5.1'
     //banner
     compile 'com.youth.banner:banner:1.4.9'
+    //convenientbanner
+    compile 'com.bigkoo:convenientbanner:2.0.5'
+    //leakCanary
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
 
 }

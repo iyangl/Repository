@@ -39,7 +39,7 @@ public class NewsDetailBean {
     /**
      * 供手机端的 WebView(UIWebView) 使用
      */
-    private List<?> js;
+    private List<String> js;
     /**
      * 获得的图片同 最新消息 获得的图片分辨率不同。这里获得的是在列表界面中使用的小图。
      */
@@ -123,11 +123,11 @@ public class NewsDetailBean {
         this.id = id;
     }
 
-    public List<?> getJs() {
+    public List<String> getJs() {
         return js;
     }
 
-    public void setJs(List<?> js) {
+    public void setJs(List<String> js) {
         this.js = js;
     }
 

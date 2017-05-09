@@ -11,20 +11,20 @@
 
     <RelativeLayout
         android:id="@+id/rl_themes_home"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
+        android:layout_width="@dimen/x300"
+        android:layout_height="@dimen/y50"
         android:background="@drawable/selector_item_themes_back"
         app:selected="@{isSelected}">
 
         <TextView
-            android:layout_width="300dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/x300"
+            android:layout_height="@dimen/y50"
             android:drawableLeft="@drawable/home"
             android:gravity="center_vertical"
-            android:paddingLeft="10dp"
+            android:paddingLeft="@dimen/x10"
             android:text="@string/home"
             android:textColor="@color/themes_text_color"
-            android:textSize="18sp"/>
+            android:textSize="@dimen/x18"/>
 
     </RelativeLayout>
 

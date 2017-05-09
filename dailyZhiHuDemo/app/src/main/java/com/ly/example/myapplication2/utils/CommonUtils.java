@@ -55,9 +55,9 @@ public class CommonUtils {
         return dm.widthPixels;
     }
 
-//	public static void RunOnUiThread(Runnable r) {
-//		CloudReaderApplication.getInstance().getMainLooper().post(r);
-//	}
+    //	public static void RunOnUiThread(Runnable r) {
+    //		CloudReaderApplication.getInstance().getMainLooper().post(r);
+    //	}
 
     public static Drawable getDrawable(int resid) {
         return getResoure().getDrawable(resid);
@@ -65,6 +65,10 @@ public class CommonUtils {
 
     public static int getColor(int resid) {
         return getResoure().getColor(resid);
+    }
+
+    public static int getDimension(int resid) {
+        return (int) getResoure().getDimension(resid);
     }
 
     public static Resources getResoure() {

@@ -31,7 +31,7 @@ public class SplashPresenter {
         if (creativesListBean != null) {
             needUpdate = iSplashModel.needUpdateLaunchImages(creativesListBean);
             imageUrl = creativesListBean.getCreatives().get(0).getUrl();
-            seconds = 3000L;
+            seconds = 1000L;
         }
         if (!TextUtils.isEmpty(imageUrl)) {
             splashView.loadLaunchImages(imageUrl);

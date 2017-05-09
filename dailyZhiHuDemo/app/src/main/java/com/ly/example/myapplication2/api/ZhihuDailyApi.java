@@ -12,7 +12,10 @@ import com.ly.example.myapplication2.api.apibean.ThemeNewsBean;
 import com.ly.example.myapplication2.api.apibean.ThemesBean;
 import com.ly.example.myapplication2.api.apibean.VersionBean;
 
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import rx.Observable;
 
@@ -165,4 +168,15 @@ public interface ZhihuDailyApi {
      */
     @GET("4/story/{id}/recommenders")
     Observable<RecommendersBean> recommenders(@Path("id") int id);
+
+    /**
+     * 点赞
+     *
+     * @param id   消息id
+     * @param data 0：取消点赞  1：点赞
+     * @return 空字符串
+     */
+    @FormUrlEncoded
+    @POST("4/vote/story/{id}")
+    Observable<ExtraBean> voteStory(@Path("id") int id, @Field("data") int data);
 }
