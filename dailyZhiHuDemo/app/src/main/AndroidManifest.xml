@@ -24,6 +24,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".mvp.view.NewsDetailActivity"/>
+        <activity android:name=".mvp.view.ShowWebImageActivity"/>
     </application>
 
 </manifest>

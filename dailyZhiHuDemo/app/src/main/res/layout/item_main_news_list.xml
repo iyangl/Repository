@@ -16,15 +16,15 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="94dp"
-        android:padding="5dp"
+        android:layout_height="@dimen/x94"
+        android:padding="@dimen/x5"
         >
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/item_main_news_back"
-            android:padding="10dp"
+            android:padding="@dimen/x10"
             >
 
             <TextView
@@ -38,15 +38,15 @@
 
             <RelativeLayout
                 android:id="@+id/rl_item_main_news_images"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="@dimen/x80"
+                android:layout_height="@dimen/x80"
                 android:layout_alignParentRight="true"
                 android:visibility="@{storiesbean.images==null ? View.GONE : View.VISIBLE}">
 
                 <ImageView
                     android:id="@+id/iv_item_main_news_image"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="@dimen/x80"
+                    android:layout_height="@dimen/x80"
                     android:layout_alignParentRight="true"
                     android:background="@drawable/image_small_default"
                     android:scaleType="centerCrop"
@@ -54,8 +54,8 @@
                     app:image="@{storiesbean.images[0]}"/>
 
                 <ImageView
-                    android:layout_width="39dp"
-                    android:layout_height="16dp"
+                    android:layout_width="@dimen/x39"
+                    android:layout_height="@dimen/y16"
                     android:layout_alignBottom="@+id/iv_item_main_news_image"
                     android:layout_alignRight="@+id/iv_item_main_news_image"
                     android:background="@drawable/home_pic"

@@ -14,30 +14,30 @@
     </data>
 
     <RelativeLayout
-        app:selected="@{isSelected}"
         android:id="@+id/rl_item_themes_list"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:background="@drawable/selector_item_themes_back">
+        android:layout_width="@dimen/x300"
+        android:layout_height="@dimen/y50"
+        android:paddingRight="@dimen/x30"
+        android:background="@drawable/selector_item_themes_back"
+        app:selected="@{isSelected}">
 
         <TextView
             android:id="@+id/tv_themes_list_theme"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/x50"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="@dimen/x15"
             android:gravity="center_vertical"
             android:text="@{others.name}"
             android:textColor="@color/black"
-            android:textSize="18sp"/>
+            android:textSize="@dimen/x18"/>
 
         <ImageView
             android:id="@+id/iv_themes_list_favor"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="@dimen/x20"
+            android:layout_height="@dimen/x20"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="30dp"
             android:background="@drawable/selector_item_themes_favor"
             android:scaleType="centerCrop"
             />

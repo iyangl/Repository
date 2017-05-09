@@ -15,9 +15,9 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:gravity="center_vertical"
-        android:padding="10dp"
+        android:padding="@dimen/x10"
         android:text="@{StringFormat.formatNewsDate(date)}"
         android:textColor="@color/news_date"
-        android:textSize="18sp"/>
+        android:textSize="@dimen/x18"/>
 
 </layout>

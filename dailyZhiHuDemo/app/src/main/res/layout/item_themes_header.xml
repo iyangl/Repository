@@ -2,21 +2,21 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
-        android:layout_width="300dp"
+        android:layout_width="@dimen/x300"
         android:layout_height="wrap_content"
         android:background="@color/toolbar_back"
         android:orientation="vertical">
 
         <RelativeLayout
-            android:layout_width="300dp"
+            android:layout_width="@dimen/x300"
             android:layout_height="?attr/actionBarSize">
 
             <ImageView
                 android:id="@+id/iv_themes_avatar"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="@dimen/x20"
+                android:layout_height="@dimen/x20"
                 android:layout_centerVertical="true"
-                android:layout_margin="10dp"
+                android:layout_margin="@dimen/x10"
                 android:scaleType="centerCrop"
                 android:src="@drawable/menu_avatar"/>
 
@@ -28,19 +28,19 @@
                 android:layout_toRightOf="@+id/iv_themes_avatar"
                 android:text="@string/username"
                 android:textColor="@color/white"
-                android:textSize="17sp"/>
+                android:textSize="@dimen/x17"/>
 
         </RelativeLayout>
 
         <LinearLayout
-            android:layout_width="300dp"
+            android:layout_width="@dimen/x300"
             android:layout_height="?attr/actionBarSize"
             android:orientation="horizontal"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp">
+            android:paddingLeft="@dimen/x20"
+            android:paddingRight="@dimen/x20">
 
             <TextView
-                android:paddingRight="18dp"
+                android:paddingRight="@dimen/x18"
                 android:id="@+id/iv_themes_favor"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -50,11 +50,11 @@
                 android:gravity="center"
                 android:text="@string/account_favorite"
                 android:textColor="@color/white"
-                android:textSize="15sp"
+                android:textSize="@dimen/x15"
                 android:textStyle="bold"/>
 
             <TextView
-                android:paddingLeft="18dp"
+                android:paddingLeft="@dimen/x18"
                 android:id="@+id/iv_themes_download"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -63,7 +63,7 @@
                 android:gravity="center"
                 android:text="@string/offline_download"
                 android:textColor="@color/white"
-                android:textSize="15sp"
+                android:textSize="@dimen/x15"
                 android:textStyle="bold"/>
 
         </LinearLayout>

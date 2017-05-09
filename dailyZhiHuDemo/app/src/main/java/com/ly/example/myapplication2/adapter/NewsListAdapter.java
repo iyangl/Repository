@@ -150,7 +150,7 @@ public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAda
             }
             binding.convenientBanner.setLayoutParams(new RelativeLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT
-                    , CommonUtils.dip2px(binding.convenientBanner.getContext(), 200)));
+                    , CommonUtils.getDimension(R.dimen.y202)));
             binding.convenientBanner.setPages(new CBViewHolderCreator<ImageHolderView>() {
                 @Override
                 public ImageHolderView createHolder() {

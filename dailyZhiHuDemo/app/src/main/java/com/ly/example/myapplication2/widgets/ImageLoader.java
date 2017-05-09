@@ -25,6 +25,13 @@ public class ImageLoader {
                 .into(iv);
     }
 
+    public static void loadXMLImage(Context context, String url, ImageView iv) {
+        //原生 API
+        Glide.with(context).load(url).crossFade().placeholder(R.drawable.image_small_default).error(R.drawable
+                .image_small_default)
+                .into(iv);
+    }
+
     public static void loadGifImage(Context context, String url, ImageView iv) {
         Glide.with(context).load(url).asGif().diskCacheStrategy(DiskCacheStrategy.SOURCE).placeholder(R.drawable
                 .image_small_default).centerCrop().error(R.drawable.image_small_default).into(iv);

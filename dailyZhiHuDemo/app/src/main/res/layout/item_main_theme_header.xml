@@ -17,7 +17,7 @@
             android:scaleType="centerCrop"
             android:id="@+id/iv_theme_back"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="@dimen/y200"
             app:image="@{themenewsbean.background}"/>
 
         <TextView
@@ -25,13 +25,13 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/iv_theme_back"
             android:gravity="center_vertical"
-            android:paddingBottom="20dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:paddingTop="20dp"
+            android:paddingBottom="@dimen/y200"
+            android:paddingLeft="@dimen/x15"
+            android:paddingRight="@dimen/x15"
+            android:paddingTop="@dimen/y200"
             android:text="@{themenewsbean.description}"
             android:textColor="@color/white"
-            android:textSize="20sp"/>
+            android:textSize="@dimen/x20"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,7 +39,7 @@
             android:layout_below="@+id/iv_theme_back"
             android:background="@color/main_background"
             android:orientation="horizontal"
-            android:padding="10dp"
+            android:padding="@dimen/x10"
             app:editors="@{themenewsbean.editors}">
 
             <TextView
@@ -47,10 +47,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:paddingRight="10dp"
+                android:paddingRight="@dimen/x10"
                 android:text="@string/editors"
                 android:textColor="@color/black"
-                android:textSize="18sp"/>
+                android:textSize="@dimen/x18"/>
 
         </LinearLayout>
 

@@ -22,6 +22,11 @@ public class Constant {
          * 新闻id
          */
         public static final String NEWS_ID = "news_id";
+
+        /**
+         * webView中Image的url
+         */
+        public static final String WEB_IMAGE_URL = "web_image_url";
     }
 
     public static class Storage {

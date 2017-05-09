@@ -7,6 +7,7 @@ import android.webkit.WebView;
 import com.ly.example.myapplication2.api.apibean.NewsDetailBean;
 import com.ly.example.myapplication2.mvp.view.NewsDetailActivity;
 import com.ly.example.myapplication2.utils.Constant;
+import com.ly.example.myapplication2.utils.HtmlUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -21,6 +22,9 @@ import timber.log.Timber;
 
 
 public class CustomWebView extends WebView {
+
+    private static final String NEEDED_FORMAT_CSS_TAG = "<link rel=\"stylesheet\" type=\"text/css\" href=\"%s\"/>";
+
     public CustomWebView(Context context) {
         super(context);
     }
@@ -40,6 +44,18 @@ public class CustomWebView extends WebView {
         } else {
             loadData(newsDetailBean.getBody(), "text/html; charset=UTF-8", null);
         }
+    }
+
+    public void loadData(NewsDetailBean newsDetailBean) {
+        String htmlData = "";
+        if (newsDetailBean.getCss() != null && newsDetailBean.getCss().size() > 0) {
+            htmlData += HtmlUtil.createCssTag(newsDetailBean.getCss());
+        }
+        htmlData += newsDetailBean.getBody();
+        if (newsDetailBean.getJs() != null && newsDetailBean.getJs().size() > 0) {
+            htmlData += HtmlUtil.createJsTag(newsDetailBean.getJs());
+        }
+        loadData(htmlData, "text/html; charset=UTF-8", null);
     }
 
     public void downloadCJ(final NewsDetailBean newsDetailBean, final NewsDetailActivity newsDetailActivity) {
