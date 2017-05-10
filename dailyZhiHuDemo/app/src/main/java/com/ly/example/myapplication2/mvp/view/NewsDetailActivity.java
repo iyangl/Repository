@@ -5,14 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -31,6 +34,8 @@ import com.ly.example.myapplication2.utils.StringFormat;
 import com.ly.example.myapplication2.utils.ToastUtil;
 import com.ly.example.myapplication2.widgets.BadgeActionProvider;
 import com.ly.example.myapplication2.widgets.CustomWebView;
+
+import timber.log.Timber;
 
 
 public class NewsDetailActivity extends AppCompatActivity implements INewsDetailView {
@@ -57,7 +62,7 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
         mNewsDetailPresenter = new NewsDetailPresenter(this);
         mNewsDetailPresenter.loadNewsDetail(newsId);
         mNewsDetailPresenter.loadStoryExtra(newsId);
-
+        setAppbarAlphaListener();
     }
 
     @SuppressLint("JSInterface")
@@ -87,6 +92,37 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
                 NewsDetailActivity.this.finish();
             }
         });
+    }
+
+    private float lastPercent = 0;
+
+    public void setAppbarAlphaListener() {
+        binding.appbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                aaaaa(appBarLayout, verticalOffset);
+
+            }
+        });
+    }
+
+    private void aaaaa(AppBarLayout appBarLayout, int verticalOffset) {
+        int totalScrollRange = appBarLayout.getTotalScrollRange() / 2;
+        Timber.e("totalScrollRange: %d verticalOffset: %d", totalScrollRange, verticalOffset);
+        float percent = Math.abs(verticalOffset) / (float) totalScrollRange;
+        Timber.e("percent: %f, lastPercent: %f", percent, lastPercent);
+        if (Math.abs(percent - lastPercent) > 0.1 && percent <= 1) {
+            Timber.e("----------------percent: %f, lastPercent: %f", percent, lastPercent);
+            AlphaAnimation alphaAnimation;
+            if (lastPercent <= percent) {
+                alphaAnimation = new AlphaAnimation(1 - lastPercent, 1 - percent);
+            } else {
+                alphaAnimation = new AlphaAnimation(1 - percent, 1 - lastPercent);
+            }
+            alphaAnimation.setFillAfter(true);
+            mToolbar.startAnimation(alphaAnimation);
+            lastPercent = percent;
+        }
     }
 
     @Override
@@ -171,6 +207,15 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
 
     // 监听
     private class MyWebViewClient extends WebViewClient {
+
+        //调用外部浏览器打开超链接
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            Uri uri = Uri.parse(url);
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(intent);
+            return true;
+        }
 
         @Override
         public void onPageFinished(WebView view, String url) {
