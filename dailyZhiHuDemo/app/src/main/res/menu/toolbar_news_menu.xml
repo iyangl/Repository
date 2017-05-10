@@ -11,8 +11,8 @@
 
     <item
         android:id="@+id/item_toolbar_news_collect"
-        android:icon="@drawable/selecotr_item_news_collect"
         android:title="@string/collect"
+        app:actionProviderClass="com.ly.example.myapplication2.widgets.BadgeActionProvider"
         app:showAsAction="always"/>
 
     <item

@@ -7,7 +7,7 @@
         android:id="@+id/item_main_news_banner"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/y200"
+        android:layout_height="@dimen/x200"
         app:image_scale_type="center_crop"
         app:indicator_margin="@dimen/x2"
         app:title_height="@dimen/y80"

@@ -12,6 +12,7 @@ import com.ly.example.myapplication2.api.apibean.ThemeNewsBean;
 import com.ly.example.myapplication2.api.apibean.ThemesBean;
 import com.ly.example.myapplication2.api.apibean.VersionBean;
 
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -179,4 +180,11 @@ public interface ZhihuDailyApi {
     @FormUrlEncoded
     @POST("4/vote/story/{id}")
     Observable<ExtraBean> voteStory(@Path("id") int id, @Field("data") int data);
+
+    @FormUrlEncoded
+    @POST("/api/4/favorite/{id}")
+    Observable<ExtraBean> collectStory(@Path("id") int id, @Field("fk") String fk);
+
+    @DELETE("/api/4/favorite/{id}")
+    Observable<ExtraBean> collectStory(@Path("id") int id);
 }

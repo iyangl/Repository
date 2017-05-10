@@ -150,7 +150,7 @@ public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAda
             }
             binding.convenientBanner.setLayoutParams(new RelativeLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT
-                    , CommonUtils.getDimension(R.dimen.y202)));
+                    , CommonUtils.getDimension(R.dimen.x200)));
             binding.convenientBanner.setPages(new CBViewHolderCreator<ImageHolderView>() {
                 @Override
                 public ImageHolderView createHolder() {
@@ -160,7 +160,6 @@ public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAda
                     .setPointViewVisible(true)
                     .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL)
                     .setPageIndicator(new int[]{R.drawable.dot_radius_selected, R.drawable.dot_radius_unselected})
-                    .startTurning(3000)
                     .setOnItemClickListener(new OnItemClickListener() {
                         @Override
                         public void onItemClick(int position) {
@@ -173,6 +172,9 @@ public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAda
                             }
                         }
                     });
+            if (!binding.convenientBanner.isTurning()) {
+                binding.convenientBanner.startTurning(3000);
+            }
             binding.executePendingBindings();
         }
     }

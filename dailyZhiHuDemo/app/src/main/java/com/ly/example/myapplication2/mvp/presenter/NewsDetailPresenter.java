@@ -60,4 +60,18 @@ public class NewsDetailPresenter {
             }
         });
     }
+
+    public void collectStory(int newsId, boolean collect) {
+        iNewsDetailModel.collectStory(newsId, collect, new RequestImp<ExtraBean>() {
+            @Override
+            public void onSuccess(ExtraBean data) {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                iNewsDetailView.onErrorLoad(e);
+            }
+        });
+    }
 }

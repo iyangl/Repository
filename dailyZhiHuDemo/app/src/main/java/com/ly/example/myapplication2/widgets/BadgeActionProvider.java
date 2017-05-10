@@ -93,4 +93,8 @@ public class BadgeActionProvider extends ActionProvider {
         }
         return returnBadge;
     }
+
+    public void setBadgeGone() {
+        tv_badge.setVisibility(View.GONE);
+    }
 }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +22,7 @@ import com.ly.example.myapplication2.api.apibean.ThemesBean;
 import com.ly.example.myapplication2.databinding.ActivityMainBinding;
 import com.ly.example.myapplication2.mvp.presenter.MainPresenter;
 import com.ly.example.myapplication2.mvp.view.iview.IMainView;
+import com.ly.example.myapplication2.utils.CommonUtils;
 import com.ly.example.myapplication2.utils.Constant;
 import com.ly.example.myapplication2.utils.StringFormat;
 import com.ly.example.myapplication2.utils.ToastUtil;
@@ -56,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements IMainView {
         initSwipeRefreshLayout();
         initToolbar();
         initLeftRecyclerView();
+        initDrawerToggle();
     }
 
     private void initLeftRecyclerView() {
@@ -83,11 +86,11 @@ public class MainActivity extends AppCompatActivity implements IMainView {
     }
 
     private void initToolbar() {
-        binding.toolbarMain.toolbar.setNavigationIcon(R.drawable.three_lines);
+        //        binding.toolbarMain.toolbar.setNavigationIcon(R.drawable.drawer_arrow);
         binding.toolbarMain.toolbar.setTitle(R.string.home);
         binding.toolbarMain.toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         binding.toolbarMain.toolbar.inflateMenu(R.menu.toolbar_menu);
-        binding.toolbarMain.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        /*binding.toolbarMain.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 binding.dlMain.openDrawer(Gravity.START);
@@ -95,9 +98,20 @@ public class MainActivity extends AppCompatActivity implements IMainView {
                     mainPresenter.loadThemesData();
                 }
             }
-        });
+        });*/
         /*setSupportActionBar(binding.toolbarMain.toolbar);*/
         binding.toolbarMain.toolbar.setPopupTheme(R.style.Theme_Design_Light);
+    }
+
+    private void initDrawerToggle() {
+        // 参数：开启抽屉的activity、DrawerLayout的对象、toolbar按钮打开关闭的对象、描述open drawer、描述close drawer
+        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this,
+                binding.dlMain, binding.toolbarMain.toolbar, R.string.open, R.string.close);
+        // 添加抽屉按钮，通过点击按钮实现打开和关闭功能; 如果不想要抽屉按钮，只允许在侧边边界拉出侧边栏，可以不写此行代码
+        mDrawerToggle.getDrawerArrowDrawable().setColor(CommonUtils.getColor(R.color.white));
+        mDrawerToggle.syncState();
+        // 设置按钮的动画效果; 如果不想要打开关闭抽屉时的箭头动画效果，可以不写此行代码
+        binding.dlMain.setDrawerListener(mDrawerToggle);
     }
 
     private void initSwipeRefreshLayout() {
@@ -193,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements IMainView {
 
     private void initEvent() {
         initPrefetchLaunchImages(mainPresenter);
-
+        mainPresenter.loadThemesData();
         mainPresenter.loadNewsData(true);
     }
 

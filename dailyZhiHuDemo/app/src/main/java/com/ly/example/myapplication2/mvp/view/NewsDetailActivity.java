@@ -25,6 +25,7 @@ import com.ly.example.myapplication2.api.apibean.NewsDetailBean;
 import com.ly.example.myapplication2.databinding.ActivityNewsDetailBinding;
 import com.ly.example.myapplication2.mvp.presenter.NewsDetailPresenter;
 import com.ly.example.myapplication2.mvp.view.iview.INewsDetailView;
+import com.ly.example.myapplication2.utils.CommonUtils;
 import com.ly.example.myapplication2.utils.Constant;
 import com.ly.example.myapplication2.utils.StringFormat;
 import com.ly.example.myapplication2.utils.ToastUtil;
@@ -39,6 +40,7 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
     private Toolbar mToolbar;
     private BadgeActionProvider commentActionProvider;
     private BadgeActionProvider praiseActionProvider;
+    private BadgeActionProvider collectActionProvider;
     private int newsId;
 
     @Override
@@ -75,6 +77,9 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
         mToolbar = binding.newsDetailToolbar.toolbar;
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
+        mToolbar.setPadding(mToolbar.getPaddingLeft(), mToolbar.getPaddingTop(),
+                mToolbar.getPaddingRight() + CommonUtils.getDimension(R.dimen.x15)
+                , mToolbar.getPaddingBottom());
         mToolbar.setNavigationIcon(R.drawable.back_alpha);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,6 +100,7 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
         commentActionProvider.setBadge(StringFormat.formatKNumber(extraBean.getComments()));
         praiseActionProvider.setBadge(StringFormat.formatKNumber(extraBean.getPopularity()));
         praiseActionProvider.setSelected(extraBean.getVote_status() == 1);
+        collectActionProvider.setSelected(extraBean.getFavorite());
     }
 
     @Override
@@ -116,9 +122,6 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
             case R.id.item_toolbar_news_share:
                 ToastUtil.showSuccessMsg(R.string.share);
                 break;
-            case R.id.item_toolbar_news_collect:
-                ToastUtil.showSuccessMsg(R.string.collect);
-                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -128,15 +131,20 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
         super.onWindowFocusChanged(hasFocus);
         commentActionProvider.setIcon(R.drawable.comment);
         praiseActionProvider.setIcon(R.drawable.selector_item_news_praise);
+        collectActionProvider.setIcon(R.drawable.selecotr_item_news_collect);
+        collectActionProvider.setBadgeGone();
     }
 
     private void initBadge(Menu menu) {
         MenuItem menuItem1 = menu.findItem(R.id.item_toolbar_news_comments);
         MenuItem menuItem2 = menu.findItem(R.id.item_toolbar_news_zan);
+        MenuItem menuItem3 = menu.findItem(R.id.item_toolbar_news_collect);
         commentActionProvider = (BadgeActionProvider) MenuItemCompat.getActionProvider(menuItem1);
         praiseActionProvider = (BadgeActionProvider) MenuItemCompat.getActionProvider(menuItem2);
+        collectActionProvider = (BadgeActionProvider) MenuItemCompat.getActionProvider(menuItem3);
         commentActionProvider.setOnClickListener(0, onClickListener);// 设置点击监听。
         praiseActionProvider.setOnClickListener(1, onClickListener);// 设置点击监听。
+        collectActionProvider.setOnClickListener(2, onClickListener);// 设置点击监听。
     }
 
     private BadgeActionProvider.OnClickListener onClickListener = new BadgeActionProvider.OnClickListener() {
@@ -153,6 +161,9 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
                 }
                 praiseActionProvider.setSelected(!praiseActionProvider.isSelected());
                 mNewsDetailPresenter.voteStory(newsId, data);
+            } else if (what == 2) {
+                collectActionProvider.setSelected(!collectActionProvider.isSelected());
+                mNewsDetailPresenter.collectStory(newsId, collectActionProvider.isSelected());
             }
         }
     };
@@ -160,11 +171,6 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
 
     // 监听
     private class MyWebViewClient extends WebViewClient {
-
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            return super.shouldOverrideUrlLoading(view, url);
-        }
 
         @Override
         public void onPageFinished(WebView view, String url) {
@@ -188,13 +194,6 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
             view.getSettings().setJavaScriptEnabled(true);
 
             super.onPageStarted(view, url, favicon);
-        }
-
-        @Override
-        public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-
-            super.onReceivedError(view, errorCode, description, failingUrl);
-
         }
     }
 

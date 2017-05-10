@@ -35,7 +35,7 @@
                 <RelativeLayout
                     android:id="@+id/rl_detail_top_image"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/y238"
+                    android:layout_height="@dimen/x236"
                     android:paddingTop="?attr/actionBarSize"
                     android:visibility="@{news.image == null ? View.GONE : View.VISIBLE}"
                     app:layout_collapseMode="parallax"
@@ -44,7 +44,7 @@
 
                     <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/y202"
+                        android:layout_height="@dimen/x200"
                         android:layout_alignBottom="@+id/tv_image_source"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"

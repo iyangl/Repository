@@ -11,4 +11,6 @@ public interface INewsDetailModel {
     void loadStoryExtra(int newsId, RequestImp<ExtraBean> requestImp);
 
     void voteStory(int newsId, int data, RequestImp<ExtraBean> requestImp);
+
+    void collectStory(int newsId, boolean collect, RequestImp<ExtraBean> requestImp);
 }

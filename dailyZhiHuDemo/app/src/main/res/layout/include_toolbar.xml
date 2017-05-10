@@ -11,7 +11,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/toolbar_back"
         android:theme="@style/Theme.ToolBar.DailyZhiHu"
-        toolbar:navigationIcon="@drawable/three_lines"
+        toolbar:navigationIcon="@drawable/drawer_arrow"
         app:layout_collapseMode="pin"
         />
 

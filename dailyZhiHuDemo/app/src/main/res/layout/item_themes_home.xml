@@ -11,14 +11,14 @@
 
     <RelativeLayout
         android:id="@+id/rl_themes_home"
-        android:layout_width="@dimen/x300"
-        android:layout_height="@dimen/y50"
+        android:layout_width="@dimen/x250"
+        android:layout_height="@dimen/x40"
         android:background="@drawable/selector_item_themes_back"
         app:selected="@{isSelected}">
 
         <TextView
-            android:layout_width="@dimen/x300"
-            android:layout_height="@dimen/y50"
+            android:layout_width="@dimen/x250"
+            android:layout_height="@dimen/x40"
             android:drawableLeft="@drawable/home"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/x10"

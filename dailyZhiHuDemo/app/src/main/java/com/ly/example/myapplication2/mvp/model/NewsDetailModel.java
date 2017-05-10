@@ -82,4 +82,48 @@ public class NewsDetailModel implements INewsDetailModel {
                     }
                 });
     }
+
+    @Override
+    public void collectStory(int newsId, boolean collect, final RequestImp<ExtraBean> requestImp) {
+        if (collect) {
+            ApiFactory.getApi().collectStory(newsId, null)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<ExtraBean>() {
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            requestImp.onError(e);
+                        }
+
+                        @Override
+                        public void onNext(ExtraBean extraBean) {
+                        }
+                    });
+        } else {
+            ApiFactory.getApi().collectStory(newsId)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<ExtraBean>() {
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            requestImp.onError(e);
+                        }
+
+                        @Override
+                        public void onNext(ExtraBean extraBean) {
+                        }
+                    });
+        }
+
+    }
 }
