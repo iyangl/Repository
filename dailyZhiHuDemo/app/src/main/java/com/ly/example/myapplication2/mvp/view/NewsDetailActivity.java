@@ -100,28 +100,35 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
         binding.appbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                aaaaa(appBarLayout, verticalOffset);
-
+                setAlphaAnimationWithScroll(appBarLayout, verticalOffset);
             }
         });
     }
 
-    private void aaaaa(AppBarLayout appBarLayout, int verticalOffset) {
-        int totalScrollRange = appBarLayout.getTotalScrollRange() / 2;
-        Timber.e("totalScrollRange: %d verticalOffset: %d", totalScrollRange, verticalOffset);
+    private double ALPHA_PERCENT = 0.1;
+
+    private void setAlphaAnimationWithScroll(AppBarLayout appBarLayout, int verticalOffset) {
+        int totalScrollRange = appBarLayout.getTotalScrollRange();
+        float maxPercent = 1 - (float) mToolbar.getHeight() / (float) totalScrollRange;
         float percent = Math.abs(verticalOffset) / (float) totalScrollRange;
-        Timber.e("percent: %f, lastPercent: %f", percent, lastPercent);
-        if (Math.abs(percent - lastPercent) > 0.1 && percent <= 1) {
+        if (Math.abs(percent - ALPHA_PERCENT) > 0.01 && percent < maxPercent) {
             Timber.e("----------------percent: %f, lastPercent: %f", percent, lastPercent);
+            ALPHA_PERCENT = 0.1;
             AlphaAnimation alphaAnimation;
             if (lastPercent <= percent) {
-                alphaAnimation = new AlphaAnimation(1 - lastPercent, 1 - percent);
+                alphaAnimation = new AlphaAnimation(maxPercent - lastPercent, maxPercent - percent);
             } else {
                 alphaAnimation = new AlphaAnimation(1 - percent, 1 - lastPercent);
             }
             alphaAnimation.setFillAfter(true);
             mToolbar.startAnimation(alphaAnimation);
             lastPercent = percent;
+        }
+        if (percent >= 1) {
+            ALPHA_PERCENT = 0.01;
+            AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1);
+            alphaAnimation.setFillAfter(true);
+            mToolbar.startAnimation(alphaAnimation);
         }
     }
 

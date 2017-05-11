@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.bigkoo.convenientbanner.ConvenientBanner;
@@ -24,8 +23,6 @@ import com.ly.example.myapplication2.databinding.ItemMainNewsDateBinding;
 import com.ly.example.myapplication2.databinding.ItemMainNewsListBinding;
 import com.ly.example.myapplication2.databinding.ItemMainThemeHeaderBinding;
 import com.ly.example.myapplication2.utils.CommonUtils;
-import com.ly.example.myapplication2.widgets.ImageLoader;
-import com.youth.banner.loader.ImageLoaderInterface;
 
 import java.util.List;
 
@@ -221,18 +218,6 @@ public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAda
         }
 
         public void bind(Object obj) {
-        }
-    }
-
-    private static class GlideImageLoader implements ImageLoaderInterface {
-        @Override
-        public void displayImage(Context context, Object path, View imageView) {
-            ImageLoader.loadImage(context, (String) path, (ImageView) imageView);
-        }
-
-        @Override
-        public View createImageView(Context context) {
-            return null;
         }
     }
 

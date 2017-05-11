@@ -1,6 +1,8 @@
 package com.ly.example.myapplication2.widgets;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.webkit.WebView;
 
@@ -70,7 +72,7 @@ public class CustomWebView extends WebView {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                final File cssFile = new File(Constant.Storage.CSS_DIR + newsDetailBean.getId() + ".css");
+                final File cssFile = new File(Constant.Storage.WEB_DIR + newsDetailBean.getId() + ".css");
                 if (!cssFile.getParentFile().exists()) {
                     cssFile.getParentFile().mkdirs();
                 }
@@ -78,17 +80,28 @@ public class CustomWebView extends WebView {
                     cssFile.createNewFile();
                 }
                 FileOutputStream fileOutputStream = new FileOutputStream(cssFile);
-                fileOutputStream.write(response.body().bytes());
+                byte[] bytes = response.body().string().replace(".headline .img-place-holder {\n" +
+                        "  height: 200px;\n" +
+                        "}", "").getBytes();
+                fileOutputStream.write(bytes);
                 final String htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\""
                         + cssFile.getName() + "\" />" + newsDetailBean.getBody();
                 Timber.e("htmlData: %s" + htmlData);
-                newsDetailActivity.runOnUiThread(new Runnable() {
+                new Handler(Looper.getMainLooper())
+                        .post(new Runnable() {
+                            @Override
+                            public void run() {
+                                loadDataWithBaseURL("file:///" + cssFile.getParentFile().getAbsolutePath() + "/"
+                                        , htmlData, "text/html; charset=UTF-8", null, null);
+                            }
+                        });
+                /*newsDetailActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         loadDataWithBaseURL("file:///" + cssFile.getParentFile().getAbsolutePath() + "/"
                                 , htmlData, "text/html; charset=UTF-8", null, null);
                     }
-                });
+                });*/
             }
         });
     }

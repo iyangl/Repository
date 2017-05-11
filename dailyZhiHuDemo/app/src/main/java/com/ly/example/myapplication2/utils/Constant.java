@@ -1,6 +1,6 @@
 package com.ly.example.myapplication2.utils;
 
-import com.ly.example.myapplication2.app;
+import android.os.Environment;
 
 public class Constant {
 
@@ -33,12 +33,13 @@ public class Constant {
         /**
          * data缓存目录
          */
-        public static final String PACK_CACHE = app.getInstance().getCacheDir().getAbsolutePath() + "/";
+        public static final String PACK_CACHE = Environment.getExternalStorageDirectory().getAbsolutePath()
+                + "/" + "DailyZhiHu/";
 
         /**
          * 存放css目录
          */
-        public static final String CSS_DIR = PACK_CACHE + "css/";
+        public static final String WEB_DIR = PACK_CACHE + "web/";
 
     }
 

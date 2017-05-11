@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="?attr/actionBarSize"
+              android:layout_width="wrap_content"
               android:layout_height="match_parent"
               android:background="?actionBarItemBackground"
               android:gravity="center"
@@ -20,7 +20,8 @@
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:text="..."
+        android:lines="1"
         android:textColor="@color/white"
-        android:textSize="@dimen/x12"/>
+        android:textSize="@dimen/x11"/>
 
 </LinearLayout>
