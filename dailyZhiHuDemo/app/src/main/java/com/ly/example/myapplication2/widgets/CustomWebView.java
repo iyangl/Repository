@@ -1,31 +1,19 @@
 package com.ly.example.myapplication2.widgets;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.AttributeSet;
 import android.webkit.WebView;
 
 import com.ly.example.myapplication2.api.apibean.NewsDetailBean;
-import com.ly.example.myapplication2.mvp.view.NewsDetailActivity;
+import com.ly.example.myapplication2.rx.RxBus;
+import com.ly.example.myapplication2.rx.bean.WebCacheBean;
+import com.ly.example.myapplication2.utils.CommonUtils;
 import com.ly.example.myapplication2.utils.Constant;
-import com.ly.example.myapplication2.utils.HtmlUtil;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import timber.log.Timber;
+import com.ly.example.myapplication2.utils.FileUtils;
+import com.ly.example.myapplication2.utils.OkHttp3Utils;
 
 
 public class CustomWebView extends WebView {
-
-    private static final String NEEDED_FORMAT_CSS_TAG = "<link rel=\"stylesheet\" type=\"text/css\" href=\"%s\"/>";
 
     public CustomWebView(Context context) {
         super(context);
@@ -35,75 +23,50 @@ public class CustomWebView extends WebView {
         super(context, attrs);
     }
 
-    @Override
-    public void loadData(String data, String mimeType, String encoding) {
-        super.loadData(data, mimeType, encoding);
-    }
-
-    public void loadData(NewsDetailBean newsDetailBean, NewsDetailActivity newsDetailActivity) {
+    public void loadWebViewData(NewsDetailBean newsDetailBean) {
         if (newsDetailBean.getCss() != null && newsDetailBean.getCss().size() > 0) {
-            downloadCJ(newsDetailBean, newsDetailActivity);
-        } else {
-            loadData(newsDetailBean.getBody(), "text/html; charset=UTF-8", null);
+            for (String cssUrl : newsDetailBean.getCss()) {
+                downloadJSorCSS(newsDetailBean.getId(), cssUrl, Constant.FileType.CSS);
+            }
         }
-    }
-
-    public void loadData(NewsDetailBean newsDetailBean) {
-        String htmlData = "";
-        if (newsDetailBean.getCss() != null && newsDetailBean.getCss().size() > 0) {
-            htmlData += HtmlUtil.createCssTag(newsDetailBean.getCss());
-        }
-        htmlData += newsDetailBean.getBody();
         if (newsDetailBean.getJs() != null && newsDetailBean.getJs().size() > 0) {
-            htmlData += HtmlUtil.createJsTag(newsDetailBean.getJs());
+            for (String jsUrl : newsDetailBean.getJs()) {
+                downloadJSorCSS(newsDetailBean.getId(), jsUrl, Constant.FileType.JS);
+            }
         }
-        loadData(htmlData, "text/html; charset=UTF-8", null);
     }
 
-    public void downloadCJ(final NewsDetailBean newsDetailBean, final NewsDetailActivity newsDetailActivity) {
-        OkHttpClient okHttpClient = new OkHttpClient();
-        Request request = new Request.Builder().url(newsDetailBean.getCss().get(0)).build();
-        Call call = okHttpClient.newCall(request);
-        call.enqueue(new Callback() {
+    public void downloadJSorCSS(final int id, final String url, final int filetype) {
+        OkHttp3Utils.getInstance().doGetAsync(url, null, null, new OkHttp3Utils.NetCallback() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                System.out.println("onFailure: " + e.getMessage());
+            public void onFailure(int code, String msg) {
+
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final File cssFile = new File(Constant.Storage.WEB_DIR + newsDetailBean.getId() + ".css");
-                if (!cssFile.getParentFile().exists()) {
-                    cssFile.getParentFile().mkdirs();
-                }
-                if (!cssFile.exists()) {
-                    cssFile.createNewFile();
-                }
-                FileOutputStream fileOutputStream = new FileOutputStream(cssFile);
-                byte[] bytes = response.body().string().replace(".headline .img-place-holder {\n" +
+            public void onSuccess(int code, String content) {
+                String fileName = CommonUtils.getMD5Str(url);
+                String filePath = Constant.Storage.WEB_CACHE_DIR + fileName;
+                boolean writeFile = FileUtils.writeFile(filePath, content.replace(".headline .img-place-holder {\n" +
                         "  height: 200px;\n" +
-                        "}", "").getBytes();
-                fileOutputStream.write(bytes);
-                final String htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\""
-                        + cssFile.getName() + "\" />" + newsDetailBean.getBody();
-                Timber.e("htmlData: %s" + htmlData);
-                new Handler(Looper.getMainLooper())
-                        .post(new Runnable() {
-                            @Override
-                            public void run() {
-                                loadDataWithBaseURL("file:///" + cssFile.getParentFile().getAbsolutePath() + "/"
-                                        , htmlData, "text/html; charset=UTF-8", null, null);
-                            }
-                        });
-                /*newsDetailActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        loadDataWithBaseURL("file:///" + cssFile.getParentFile().getAbsolutePath() + "/"
-                                , htmlData, "text/html; charset=UTF-8", null, null);
+                        "}", ""));
+                if (writeFile) {
+                    WebCacheBean webCacheBean = new WebCacheBean();
+                    webCacheBean.setId(id);
+                    if (filetype == Constant.FileType.CSS) {
+                        WebCacheBean.CSSCacheBean cssCacheBean = new WebCacheBean.CSSCacheBean();
+                        cssCacheBean.setCssLink(fileName);
+                        webCacheBean.setCssCacheBean(cssCacheBean);
+                    } else if (filetype == Constant.FileType.JS) {
+                        WebCacheBean.JSCacheBean jsCacheBean = new WebCacheBean.JSCacheBean();
+                        jsCacheBean.setJsLink(fileName);
+                        webCacheBean.setJsCacheBean(jsCacheBean);
                     }
-                });*/
+                    RxBus.getInstance().post(webCacheBean);
+                }
             }
         });
+
     }
 
 }

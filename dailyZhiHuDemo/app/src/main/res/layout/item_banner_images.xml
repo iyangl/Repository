@@ -34,7 +34,7 @@
             android:layout_margin="@dimen/x10"
             android:text="@{title}"
             android:textColor="@color/white"
-            android:textSize="@dimen/x24"/>
+            android:textSize="@dimen/x20"/>
 
     </RelativeLayout>
 

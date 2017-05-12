@@ -123,7 +123,7 @@ public class ExampleInstrumentedTest {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                File cssFile = new File(Constant.Storage.CSS_DIR + newsDetailBean.getId() + ".css");
+                File cssFile = new File(Constant.Storage.WEB_CACHE_DIR + newsDetailBean.getId() + ".css");
                 if (!cssFile.exists()) {
                     cssFile.createNewFile();
                 }

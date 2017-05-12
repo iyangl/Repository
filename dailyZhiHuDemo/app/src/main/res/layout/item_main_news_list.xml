@@ -23,7 +23,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/item_main_news_back"
+            android:background="@drawable/recycler_bg"
             android:padding="@dimen/x10"
             >
 

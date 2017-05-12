@@ -28,14 +28,21 @@ import com.ly.example.myapplication2.api.apibean.NewsDetailBean;
 import com.ly.example.myapplication2.databinding.ActivityNewsDetailBinding;
 import com.ly.example.myapplication2.mvp.presenter.NewsDetailPresenter;
 import com.ly.example.myapplication2.mvp.view.iview.INewsDetailView;
+import com.ly.example.myapplication2.rx.RxBus;
+import com.ly.example.myapplication2.rx.bean.WebCacheBean;
 import com.ly.example.myapplication2.utils.CommonUtils;
 import com.ly.example.myapplication2.utils.Constant;
+import com.ly.example.myapplication2.utils.HtmlUtil;
 import com.ly.example.myapplication2.utils.StringFormat;
 import com.ly.example.myapplication2.utils.ToastUtil;
 import com.ly.example.myapplication2.widgets.BadgeActionProvider;
 import com.ly.example.myapplication2.widgets.CustomWebView;
 
-import timber.log.Timber;
+import java.util.ArrayList;
+
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 
 
 public class NewsDetailActivity extends AppCompatActivity implements INewsDetailView {
@@ -47,6 +54,8 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
     private BadgeActionProvider praiseActionProvider;
     private BadgeActionProvider collectActionProvider;
     private int newsId;
+    private Subscription subscription;
+    private WebCacheBean mWebCache;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,12 +66,75 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
         newsId = getIntent().getIntExtra(Constant.Intent_Extra.NEWS_ID, -1);
         if (newsId == -1) {
             return;
+        } else {
+            initWebCache();
         }
+
         initWebView();
+        initEvent();
+        setAppbarAlphaListener();
+    }
+
+    private void initWebCache() {
+        mWebCache = new WebCacheBean();
+        mWebCache.setId(newsId);
+        mWebCache.setCssLinks(new ArrayList<String>() {
+            @Override
+            public boolean add(String s) {
+                return !contains(s) && super.add(s);
+            }
+        });
+        mWebCache.setJsLinks(new ArrayList<String>() {
+            @Override
+            public boolean add(String s) {
+                return !contains(s) && super.add(s);
+            }
+        });
+    }
+
+    private void initEvent() {
+        subscription = RxBus.getInstance().toObserverable(WebCacheBean.class)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<WebCacheBean>() {
+                    @Override
+                    public void onCompleted() {
+                        ToastUtil.showErrorMsg("onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        ToastUtil.showErrorMsg(e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(WebCacheBean webCacheBean) {
+                        loadWebViewData(webCacheBean);
+                    }
+                });
+
         mNewsDetailPresenter = new NewsDetailPresenter(this);
         mNewsDetailPresenter.loadNewsDetail(newsId);
         mNewsDetailPresenter.loadStoryExtra(newsId);
-        setAppbarAlphaListener();
+    }
+
+    private void loadWebViewData(WebCacheBean webCacheBean) {
+        if (mWebCache.getId() == webCacheBean.getId()) {
+
+            if (webCacheBean.getCssCacheBean() != null) {
+                mWebCache.getCssLinks().add(webCacheBean.getCssCacheBean().getCssLink());
+            } else if (webCacheBean.getJsCacheBean() != null) {
+                mWebCache.getJsLinks().add(webCacheBean.getJsCacheBean().getJsLink());
+            }
+
+            if (mWebCache.getCssLinks().size() == mWebCache.getCssCount() &&
+                    mWebCache.getJsLinks().size() == mWebCache.getJsCount()) {
+                String htmlData = mWebCache.getHtmlData();
+                htmlData = HtmlUtil.createCssTag(mWebCache.getCssLinks()) + htmlData;
+                htmlData = htmlData + HtmlUtil.createJsTag(mWebCache.getJsLinks());
+                mWebView.loadDataWithBaseURL("file:///" + Constant.Storage.WEB_CACHE_DIR
+                        , htmlData, "text/html; charset=UTF-8", null, null);
+            }
+        }
     }
 
     @SuppressLint("JSInterface")
@@ -112,7 +184,6 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
         float maxPercent = 1 - (float) mToolbar.getHeight() / (float) totalScrollRange;
         float percent = Math.abs(verticalOffset) / (float) totalScrollRange;
         if (Math.abs(percent - ALPHA_PERCENT) > 0.01 && percent < maxPercent) {
-            Timber.e("----------------percent: %f, lastPercent: %f", percent, lastPercent);
             ALPHA_PERCENT = 0.1;
             AlphaAnimation alphaAnimation;
             if (lastPercent <= percent) {
@@ -135,7 +206,12 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
     @Override
     public void loadNewsDetailSuccess(NewsDetailBean newsDetailBean) {
         binding.setNews(newsDetailBean);
-        mWebView.loadData(newsDetailBean);
+
+        mWebCache.setCssCount(CommonUtils.getListSize(newsDetailBean.getCss()));
+        mWebCache.setJsCount(CommonUtils.getListSize(newsDetailBean.getJs()));
+        mWebCache.setHtmlData(newsDetailBean.getBody());
+
+        mWebView.loadWebViewData(newsDetailBean);
     }
 
     @Override
@@ -282,6 +358,14 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
             intent.setClass(context, ShowWebImageActivity.class);
             context.startActivity(intent);
             System.out.println(img);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (subscription != null && !subscription.isUnsubscribed()) {
+            subscription.unsubscribe();
         }
     }
 }

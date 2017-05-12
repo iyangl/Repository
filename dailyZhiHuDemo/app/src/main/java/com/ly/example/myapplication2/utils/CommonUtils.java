@@ -17,6 +17,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -154,5 +155,16 @@ public class CommonUtils {
                 md5StrBuff.append(Integer.toHexString(0xFF & byteArray[i]));
         }
         return md5StrBuff.toString();
+    }
+
+    public static boolean isListEmpty(List list) {
+        return list == null || list.size() == 0;
+    }
+
+    public static int getListSize(List list) {
+        if (isListEmpty(list)) {
+            return 0;
+        }
+        return list.size();
     }
 }

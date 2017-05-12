@@ -39,8 +39,13 @@ public class Constant {
         /**
          * 存放css目录
          */
-        public static final String WEB_DIR = PACK_CACHE + "web/";
+        public static final String WEB_CACHE_DIR = PACK_CACHE + "web/";
 
+    }
+
+    public static class FileType {
+        public static final int CSS = 1;
+        public static final int JS = 2;
     }
 
 }
