@@ -27,6 +27,10 @@ public class Constant {
          * webView中Image的url
          */
         public static final String WEB_IMAGE_URL = "web_image_url";
+        /**
+         * news的评论数等信息
+         */
+        public static final String NEWS_STORY_EXTRA = "news_story_extra";
     }
 
     public static class Storage {

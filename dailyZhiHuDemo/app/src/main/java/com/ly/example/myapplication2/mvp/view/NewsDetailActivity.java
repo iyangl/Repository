@@ -44,6 +44,8 @@ import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
+import static com.ly.example.myapplication2.utils.Constant.Intent_Extra.NEWS_ID;
+
 
 public class NewsDetailActivity extends AppCompatActivity implements INewsDetailView {
     private ActivityNewsDetailBinding binding;
@@ -56,6 +58,7 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
     private int newsId;
     private Subscription subscription;
     private WebCacheBean mWebCache;
+    private ExtraBean extraBean;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,7 +66,7 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
         binding = DataBindingUtil.setContentView(this, R.layout.activity_news_detail);
         initToolbar();
 
-        newsId = getIntent().getIntExtra(Constant.Intent_Extra.NEWS_ID, -1);
+        newsId = getIntent().getIntExtra(NEWS_ID, -1);
         if (newsId == -1) {
             return;
         } else {
@@ -216,6 +219,7 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
 
     @Override
     public void loadStoryExtra(ExtraBean extraBean) {
+        this.extraBean = extraBean;
         commentActionProvider.setBadge(StringFormat.formatKNumber(extraBean.getComments()));
         praiseActionProvider.setBadge(StringFormat.formatKNumber(extraBean.getPopularity()));
         praiseActionProvider.setSelected(extraBean.getVote_status() == 1);
@@ -270,6 +274,10 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
         @Override
         public void onClick(int what) {
             if (what == 0) {
+                Intent intent = new Intent(NewsDetailActivity.this, CommentsActivity.class);
+                intent.putExtra(Constant.Intent_Extra.NEWS_STORY_EXTRA, extraBean);
+                intent.putExtra(Constant.Intent_Extra.NEWS_ID, newsId);
+                NewsDetailActivity.this.startActivity(intent);
             } else if (what == 1) {
                 int data = 0;
                 if (praiseActionProvider.isSelected()) {

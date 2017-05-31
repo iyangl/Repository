@@ -85,4 +85,9 @@ public class StringFormat {
         return String.valueOf(number);
     }
 
+    public static String formatCommentDate(Long date) {
+        SimpleDateFormat format = new SimpleDateFormat("MM-dd HH:mm");
+        return format.format(date);
+    }
+
 }

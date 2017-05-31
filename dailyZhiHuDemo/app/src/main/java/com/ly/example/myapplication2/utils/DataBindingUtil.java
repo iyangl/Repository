@@ -23,6 +23,11 @@ public class DataBindingUtil {
         }
     }
 
+    @BindingAdapter("avatar")
+    public static void avatarLoader(ImageView imageView, String imageUrls) {
+        ImageLoader.loadCircleImage(imageView.getContext(), imageUrls, imageView);
+    }
+
     @BindingAdapter("selected")
     public static void itemSelected(View view, boolean isSelected) {
         view.setSelected(isSelected);
@@ -55,4 +60,10 @@ public class DataBindingUtil {
                 layoutParams.rightMargin, layoutParams.bottomMargin);
         view.setLayoutParams(layoutParams);
     }
+
+    @BindingAdapter("selected")
+    public static void selected(ImageView view, boolean selected) {
+        view.setSelected(selected);
+    }
+
 }

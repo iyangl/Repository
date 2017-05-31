@@ -25,6 +25,7 @@
         </activity>
         <activity android:name=".mvp.view.NewsDetailActivity"/>
         <activity android:name=".mvp.view.ShowWebImageActivity"/>
+        <activity android:name=".mvp.view.CommentsActivity"/>
     </application>
 
 </manifest>

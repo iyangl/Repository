@@ -39,9 +39,12 @@ public class ImageLoader {
 
 
     public static void loadCircleImage(Context context, String url, ImageView iv) {
-        Glide.with(context).load(url).placeholder(R.drawable.image_small_default).error(R.drawable
-                .image_small_default).centerCrop().transform(new
-                GlideCircleTransform(context)).into(iv);
+        loadCircleImage(context, url, iv, R.drawable.image_small_default);
+    }
+
+    public static void loadCircleImage(Context context, String url, ImageView iv, int defaultImage) {
+        Glide.with(context).load(url).placeholder(defaultImage).error(defaultImage)
+                .centerCrop().transform(new GlideCircleTransform(context)).into(iv);
     }
 
     public static void loadRoundCornerImage(Context context, String url, ImageView iv) {

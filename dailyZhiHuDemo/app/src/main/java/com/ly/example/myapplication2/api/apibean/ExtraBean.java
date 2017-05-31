@@ -1,6 +1,8 @@
 package com.ly.example.myapplication2.api.apibean;
 
-public class ExtraBean {
+import java.io.Serializable;
+
+public class ExtraBean implements Serializable {
 
     /**
      * 长评论总数
