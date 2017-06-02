@@ -15,7 +15,7 @@ import timber.log.Timber;
 public class ServiceGenerator {
 
     private static final String BASE_URL = "http://news-at.zhihu.com/api/";
-    private static final String Authorization = "Bearer moEVfTWCT3-KWj-g9ZJIxQ";
+    private static final String Authorization = "Bearer eKlVryCiQTamKjh2GQ3ekg";
 
     private static OkHttpClient.Builder builder = new OkHttpClient.Builder();
 

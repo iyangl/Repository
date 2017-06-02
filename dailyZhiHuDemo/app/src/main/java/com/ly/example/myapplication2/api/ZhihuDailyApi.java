@@ -100,6 +100,17 @@ public interface ZhihuDailyApi {
     Observable<CommentsBean> longComments(@Path("id") int id);
 
     /**
+     * URL:https://news-at.zhihu.com/api/4/story/9449109/long-comments/before/29154756
+     * 长评论加载更多
+     *
+     * @param id         消息id
+     * @param comment_id 最后一条回复id
+     * @return {@link CommentsBean}
+     */
+    @GET("4/story/{id}/long-comments/before/{comment_id}")
+    Observable<CommentsBean> longCommentsBefore(@Path("id") int id, @Path("comment_id") int comment_id);
+
+    /**
      * URL: http://news-at.zhihu.com/api/4/story/4232852/short-comments
      * 新闻对应短评论查看
      * 使用在 最新消息 中获得的 id，在 http://news-at.zhihu.com/api/4/story/#{id}/short-comments
@@ -110,6 +121,17 @@ public interface ZhihuDailyApi {
      */
     @GET("4/story/{id}/short-comments")
     Observable<CommentsBean> shortComments(@Path("id") int id);
+
+    /**
+     * URL:https://news-at.zhihu.com/api/4/story/9449109/short-comments/before/29159285
+     * 短评论加载更多
+     *
+     * @param id         消息id
+     * @param comment_id 最后一条回复id
+     * @return {@link CommentsBean}
+     */
+    @GET("4/story/{id}/short-comments/before/{comment_id}")
+    Observable<CommentsBean> shortCommentsBefore(@Path("id") int id, @Path("comment_id") int comment_id);
 
     /**
      * URL: http://news-at.zhihu.com/api/4/themes

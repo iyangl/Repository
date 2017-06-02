@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements IMainView {
         });
     }
 
-    private int lastVisibleItemPositon;
+    private int lastVisibleItemPosition;
 
     /**
      * 随着滑动更新toolbar标题为当前News日期
@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements IMainView {
                     .findFirstVisibleItemPosition();
             if (firstVisibleItemPosition > 0) {
                 Object item = null;
-                if (lastVisibleItemPositon > firstVisibleItemPosition) {
+                if (lastVisibleItemPosition > firstVisibleItemPosition) {
                     item = newsListAdapter.getItem(firstVisibleItemPosition + 1);
                     if (item instanceof String) {
                         item = StringFormat.getTomorrowDate((String) item);
@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements IMainView {
             } else {
                 binding.toolbarMain.toolbar.setTitle(R.string.home);
             }
-            lastVisibleItemPositon = firstVisibleItemPosition;
+            lastVisibleItemPosition = firstVisibleItemPosition;
         }
     }
 

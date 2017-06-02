@@ -1,14 +1,21 @@
 package com.ly.example.myapplication2.utils;
 
 import android.databinding.BindingAdapter;
+import android.graphics.Typeface;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.ly.example.myapplication2.R;
+import com.ly.example.myapplication2.api.apibean.CommentsBean;
 import com.ly.example.myapplication2.api.apibean.ThemeNewsBean;
 import com.ly.example.myapplication2.widgets.ImageLoader;
 
@@ -66,4 +73,27 @@ public class DataBindingUtil {
         view.setSelected(selected);
     }
 
+    @BindingAdapter("comments")
+    public static void comments(TextView view, CommentsBean.CommentBean commentBean) {
+        int contentLength;
+        int reply_author_length = 0;
+        StringBuilder content = new StringBuilder(commentBean.getContent());
+        contentLength = content.length();
+        if (commentBean.getReply_to() != null) {
+            content.append("\n").append("//").append(commentBean.getReply_to().getAuthor()).append(":");
+            reply_author_length = commentBean.getReply_to().getAuthor().length() + 3;
+            content.append(commentBean.getReply_to().getContent());
+        }
+        SpannableString ss = new SpannableString(content);
+        ss.setSpan(new ForegroundColorSpan(CommonUtils.getColor(R.color.black)), 0,
+                contentLength, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        if (commentBean.getReply_to() != null) {
+            ss.setSpan(new StyleSpan(Typeface.BOLD), contentLength,
+                    contentLength + reply_author_length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ss.setSpan(new ForegroundColorSpan(CommonUtils.getColor(R.color.comments_quote)),
+                    contentLength + reply_author_length, content.length(),
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        view.setText(ss);
+    }
 }
