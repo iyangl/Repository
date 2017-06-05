@@ -26,6 +26,8 @@ public class CommentsAdapter extends BaseRecyclerViewAdapter<CommentsBean.Commen
     private static int longCommentsCount;
     private static int shortCommentsCount;
 
+    private OnItemClickListener<CommentsBean.CommentBean> onItemClickListener;
+
     public CommentsAdapter(int long_comments, int short_comments) {
         longComments = new ArrayList<>();
         shortComments = new ArrayList<>();
@@ -41,9 +43,11 @@ public class CommentsAdapter extends BaseRecyclerViewAdapter<CommentsBean.Commen
                 return new CountLongViewHolder(longCountView);
             case COMMENTS_COUNT_SHORT:
                 View shortCountView = View.inflate(parent.getContext(), R.layout.item_comments_count, null);
+                shortCountView.setOnClickListener(this);
                 return new CountShortViewHolder(shortCountView);
             case COMMENTS_COMMENT:
                 View commentView = View.inflate(parent.getContext(), R.layout.item_comments_comment, null);
+                commentView.setOnClickListener(this);
                 return new CommentViewHolder(commentView);
             case COMMENTS_EMPTY:
                 View emptyView = View.inflate(parent.getContext(), R.layout.item_comment_empty, null);
@@ -61,6 +65,10 @@ public class CommentsAdapter extends BaseRecyclerViewAdapter<CommentsBean.Commen
         }
         if (holder instanceof CountShortViewHolder) {
             ((CountShortViewHolder) holder).bind(new CommentsBean.CommentBean());
+            ((CountShortViewHolder) holder).itemView.setTag(
+                    R.id.tag_type, COMMENTS_COUNT_SHORT);
+            ((CountShortViewHolder) holder).itemView.setTag(
+                    R.id.tag_position, null);
         }
         if (holder instanceof EmptyViewHolder) {
             holder.bind(new CommentsBean.CommentBean());
@@ -102,7 +110,7 @@ public class CommentsAdapter extends BaseRecyclerViewAdapter<CommentsBean.Commen
 
     @Override
     public int getItemViewType(int position) {
-        if(position == 8) {
+        if (position == 8) {
             System.out.println("dasd");
         }
 
@@ -139,9 +147,41 @@ public class CommentsAdapter extends BaseRecyclerViewAdapter<CommentsBean.Commen
         notifyDataSetChanged();
     }
 
+    public int getLastShortCommentId() {
+        return shortComments.isEmpty() ? 0 : shortComments.get(shortComments.size() - 1).getId();
+    }
+
+    public int getLastLongCommentId() {
+        return longComments.isEmpty() ? 0 : longComments.get(longComments.size() - 1).getId();
+    }
+
+    public int getShortCommentsCount() {
+        return shortComments.size();
+    }
+
+    public int getLongCommentsCount() {
+        return longComments.size();
+    }
+
+    public void clearShortComments() {
+        shortComments.clear();
+        notifyDataSetChanged();
+    }
+
     @Override
     public void onClick(View v) {
+        if (onItemClickListener != null) {
+            int type = (int) v.getTag(R.id.tag_type);
+            CommentsBean.CommentBean comment = (CommentsBean.CommentBean) v.getTag(R.id.tag_position);
+            if (COMMENTS_COMMENT == type && comment == null) {
+                return;
+            }
+            onItemClickListener.onClick(v, comment);
+        }
+    }
 
+    public void setOnItemClickListener(OnItemClickListener<CommentsBean.CommentBean> onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
 

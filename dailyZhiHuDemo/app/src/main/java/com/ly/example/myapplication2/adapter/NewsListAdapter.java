@@ -48,7 +48,7 @@ public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAda
      */
     private static final int THEME_HEADER = 4;
 
-    private com.ly.example.myapplication2.adapter.OnItemClickListener onItemClickListener;
+    private com.ly.example.myapplication2.adapter.OnItemClickListener<Integer> onItemClickListener;
 
 
     @Override
@@ -109,7 +109,8 @@ public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAda
         }
     }
 
-    public void setOnItemClickListener(com.ly.example.myapplication2.adapter.OnItemClickListener onItemClickListener) {
+    public void setOnItemClickListener(com.ly.example.myapplication2.adapter.OnItemClickListener<Integer>
+                                               onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 

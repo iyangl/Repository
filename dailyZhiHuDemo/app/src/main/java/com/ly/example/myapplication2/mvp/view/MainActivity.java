@@ -65,9 +65,9 @@ public class MainActivity extends AppCompatActivity implements IMainView {
         binding.rvMainThemes.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         themesListAdapter = new ThemesListAdapter();
         binding.rvMainThemes.setAdapter(themesListAdapter);
-        themesListAdapter.setOnItemClickListener(new OnItemClickListener() {
+        themesListAdapter.setOnItemClickListener(new OnItemClickListener<Integer>() {
             @Override
-            public void onClick(View view, int... positions) {
+            public void onClick(View view, Integer... positions) {
                 selectedThemePosition = positions[0] - 2;
                 if (positions[0] != positions[1]) {
                     if (positions[0] == 1) {
@@ -136,9 +136,9 @@ public class MainActivity extends AppCompatActivity implements IMainView {
         binding.rvMain.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         newsListAdapter = new NewsListAdapter();
         binding.rvMain.setAdapter(newsListAdapter);
-        newsListAdapter.setOnItemClickListener(new OnItemClickListener() {
+        newsListAdapter.setOnItemClickListener(new OnItemClickListener<Integer>() {
             @Override
-            public void onClick(View view, int... positions) {
+            public void onClick(View view, Integer... positions) {
                 Intent intent = new Intent(MainActivity.this, NewsDetailActivity.class);
                 intent.putExtra(Constant.Intent_Extra.NEWS_ID, positions[0]);
                 startActivity(intent);

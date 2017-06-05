@@ -3,9 +3,13 @@ package com.ly.example.myapplication2;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
+import android.widget.Toast;
 
 import com.ly.example.myapplication2.api.ApiFactory;
+import com.ly.example.myapplication2.api.apibean.CommentsBean;
 import com.ly.example.myapplication2.api.apibean.NewsDetailBean;
+import com.ly.example.myapplication2.mvp.RequestImp;
+import com.ly.example.myapplication2.mvp.model.CommentsModel;
 import com.ly.example.myapplication2.utils.Constant;
 import com.ly.example.myapplication2.utils.StringFormat;
 
@@ -132,6 +136,23 @@ public class ExampleInstrumentedTest {
                 String htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\""
                         + cssFile.getName() + ".css\" />";
                 System.out.println("onResponse: " + htmlData);
+            }
+        });
+    }
+
+    @Test
+    public void testLongComments() {
+        CommentsModel commentModel = new CommentsModel();
+        int newsId = 9458195;
+        commentModel.loadLongComments(newsId, new RequestImp<CommentsBean>() {
+            @Override
+            public void onSuccess(CommentsBean data) {
+                Toast.makeText(app.getInstance(), data.toString(), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
             }
         });
     }

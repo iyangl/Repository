@@ -9,28 +9,30 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Toast;
 
 import com.ly.example.myapplication2.R;
 import com.ly.example.myapplication2.adapter.CommentsAdapter;
-import com.ly.example.myapplication2.api.ApiFactory;
+import com.ly.example.myapplication2.adapter.OnItemClickListener;
 import com.ly.example.myapplication2.api.apibean.CommentsBean;
 import com.ly.example.myapplication2.api.apibean.ExtraBean;
 import com.ly.example.myapplication2.databinding.ActivityCommentsBinding;
+import com.ly.example.myapplication2.mvp.presenter.CommentsPresenter;
+import com.ly.example.myapplication2.mvp.view.iview.ICommentsView;
 import com.ly.example.myapplication2.utils.Constant;
+import com.ly.example.myapplication2.utils.ToastUtil;
 
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 
-public class CommentsActivity extends AppCompatActivity {
+public class CommentsActivity extends AppCompatActivity implements ICommentsView {
 
     private ActivityCommentsBinding binding;
     private CommentsAdapter commentsAdapter;
     private ExtraBean extraBean;
     private int newsId;
     private boolean isLoading;
+    private CommentsPresenter commentsPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,45 +52,35 @@ public class CommentsActivity extends AppCompatActivity {
     }
 
     private void initEvent() {
-        ApiFactory.getApi().longComments(newsId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<CommentsBean>() {
-                    @Override
-                    public void onCompleted() {
+        commentsPresenter = new CommentsPresenter(this);
+        commentsPresenter.loadLongComments(newsId);
 
+        initOnClick();
+    }
+
+    private void initOnClick() {
+        commentsAdapter.setOnItemClickListener(new OnItemClickListener<CommentsBean.CommentBean>() {
+            @Override
+            public void onClick(View view, CommentsBean.CommentBean... positions) {
+                if (positions[0] == null) {
+                    //打开关闭短评
+                    LinearLayoutManager layoutManager = (LinearLayoutManager) binding.commentRecycler
+                            .getLayoutManager();
+                    boolean isSelected = !view.isSelected();
+                    view.setSelected(isSelected);
+                    if (isSelected) {
+                        commentsPresenter.loadShortComments(newsId);
+                        int i = commentsAdapter.getLongCommentsCount() + 1;
+                        binding.commentRecycler.smoothScrollToPosition(i);
+                    } else {
+                        commentsAdapter.clearShortComments();
+                        binding.commentRecycler.smoothScrollToPosition(0);
                     }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(CommentsBean commentsBean) {
-                        commentsAdapter.addLongComments(commentsBean.getComments(), true);
-                    }
-                });
-
-        ApiFactory.getApi().shortComments(newsId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<CommentsBean>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(CommentsBean commentsBean) {
-                        commentsAdapter.addShortComments(commentsBean.getComments(), true);
-                    }
-                });
+                } else {
+                    Toast.makeText(CommentsActivity.this, positions[0].getAuthor(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void initRecyclerView() {
@@ -127,4 +119,18 @@ public class CommentsActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void loadLongComments(CommentsBean commentBean, boolean isClear) {
+        commentsAdapter.addLongComments(commentBean.getComments(), isClear);
+    }
+
+    @Override
+    public void loadShortComments(CommentsBean commentBean, boolean isClear) {
+        commentsAdapter.addShortComments(commentBean.getComments(), isClear);
+    }
+
+    @Override
+    public void onError(Throwable e) {
+        ToastUtil.showErrorMsg(e.getMessage());
+    }
 }

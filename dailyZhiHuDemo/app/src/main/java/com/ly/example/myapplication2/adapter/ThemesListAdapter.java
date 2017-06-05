@@ -17,7 +17,7 @@ public class ThemesListAdapter extends BaseRecyclerViewAdapter<ThemesBean.Others
     private static final int THEMES_HOME = 2;
     private static final int THEMES_LIST = 3;
 
-    private OnItemClickListener onItemClickListener;
+    private OnItemClickListener<Integer> onItemClickListener;
     private int lastSelectedPosition = 1;
 
     @Override
@@ -64,7 +64,7 @@ public class ThemesListAdapter extends BaseRecyclerViewAdapter<ThemesBean.Others
         return super.getItemViewType(position);
     }
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+    public void setOnItemClickListener(OnItemClickListener<Integer> onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 

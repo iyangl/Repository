@@ -177,8 +177,39 @@ public class CommentsBean {
             public void setAuthor(String author) {
                 this.author = author;
             }
+
+            @Override
+            public String toString() {
+                return "ReplyToBean{" +
+                        "content='" + content + '\'' +
+                        ", status=" + status +
+                        ", id=" + id +
+                        ", author='" + author + '\'' +
+                        ", err_msg='" + err_msg + '\'' +
+                        '}';
+            }
+        }
+
+        @Override
+        public String toString() {
+            return "CommentBean{" +
+                    "author='" + author + '\'' +
+                    ", content='" + content + '\'' +
+                    ", avatar='" + avatar + '\'' +
+                    ", time=" + time +
+                    ", reply_to=" + reply_to +
+                    ", id=" + id +
+                    ", likes=" + likes +
+                    ", voted=" + voted +
+                    '}';
         }
 
     }
 
+    @Override
+    public String toString() {
+        return "CommentsBean{" +
+                "comments=" + comments +
+                '}';
+    }
 }
