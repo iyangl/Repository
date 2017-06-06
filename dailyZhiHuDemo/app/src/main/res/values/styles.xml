@@ -19,4 +19,9 @@
         <item name="android:src">@drawable/main_menu_more_overflow_mtrl_alpha</item>
     </style>
 
+    <style name="CustomDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
 </resources>

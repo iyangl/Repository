@@ -110,9 +110,6 @@ public class CommentsAdapter extends BaseRecyclerViewAdapter<CommentsBean.Commen
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 8) {
-            System.out.println("dasd");
-        }
 
         if (position == 0) {
             return COMMENTS_COUNT_LONG;
@@ -212,6 +209,9 @@ public class CommentsAdapter extends BaseRecyclerViewAdapter<CommentsBean.Commen
 
         public EmptyViewHolder(View itemView) {
             super(itemView);
+            if (longCommentsCount != 0) {
+                binding.ivCommentEmpty.setVisibility(View.VISIBLE);
+            }
         }
     }
 

@@ -17,6 +17,7 @@
     <string name="open">打开</string>
     <string name="close">关闭</string>
     <string name="comment_empty_long">深度长评虚位以待</string>
+    <string name="loading">请稍候……</string>
 
     <item name="tag_type" type="id"/>
     <item name="tag_position" type="id"/>

@@ -4,7 +4,6 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,10 +21,11 @@ import com.ly.example.myapplication2.mvp.view.iview.ICommentsView;
 import com.ly.example.myapplication2.utils.Constant;
 import com.ly.example.myapplication2.utils.ToastUtil;
 
+import rx.Subscription;
 import timber.log.Timber;
 
 
-public class CommentsActivity extends AppCompatActivity implements ICommentsView {
+public class CommentsActivity extends BaseActivity implements ICommentsView {
 
     private ActivityCommentsBinding binding;
     private CommentsAdapter commentsAdapter;
@@ -33,6 +33,8 @@ public class CommentsActivity extends AppCompatActivity implements ICommentsView
     private int newsId;
     private boolean isLoading;
     private CommentsPresenter commentsPresenter;
+    private LinearLayoutManager mLinearLayoutManager;
+    private boolean isUnFold;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,21 +60,22 @@ public class CommentsActivity extends AppCompatActivity implements ICommentsView
         initOnClick();
     }
 
+    private boolean shouldSmooth;
+
     private void initOnClick() {
         commentsAdapter.setOnItemClickListener(new OnItemClickListener<CommentsBean.CommentBean>() {
             @Override
             public void onClick(View view, CommentsBean.CommentBean... positions) {
                 if (positions[0] == null) {
                     //打开关闭短评
-                    LinearLayoutManager layoutManager = (LinearLayoutManager) binding.commentRecycler
-                            .getLayoutManager();
-                    boolean isSelected = !view.isSelected();
-                    view.setSelected(isSelected);
-                    if (isSelected) {
+                    isUnFold = !view.isSelected();
+                    view.setSelected(isUnFold);
+                    if (isUnFold) {
                         commentsPresenter.loadShortComments(newsId);
-                        int i = commentsAdapter.getLongCommentsCount() + 1;
-                        binding.commentRecycler.smoothScrollToPosition(i);
+                        shouldSmooth = true;
                     } else {
+                        //取消可能存在的正在进行的网络请求
+                        removeAllSubscriptions();
                         commentsAdapter.clearShortComments();
                         binding.commentRecycler.smoothScrollToPosition(0);
                     }
@@ -90,18 +93,32 @@ public class CommentsActivity extends AppCompatActivity implements ICommentsView
                 new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         commentsAdapter = new CommentsAdapter(extraBean.getLong_comments(), extraBean.getShort_comments());
         binding.commentRecycler.setAdapter(commentsAdapter);
+        mLinearLayoutManager = (LinearLayoutManager) binding.commentRecycler
+                .getLayoutManager();
         binding.commentRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager())
                         .findLastVisibleItemPosition();
-                if (lastVisibleItemPosition + 1 == commentsAdapter.getItemCount()) {
+                int itemCount = commentsAdapter.getItemCount();
+                if (lastVisibleItemPosition + 2 == itemCount) {
                     if (!isLoading) {
+                        if (isUnFold) {
+                            if (extraBean.getShort_comments() == 0 ||
+                                    extraBean.getShort_comments() == commentsAdapter.getShortCommentsCount()) {
+                                return;
+                            }
+                            commentsPresenter.loadMoreShortComments(newsId, commentsAdapter.getLastShortCommentId());
+                        } else {
+                            if (extraBean.getLong_comments() == 0 ||
+                                    extraBean.getLong_comments() == commentsAdapter.getLongCommentsCount()) {
+                                return;
+                            }
+                            commentsPresenter.loadMoreLongComments(newsId, commentsAdapter.getLastLongCommentId());
+                        }
                         isLoading = true;
-
                     }
                 }
-
                 super.onScrolled(recyclerView, dx, dy);
             }
         });
@@ -121,16 +138,40 @@ public class CommentsActivity extends AppCompatActivity implements ICommentsView
 
     @Override
     public void loadLongComments(CommentsBean commentBean, boolean isClear) {
+        isLoading = false;
         commentsAdapter.addLongComments(commentBean.getComments(), isClear);
     }
 
     @Override
     public void loadShortComments(CommentsBean commentBean, boolean isClear) {
+        isLoading = false;
         commentsAdapter.addShortComments(commentBean.getComments(), isClear);
+        if (shouldSmooth) {
+            shouldSmooth = false;
+            int i = commentsAdapter.getLongCommentsCount() + 1;
+            mLinearLayoutManager.scrollToPositionWithOffset(i, 0);
+            mLinearLayoutManager.setStackFromEnd(true);
+        }
     }
 
     @Override
     public void onError(Throwable e) {
+        isLoading = false;
         ToastUtil.showErrorMsg(e.getMessage());
+    }
+
+    @Override
+    public void onAddSubscription(Subscription subscription) {
+        addSubscription(subscription);
+    }
+
+    @Override
+    public void onShowLoading() {
+        showLoading();
+    }
+
+    @Override
+    public void onLoadingDismiss() {
+        dismiss();
     }
 }

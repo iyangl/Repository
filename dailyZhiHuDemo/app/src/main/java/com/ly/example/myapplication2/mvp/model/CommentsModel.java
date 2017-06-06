@@ -3,18 +3,20 @@ package com.ly.example.myapplication2.mvp.model;
 import com.ly.example.myapplication2.api.ApiFactory;
 import com.ly.example.myapplication2.api.apibean.CommentsBean;
 import com.ly.example.myapplication2.mvp.RequestImp;
+import com.ly.example.myapplication2.mvp.RequestImp2;
 import com.ly.example.myapplication2.mvp.model.imodel.ICommentsModel;
 import com.ly.example.myapplication2.rx.RxUtils;
 
 import rx.Subscriber;
+import rx.Subscription;
 
 
 public class CommentsModel implements ICommentsModel {
 
     @Override
-    public void loadLongComments(int newsId, final RequestImp<CommentsBean> requestImp) {
-        ApiFactory.getApi().longComments(newsId)
-                .compose(RxUtils.<CommentsBean>rxSchedulerHelper())
+    public void loadLongComments(int newsId, final RequestImp2<CommentsBean> requestImp) {
+        Subscription subscription = ApiFactory.getApi().longComments(newsId)
+                .compose(RxUtils.<CommentsBean>rxSchedulerHelper(requestImp))
                 .subscribe(new Subscriber<CommentsBean>() {
                     @Override
                     public void onCompleted() {
@@ -31,6 +33,7 @@ public class CommentsModel implements ICommentsModel {
                         requestImp.onSuccess(commentsBean);
                     }
                 });
+        requestImp.onAddSubscription(subscription);
     }
 
     @Override
@@ -56,9 +59,9 @@ public class CommentsModel implements ICommentsModel {
     }
 
     @Override
-    public void loadShortComments(int newsId, final RequestImp<CommentsBean> requestImp) {
-        ApiFactory.getApi().shortComments(newsId)
-                .compose(RxUtils.<CommentsBean>rxSchedulerHelper())
+    public void loadShortComments(int newsId, final RequestImp2<CommentsBean> requestImp) {
+        Subscription subscription = ApiFactory.getApi().shortComments(newsId)
+                .compose(RxUtils.<CommentsBean>rxSchedulerHelper(requestImp))
                 .subscribe(new Subscriber<CommentsBean>() {
                     @Override
                     public void onCompleted() {
@@ -75,6 +78,7 @@ public class CommentsModel implements ICommentsModel {
                         requestImp.onSuccess(commentsBean);
                     }
                 });
+        requestImp.onAddSubscription(subscription);
     }
 
     @Override
