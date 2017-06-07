@@ -31,6 +31,11 @@ public class Constant {
          * news的评论数等信息
          */
         public static final String NEWS_STORY_EXTRA = "news_story_extra";
+
+        /**
+         * 回复对象的信息
+         */
+        public static final String REPLY_COMMENT = "reply_comment";
     }
 
     public static class Storage {

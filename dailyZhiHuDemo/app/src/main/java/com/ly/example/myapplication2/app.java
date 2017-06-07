@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.StrictMode;
 
 import com.hss01248.dialog.MyActyManager;
-import com.ly.example.myapplication2.widgets.CrashHandler;
 import com.squareup.leakcanary.LeakCanary;
 
 import timber.log.Timber;
@@ -28,7 +27,6 @@ public class app extends Application {
         initTimber();
         enabledStrictMode();
         LeakCanary.install(this);
-        CrashHandler.getInstance().init(this);
         registerCallbacks();
     }
 

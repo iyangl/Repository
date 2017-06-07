@@ -11,6 +11,19 @@
             android:id="@+id/comment_toolbar"
             layout="@layout/include_toolbar"/>
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <EditText
+                android:hint="@string/comment_publish_hint"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"/>
+
+        </ScrollView>
+
     </LinearLayout>
 
 </layout>

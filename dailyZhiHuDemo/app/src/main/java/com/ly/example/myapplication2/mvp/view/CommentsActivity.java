@@ -129,7 +129,7 @@ public class CommentsActivity extends BaseActivity implements ICommentsView {
                                             Toast.LENGTH_SHORT).show();
                                     break;
                                 case 3:
-                                    goToReplyActivity();
+                                    goToReplyActivity(commentBean);
                                     break;
                             }
                         }
@@ -178,14 +178,14 @@ public class CommentsActivity extends BaseActivity implements ICommentsView {
     }
 
     private void initToolbar() {
-        binding.commentToolbar.toolbar.setTitle(extraBean.getComments() + "条点评");
+        binding.commentToolbar.toolbar.setTitle(extraBean.getComments() + getString(R.string.count_comments));
         binding.commentToolbar.toolbar.setTitleTextColor(Color.WHITE);
         binding.commentToolbar.toolbar.setNavigationIcon(R.drawable.back_alpha);
         binding.commentToolbar.toolbar.inflateMenu(R.menu.toolbar_comments);
         binding.commentToolbar.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                goToReplyActivity();
+                goToReplyActivity(null);
                 return true;
             }
         });
@@ -197,8 +197,12 @@ public class CommentsActivity extends BaseActivity implements ICommentsView {
         });
     }
 
-    private void goToReplyActivity() {
-        startActivity(new Intent(this, SplashActivity.class));
+    private void goToReplyActivity(CommentsBean.CommentBean commentBean) {
+        Intent intent = new Intent(this, ReplyActivity.class);
+        if (commentBean != null) {
+            intent.putExtra(Constant.Intent_Extra.REPLY_COMMENT, commentBean);
+        }
+        startActivity(intent);
     }
 
     @Override

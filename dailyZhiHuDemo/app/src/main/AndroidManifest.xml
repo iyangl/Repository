@@ -26,6 +26,7 @@
         <activity android:name=".mvp.view.NewsDetailActivity"/>
         <activity android:name=".mvp.view.ShowWebImageActivity"/>
         <activity android:name=".mvp.view.CommentsActivity"/>
+        <activity android:name=".mvp.view.ReplyActivity"/>
     </application>
 
 </manifest>

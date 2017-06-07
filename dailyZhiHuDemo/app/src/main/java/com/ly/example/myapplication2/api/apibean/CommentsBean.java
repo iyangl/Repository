@@ -1,5 +1,6 @@
 package com.ly.example.myapplication2.api.apibean;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class CommentsBean {
@@ -14,7 +15,7 @@ public class CommentsBean {
         this.comments = comments;
     }
 
-    public static class CommentBean {
+    public static class CommentBean implements Serializable {
 
         /**
          * 评论作者
