@@ -15,6 +15,8 @@ public class BaseRecyclerViewHolder<T extends ViewDataBinding, D> extends Recycl
     }
 
     public void bind(D d) {
-        binding.executePendingBindings();
+        if (binding != null) {
+            binding.executePendingBindings();
+        }
     }
 }

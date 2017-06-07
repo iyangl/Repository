@@ -189,7 +189,6 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 FileOutputStream fos = new FileOutputStream(path + fileName);
                 fos.write(sb.toString().getBytes());
                 //发送给开发人员
-                sendCrashLog2PM(path + fileName);
                 fos.close();
             }
             return fileName;

@@ -1,6 +1,7 @@
 package com.ly.example.myapplication2.mvp.presenter;
 
 import com.ly.example.myapplication2.api.apibean.CommentsBean;
+import com.ly.example.myapplication2.api.apibean.ExtraBean;
 import com.ly.example.myapplication2.mvp.RequestImp;
 import com.ly.example.myapplication2.mvp.RequestImp2;
 import com.ly.example.myapplication2.mvp.model.CommentsModel;
@@ -23,7 +24,7 @@ public class CommentsPresenter {
         iCommentsModel.loadLongComments(newsId, new RequestImp2<CommentsBean>() {
             @Override
             public void onSuccess(CommentsBean data) {
-                iCommentsView.loadLongComments(data, false);
+                iCommentsView.loadLongComments(data, true);
             }
 
             @Override
@@ -95,7 +96,7 @@ public class CommentsPresenter {
     }
 
     public void loadMoreShortComments(int newsId, int lastCommentId) {
-        if(lastCommentId == 0) {
+        if (lastCommentId == 0) {
             return;
         }
         iCommentsModel.loadMoreShortComments(newsId, lastCommentId, new RequestImp<CommentsBean>() {
@@ -111,4 +112,17 @@ public class CommentsPresenter {
         });
     }
 
+    public void voteComment(int id, Boolean voted) {
+        iCommentsModel.voteComment(id, voted, new RequestImp<ExtraBean>() {
+            @Override
+            public void onSuccess(ExtraBean data) {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                iCommentsView.onError(e);
+            }
+        });
+    }
 }

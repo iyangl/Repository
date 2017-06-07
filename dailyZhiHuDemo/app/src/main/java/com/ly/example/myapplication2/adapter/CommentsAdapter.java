@@ -8,6 +8,7 @@ import com.ly.example.myapplication2.api.apibean.CommentsBean;
 import com.ly.example.myapplication2.databinding.ItemCommentEmptyBinding;
 import com.ly.example.myapplication2.databinding.ItemCommentsCommentBinding;
 import com.ly.example.myapplication2.databinding.ItemCommentsCountBinding;
+import com.ly.example.myapplication2.utils.CommonUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,8 @@ public class CommentsAdapter extends BaseRecyclerViewAdapter<CommentsBean.Commen
     private static int shortCommentsCount;
 
     private OnItemClickListener<CommentsBean.CommentBean> onItemClickListener;
+
+    private int mDefaultClickPosition;
 
     public CommentsAdapter(int long_comments, int short_comments) {
         longComments = new ArrayList<>();
@@ -60,6 +63,7 @@ public class CommentsAdapter extends BaseRecyclerViewAdapter<CommentsBean.Commen
 
     @Override
     public void onBindViewHolder(BaseRecyclerViewHolder holder, int position) {
+        holder.itemView.setTag(R.id.tag_position, position);
         if (holder instanceof CountLongViewHolder) {
             ((CountLongViewHolder) holder).bind(new CommentsBean.CommentBean());
         }
@@ -68,7 +72,7 @@ public class CommentsAdapter extends BaseRecyclerViewAdapter<CommentsBean.Commen
             ((CountShortViewHolder) holder).itemView.setTag(
                     R.id.tag_type, COMMENTS_COUNT_SHORT);
             ((CountShortViewHolder) holder).itemView.setTag(
-                    R.id.tag_position, null);
+                    R.id.tag_content, null);
         }
         if (holder instanceof EmptyViewHolder) {
             holder.bind(new CommentsBean.CommentBean());
@@ -79,20 +83,20 @@ public class CommentsAdapter extends BaseRecyclerViewAdapter<CommentsBean.Commen
                 ((CommentViewHolder) holder).itemView.setTag(
                         R.id.tag_type, COMMENTS_COMMENT);
                 ((CommentViewHolder) holder).itemView.setTag(
-                        R.id.tag_position, shortComments.get(position - 3));
+                        R.id.tag_content, shortComments.get(position - 3));
             } else {
                 if (position >= longComments.size() + 2) {
                     ((CommentViewHolder) holder).bind(shortComments.get(position - longComments.size() - 2));
                     ((CommentViewHolder) holder).itemView.setTag(
                             R.id.tag_type, COMMENTS_COMMENT);
                     ((CommentViewHolder) holder).itemView.setTag(
-                            R.id.tag_position, shortComments.get(position - longComments.size() - 2));
+                            R.id.tag_content, shortComments.get(position - longComments.size() - 2));
                 } else {
                     ((CommentViewHolder) holder).bind(longComments.get(position - 1));
                     ((CommentViewHolder) holder).itemView.setTag(
                             R.id.tag_type, COMMENTS_COMMENT);
                     ((CommentViewHolder) holder).itemView.setTag(
-                            R.id.tag_position, longComments.get(position - 1));
+                            R.id.tag_content, longComments.get(position - 1));
                 }
             }
 
@@ -157,7 +161,7 @@ public class CommentsAdapter extends BaseRecyclerViewAdapter<CommentsBean.Commen
     }
 
     public int getLongCommentsCount() {
-        return longComments.size();
+        return longComments.size() == 0 ? 1 : longComments.size();
     }
 
     public void clearShortComments() {
@@ -165,11 +169,27 @@ public class CommentsAdapter extends BaseRecyclerViewAdapter<CommentsBean.Commen
         notifyDataSetChanged();
     }
 
+    public void notifySelectedItem(boolean vote, int likes) {
+        if (mDefaultClickPosition <= 0) {
+            return;
+        }
+        if (mDefaultClickPosition <= getLongCommentsCount()) {
+            longComments.get(mDefaultClickPosition - 1).setVoted(vote);
+            longComments.get(mDefaultClickPosition - 1).setLikes(likes);
+        } else {
+            shortComments.get(mDefaultClickPosition - getLongCommentsCount() - 2).setVoted(vote);
+            shortComments.get(mDefaultClickPosition - getLongCommentsCount() - 2).setLikes(likes);
+        }
+
+        notifyItemChanged(mDefaultClickPosition);
+    }
+
     @Override
     public void onClick(View v) {
         if (onItemClickListener != null) {
             int type = (int) v.getTag(R.id.tag_type);
-            CommentsBean.CommentBean comment = (CommentsBean.CommentBean) v.getTag(R.id.tag_position);
+            CommentsBean.CommentBean comment = (CommentsBean.CommentBean) v.getTag(R.id.tag_content);
+            mDefaultClickPosition = (int) v.getTag(R.id.tag_position);
             if (COMMENTS_COMMENT == type && comment == null) {
                 return;
             }
@@ -209,8 +229,9 @@ public class CommentsAdapter extends BaseRecyclerViewAdapter<CommentsBean.Commen
 
         public EmptyViewHolder(View itemView) {
             super(itemView);
-            if (longCommentsCount != 0) {
+            if (longCommentsCount == 0) {
                 binding.ivCommentEmpty.setVisibility(View.VISIBLE);
+                binding.tvCommentEmpty.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -227,7 +248,7 @@ public class CommentsAdapter extends BaseRecyclerViewAdapter<CommentsBean.Commen
 
         @Override
         public void bind(CommentsBean.CommentBean commentBean) {
-            binding.setCount(longCommentsCount + "条长评");
+            binding.setCount(longCommentsCount + CommonUtils.getString(R.string.count_long_comments));
             super.bind(commentBean);
         }
     }
@@ -245,7 +266,7 @@ public class CommentsAdapter extends BaseRecyclerViewAdapter<CommentsBean.Commen
 
         @Override
         public void bind(CommentsBean.CommentBean commentBean) {
-            binding.setCount(shortCommentsCount + "条短评");
+            binding.setCount(shortCommentsCount + CommonUtils.getString(R.string.count_short_comments));
             super.bind(commentBean);
         }
     }

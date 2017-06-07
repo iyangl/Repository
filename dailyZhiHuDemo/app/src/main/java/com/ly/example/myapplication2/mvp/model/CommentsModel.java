@@ -2,6 +2,7 @@ package com.ly.example.myapplication2.mvp.model;
 
 import com.ly.example.myapplication2.api.ApiFactory;
 import com.ly.example.myapplication2.api.apibean.CommentsBean;
+import com.ly.example.myapplication2.api.apibean.ExtraBean;
 import com.ly.example.myapplication2.mvp.RequestImp;
 import com.ly.example.myapplication2.mvp.RequestImp2;
 import com.ly.example.myapplication2.mvp.model.imodel.ICommentsModel;
@@ -101,5 +102,48 @@ public class CommentsModel implements ICommentsModel {
                         requestImp.onSuccess(commentsBean);
                     }
                 });
+    }
+
+    @Override
+    public void voteComment(int newsId, Boolean voted, final RequestImp<ExtraBean> requestImp) {
+        if (voted) {
+            ApiFactory.getApi().voteComment(newsId)
+                    .compose(RxUtils.<ExtraBean>rxSchedulerHelper())
+                    .subscribe(new Subscriber<ExtraBean>() {
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            requestImp.onError(e);
+                        }
+
+                        @Override
+                        public void onNext(ExtraBean extraBean) {
+                            requestImp.onSuccess(extraBean);
+                        }
+                    });
+        } else {
+            ApiFactory.getApi().voteComment(newsId, null)
+                    .compose(RxUtils.<ExtraBean>rxSchedulerHelper())
+                    .subscribe(new Subscriber<ExtraBean>() {
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            requestImp.onError(e);
+                        }
+
+                        @Override
+                        public void onNext(ExtraBean extraBean) {
+                            requestImp.onSuccess(extraBean);
+                        }
+                    });
+        }
     }
 }

@@ -18,7 +18,6 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
-import retrofit2.http.Url;
 import rx.Observable;
 
 public interface ZhihuDailyApi {
@@ -212,7 +211,7 @@ public interface ZhihuDailyApi {
      * @return 随便写的, 实际成功时返回{}
      */
     @FormUrlEncoded
-    @POST("/api/4/favorite/{id}")
+    @POST("4/favorite/{id}")
     Observable<ExtraBean> collectStory(@Path("id") int id, @Field("fk") String fk);
 
     /**
@@ -221,9 +220,26 @@ public interface ZhihuDailyApi {
      * @param id id
      * @return 随便写的, 实际成功时返回{}
      */
-    @DELETE("/api/4/favorite/{id}")
+    @DELETE("4/favorite/{id}")
     Observable<ExtraBean> collectStory(@Path("id") int id);
 
-    @GET
-    Observable<String> downloadCJ(@Url String url);
+    /**
+     * POST添加到收藏
+     *
+     * @param id id
+     * @param fk 随便写的，实际不需要参数，但用POST需要一个Field,传null即可
+     * @return 随便写的, 实际成功时返回{}
+     */
+    @FormUrlEncoded
+    @POST("4/vote/comment/{id}")
+    Observable<ExtraBean> voteComment(@Path("id") int id, @Field("fk") String fk);
+
+    /**
+     * DELETE从收藏中移除
+     *
+     * @param id id
+     * @return 随便写的, 实际成功时返回{}
+     */
+    @DELETE("4/vote/comment/{id}")
+    Observable<ExtraBean> voteComment(@Path("id") int id);
 }

@@ -31,6 +31,11 @@ public class ExtraBean implements Serializable {
      */
     private Boolean favorite;
 
+    /**
+     * 评论点赞返回值
+     */
+    private Integer count;
+
     public int getVote_status() {
         return vote_status;
     }

@@ -20,19 +20,18 @@ public class RxUtils {
                         .doOnSubscribe(new Action0() {
                             @Override
                             public void call() {
+                                SystemClock.sleep(300);
+                            }
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .doOnSubscribe(new Action0() {
+                            @Override
+                            public void call() {
                                 if (requestImp != null) {
                                     requestImp.onShowLoading();
                                 }
                             }
                         })
-                        .subscribeOn(AndroidSchedulers.mainThread())
-                        .doOnSubscribe(new Action0() {
-                            @Override
-                            public void call() {
-                                SystemClock.sleep(800);
-                            }
-                        })
-                        .subscribeOn(Schedulers.io())
                         .subscribeOn(AndroidSchedulers.mainThread())
                         .doAfterTerminate(new Action0() {
                             @Override

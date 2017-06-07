@@ -70,7 +70,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginRight="@dimen/x3"
                         android:layout_toLeftOf="@+id/tv_comment_likes"
-                        android:src="@drawable/comment_vote"
+                        android:src="@drawable/selector_icon_comment_vote"
                         app:selected="@{voted}"/>
 
                 </RelativeLayout>

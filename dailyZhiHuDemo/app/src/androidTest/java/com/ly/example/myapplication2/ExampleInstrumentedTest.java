@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.ly.example.myapplication2.api.ApiFactory;
 import com.ly.example.myapplication2.api.apibean.NewsDetailBean;
 import com.ly.example.myapplication2.mvp.model.CommentsModel;
 import com.ly.example.myapplication2.utils.Constant;
@@ -24,8 +23,6 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import rx.Subscriber;
-import rx.schedulers.Schedulers;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -83,25 +80,6 @@ public class ExampleInstrumentedTest {
 
     @Test
     public void testApiCJ() {
-        String url = "http://news-at.zhihu.com/css/news_qa.auto.css?v=4b3e3";
-        ApiFactory.getApi().downloadCJ(url)
-                .observeOn(Schedulers.io())
-                .subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onCompleted() {
-                        System.out.println("onCompleted");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        System.out.println("onError :" + e.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(String s) {
-                        System.out.println("onNext: " + s);
-                    }
-                });
     }
 
     @Test

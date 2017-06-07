@@ -18,7 +18,16 @@
     <string name="close">关闭</string>
     <string name="comment_empty_long">深度长评虚位以待</string>
     <string name="loading">请稍候……</string>
+    <string name="clipboard_success">复制成功</string>
+    <string name="report_title">举报</string>
+    <string name="report_msg">太好了 我们一起净化评论区</string>
+    <string name="cancel">取消</string>
+    <string name="report_confirm">确认举报</string>
+    <string name="count_long_comments">条长评</string>
+    <string name="count_short_comments">条短评</string>
+    <string name="reply">回复</string>
 
     <item name="tag_type" type="id"/>
     <item name="tag_position" type="id"/>
+    <item name="tag_content" type="id"/>
 </resources>

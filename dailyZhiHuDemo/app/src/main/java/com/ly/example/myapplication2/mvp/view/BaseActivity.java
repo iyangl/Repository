@@ -39,9 +39,22 @@ public class BaseActivity extends AppCompatActivity {
         compositeSubscription.add(subscription);
     }
 
+    /**
+     * unSubscribe compositeSubscription内所有Subscription
+     * 且以后再添加的Subscription均不能被Subscribe
+     */
     protected void removeAllSubscriptions() {
         if (compositeSubscription != null && !compositeSubscription.isUnsubscribed()) {
             compositeSubscription.unsubscribe();
+        }
+    }
+
+    /**
+     * unSubscribe compositeSubscription内所有Subscription
+     */
+    protected void clearAllSubscriptions() {
+        if (compositeSubscription != null && compositeSubscription.isUnsubscribed()) {
+            compositeSubscription.clear();
         }
     }
 
