@@ -30,6 +30,10 @@
     <string name="count_comments">条点评</string>
     <string name="comment_write">写点评</string>
     <string name="comment_publish_hint">不友善言论会被删除，深度讨论会优先展示。</string>
+    <string name="comment_share">同时分享到:</string>
+    <string name="content_cannot_null">内容不能为空！</string>
+    <string name="sina">sina</string>
+    <string name="tencent">tencent</string>
 
     <item name="tag_type" type="id"/>
     <item name="tag_position" type="id"/>

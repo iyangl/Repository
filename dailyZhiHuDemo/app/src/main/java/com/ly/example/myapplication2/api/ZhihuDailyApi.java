@@ -6,6 +6,7 @@ import com.ly.example.myapplication2.api.apibean.ExtraBean;
 import com.ly.example.myapplication2.api.apibean.NewsBean;
 import com.ly.example.myapplication2.api.apibean.NewsDetailBean;
 import com.ly.example.myapplication2.api.apibean.RecommendersBean;
+import com.ly.example.myapplication2.api.apibean.ReplyBean;
 import com.ly.example.myapplication2.api.apibean.SectionNewsBean;
 import com.ly.example.myapplication2.api.apibean.SectionsBean;
 import com.ly.example.myapplication2.api.apibean.ThemeNewsBean;
@@ -242,4 +243,28 @@ public interface ZhihuDailyApi {
      */
     @DELETE("4/vote/comment/{id}")
     Observable<ExtraBean> voteComment(@Path("id") int id);
+
+    /**
+     * 回复评论
+     *
+     * @param id       回复的news的id
+     * @param content  回复的内容
+     * @param share_to 是否转发到微博 sina、tencent 可为null
+     * @param reply_to 回复的评论的id 可为null
+     * @return {}
+     */
+    @FormUrlEncoded
+    @POST("4/news/{id}/comment")
+    Observable<ReplyBean> replyComment(@Path("id") int id, @Field("content") String content,
+                                       @Field("share_to") String share_to,
+                                       @Field("reply_to") int reply_to);
+
+    /**
+     * 删除评论
+     *
+     * @param id 要删除的评论id
+     * @return {}
+     */
+    @DELETE("4/comment/{id}")
+    Observable<ReplyBean> deleteComment(@Path("id") int id);
 }

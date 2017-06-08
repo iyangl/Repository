@@ -3,6 +3,7 @@ package com.ly.example.myapplication2.mvp.model;
 import com.ly.example.myapplication2.api.ApiFactory;
 import com.ly.example.myapplication2.api.apibean.CommentsBean;
 import com.ly.example.myapplication2.api.apibean.ExtraBean;
+import com.ly.example.myapplication2.api.apibean.ReplyBean;
 import com.ly.example.myapplication2.mvp.RequestImp;
 import com.ly.example.myapplication2.mvp.RequestImp2;
 import com.ly.example.myapplication2.mvp.model.imodel.ICommentsModel;
@@ -146,4 +147,51 @@ public class CommentsModel implements ICommentsModel {
                     });
         }
     }
+
+    @Override
+    public void deleteComment(int commentId, final RequestImp<ReplyBean> requestImp) {
+        ApiFactory.getApi().deleteComment(commentId)
+                .compose(RxUtils.<ReplyBean>rxSchedulerHelper())
+                .subscribe(new Subscriber<ReplyBean>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        requestImp.onError(e);
+                    }
+
+                    @Override
+                    public void onNext(ReplyBean replyBean) {
+                        requestImp.onSuccess(replyBean);
+                    }
+                });
+    }
+
+    @Override
+    public void replyComment(int newsId, String content, String share_to, int reply_to,
+                             final RequestImp<ReplyBean> requestImp) {
+        ApiFactory.getApi().replyComment(newsId, content, share_to, reply_to)
+                .compose(RxUtils.<ReplyBean>rxSchedulerHelper())
+                .subscribe(new Subscriber<ReplyBean>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        requestImp.onError(e);
+                    }
+
+                    @Override
+                    public void onNext(ReplyBean replyBean) {
+                        requestImp.onSuccess(replyBean);
+                    }
+                });
+
+    }
+
 }

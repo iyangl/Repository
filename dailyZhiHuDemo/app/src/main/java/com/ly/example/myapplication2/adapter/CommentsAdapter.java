@@ -169,6 +169,19 @@ public class CommentsAdapter extends BaseRecyclerViewAdapter<CommentsBean.Commen
         notifyDataSetChanged();
     }
 
+
+    public void delete(CommentsBean.CommentBean commentBean) {
+        if (longComments.contains(commentBean)) {
+            longComments.remove(commentBean);
+        }
+
+        if (shortComments.contains(commentBean)) {
+            shortComments.remove(commentBean);
+        }
+
+        notifyDataSetChanged();
+    }
+
     public void notifySelectedItem(boolean vote, int likes) {
         if (mDefaultClickPosition <= 0) {
             return;

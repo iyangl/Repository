@@ -26,7 +26,10 @@
         <activity android:name=".mvp.view.NewsDetailActivity"/>
         <activity android:name=".mvp.view.ShowWebImageActivity"/>
         <activity android:name=".mvp.view.CommentsActivity"/>
-        <activity android:name=".mvp.view.ReplyActivity"/>
+        <activity
+            android:name=".mvp.view.ReplyActivity"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
     </application>
 
 </manifest>

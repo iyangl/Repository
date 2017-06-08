@@ -1,6 +1,5 @@
 package com.ly.example.myapplication2.mvp.view;
 
-import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
@@ -10,10 +9,8 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.ClipboardManager;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.hss01248.dialog.StyledDialog;
 import com.hss01248.dialog.interfaces.MyDialogListener;
@@ -26,6 +23,7 @@ import com.ly.example.myapplication2.api.apibean.ExtraBean;
 import com.ly.example.myapplication2.databinding.ActivityCommentsBinding;
 import com.ly.example.myapplication2.mvp.presenter.CommentsPresenter;
 import com.ly.example.myapplication2.mvp.view.iview.ICommentsView;
+import com.ly.example.myapplication2.utils.CommonUtils;
 import com.ly.example.myapplication2.utils.Constant;
 import com.ly.example.myapplication2.utils.ToastUtil;
 
@@ -90,53 +88,67 @@ public class CommentsActivity extends BaseActivity implements ICommentsView {
                         binding.commentRecycler.smoothScrollToPosition(0);
                     }
                 } else {
-                    final CommentsBean.CommentBean commentBean = positions[0];
-                    final Boolean voted = commentBean.getVoted();
-                    List<String> choices = new ArrayList<>();
-                    choices.add(voted ? "取消赞同" : "赞同");
-                    choices.add("举报");
-                    choices.add("复制");
-                    choices.add("回复");
-                    StyledDialog.buildIosSingleChoose(choices, new MyItemDialogListener() {
-                        @Override
-                        public void onItemClick(CharSequence charSequence, int i) {
-                            switch (i) {
-                                case 0:
-                                    commentsAdapter.notifySelectedItem(!voted,
-                                            voted ? commentBean.getLikes() - 1 : commentBean.getLikes() + 1);
-                                    commentsPresenter.voteComment(commentBean.getId(), voted);
-                                    break;
-                                case 1:
-                                    StyledDialog.buildIosAlert(getString(R.string.report_title),
-                                            getString(R.string.report_msg), new MyDialogListener() {
-                                                @Override
-                                                public void onFirst() {
-                                                }
-
-                                                @Override
-                                                public void onSecond() {
-                                                }
-                                            })
-                                            .setBtnText(getString(R.string.cancel), getString(R.string.report_confirm))
-                                            .setCancelable(true, true).show();
-                                    break;
-                                case 2:
-                                    // 将文本内容放到系统剪贴板里。
-                                    ClipboardManager cm = (ClipboardManager) getSystemService(
-                                            Context.CLIPBOARD_SERVICE);
-                                    cm.setText(commentBean.getContent());
-                                    Toast.makeText(CommentsActivity.this, R.string.clipboard_success,
-                                            Toast.LENGTH_SHORT).show();
-                                    break;
-                                case 3:
-                                    goToReplyActivity(commentBean);
-                                    break;
-                            }
-                        }
-                    }).setCancelable(true, true).show();
+                    showCommentDialog(positions[0]);
                 }
             }
         });
+    }
+
+    private void showCommentDialog(final CommentsBean.CommentBean commentBean) {
+        final Boolean voted = commentBean.getVoted();
+        List<String> choices = new ArrayList<>();
+        final Boolean own = commentBean.getOwn();
+        if (own) {
+            choices.add("删除");
+            choices.add("复制");
+        } else {
+            choices.add(voted ? "取消赞同" : "赞同");
+            choices.add("举报");
+            choices.add("复制");
+            choices.add("回复");
+        }
+
+        StyledDialog.buildIosSingleChoose(choices, new MyItemDialogListener() {
+            @Override
+            public void onItemClick(CharSequence charSequence, int i) {
+                switch (i) {
+                    case 0:
+                        if (own) {
+                            commentsPresenter.deleteOwnComment(commentBean.getId());
+                            commentsAdapter.delete(commentBean);
+                        } else {
+                            commentsAdapter.notifySelectedItem(!voted,
+                                    voted ? commentBean.getLikes() - 1 : commentBean.getLikes() + 1);
+                            commentsPresenter.voteComment(commentBean.getId(), voted);
+                        }
+                        break;
+                    case 1:
+                        if (own) {
+                            CommonUtils.cliptext(commentBean.getContent());
+                            return;
+                        }
+                        StyledDialog.buildIosAlert(getString(R.string.report_title),
+                                getString(R.string.report_msg), new MyDialogListener() {
+                                    @Override
+                                    public void onFirst() {
+                                    }
+
+                                    @Override
+                                    public void onSecond() {
+                                    }
+                                })
+                                .setBtnText(getString(R.string.cancel), getString(R.string.report_confirm))
+                                .setCancelable(true, true).show();
+                        break;
+                    case 2:
+                        CommonUtils.cliptext(commentBean.getContent());
+                        break;
+                    case 3:
+                        goToReplyActivity(commentBean);
+                        break;
+                }
+            }
+        }).setCancelable(true, true).show();
     }
 
     private void initRecyclerView() {

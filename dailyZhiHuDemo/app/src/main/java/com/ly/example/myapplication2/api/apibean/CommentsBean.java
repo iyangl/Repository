@@ -50,6 +50,18 @@ public class CommentsBean {
          * 是否已点赞
          */
         private Boolean voted;
+        /**
+         * 是否是当前用户的评论
+         */
+        private Boolean own;
+
+        public Boolean getOwn() {
+            return own;
+        }
+
+        public void setOwn(Boolean own) {
+            this.own = own;
+        }
 
         public Boolean getVoted() {
             return voted;

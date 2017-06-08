@@ -4,12 +4,15 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.text.ClipboardManager;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.WindowManager;
+import android.widget.Toast;
 
+import com.ly.example.myapplication2.R;
 import com.ly.example.myapplication2.app;
 
 import java.io.UnsupportedEncodingException;
@@ -166,5 +169,18 @@ public class CommonUtils {
             return 0;
         }
         return list.size();
+    }
+
+    /**
+     * 将文本内容放到系统剪贴板里。
+     *
+     * @param content 待复制内容
+     */
+    public static void cliptext(String content) {
+        ClipboardManager cm = (ClipboardManager) app.getInstance().getSystemService(
+                Context.CLIPBOARD_SERVICE);
+        cm.setText(content);
+        Toast.makeText(app.getInstance(), R.string.clipboard_success,
+                Toast.LENGTH_SHORT).show();
     }
 }

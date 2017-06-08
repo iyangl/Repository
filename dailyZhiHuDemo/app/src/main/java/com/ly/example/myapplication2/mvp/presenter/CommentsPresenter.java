@@ -2,6 +2,7 @@ package com.ly.example.myapplication2.mvp.presenter;
 
 import com.ly.example.myapplication2.api.apibean.CommentsBean;
 import com.ly.example.myapplication2.api.apibean.ExtraBean;
+import com.ly.example.myapplication2.api.apibean.ReplyBean;
 import com.ly.example.myapplication2.mvp.RequestImp;
 import com.ly.example.myapplication2.mvp.RequestImp2;
 import com.ly.example.myapplication2.mvp.model.CommentsModel;
@@ -122,6 +123,34 @@ public class CommentsPresenter {
             @Override
             public void onError(Throwable e) {
                 iCommentsView.onError(e);
+            }
+        });
+    }
+
+    public void deleteOwnComment(int comment_id) {
+        iCommentsModel.deleteComment(comment_id, new RequestImp<ReplyBean>() {
+            @Override
+            public void onSuccess(ReplyBean data) {
+                
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                iCommentsView.onError(e);
+            }
+        });
+    }
+
+    public void replyComment(int newsId, String content, String share_to, int reply_to) {
+        iCommentsModel.replyComment(newsId, content, share_to, reply_to, new RequestImp<ReplyBean>() {
+            @Override
+            public void onSuccess(ReplyBean data) {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
             }
         });
     }
