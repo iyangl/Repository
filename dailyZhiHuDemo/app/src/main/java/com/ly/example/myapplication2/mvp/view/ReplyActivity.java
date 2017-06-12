@@ -59,11 +59,11 @@ public class ReplyActivity extends BaseActivity implements ReplyContact.View, Vi
         binding.commentToolbar.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if (TextUtils.isEmpty(binding.etContent.getText().toString().trim())) {
-                    Toast.makeText(ReplyActivity.this, R.string.content_cannot_null, Toast.LENGTH_SHORT).show();
-                    return true;
-                }
                 if (item.getItemId() == R.id.comment_publish) {
+                    if (TextUtils.isEmpty(binding.etContent.getText().toString().trim())) {
+                        Toast.makeText(ReplyActivity.this, R.string.content_cannot_null, Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
                     replyComment();
                 }
                 return true;
@@ -131,9 +131,11 @@ public class ReplyActivity extends BaseActivity implements ReplyContact.View, Vi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_share_sina:
+                Toast.makeText(ReplyActivity.this, "sina", Toast.LENGTH_SHORT).show();
                 binding.ivShareSina.setSelected(!binding.ivShareSina.isSelected());
                 break;
             case R.id.iv_share_tencent:
+                Toast.makeText(ReplyActivity.this, "tencent", Toast.LENGTH_SHORT).show();
                 binding.ivShareTencent.setSelected(!binding.ivShareTencent.isSelected());
                 break;
         }

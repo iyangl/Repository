@@ -13,7 +13,7 @@
 
         <variable
             name="voted"
-            type="Boolean"/>
+            type="boolean"/>
 
         <variable
             name="likes"

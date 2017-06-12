@@ -1,9 +1,22 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
+def keyStorePropertiesFile = rootProject.file("keystore.properties")
+def keyStoreProperties = new Properties()
+keyStoreProperties.load(new FileInputStream(keyStorePropertiesFile))
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
+
+    signingConfigs {
+        releaseConfig {
+            storeFile file(keyStoreProperties['storeFile'])
+            keyAlias keyStoreProperties['keyAlias']
+            keyPassword keyStoreProperties['keyPassword']
+            storePassword keyStoreProperties['storePassword']
+        }
+    }
 
     dataBinding {
         enabled true
@@ -19,8 +32,26 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.releaseConfig
+
+            applicationVariants.all {
+                variant ->
+                    variant.outputs.each { output ->
+                        def outputFile = output.outputFile
+                        if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                            def fileName = "DailyZhiHu${releaseTime()}_v${defaultConfig.versionName}_vc${defaultConfig.versionCode}.apk"
+                            //控制输出的APK的存放路径
+                            if (project.hasProperty('OUT_PUT_DIR_PARA')) {
+                                File output_dir1 = file("${OUT_PUT_DIR_PARA}");
+                                output.outputFile = new File(output_dir1, fileName)
+                            } else {
+                                output.outputFile = new File(outputFile.parent, fileName)
+                            }
+                        }
+                    }
+            }
         }
     }
 
@@ -69,4 +100,9 @@ dependencies {
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
     //dialog
     compile 'com.github.hss01248:DialogUtil:1.1.5'
+}
+
+// 定义一个打包时间
+static def releaseTime() {
+    return new Date().format("MMddHHmm", TimeZone.getTimeZone("UTC"))
 }
