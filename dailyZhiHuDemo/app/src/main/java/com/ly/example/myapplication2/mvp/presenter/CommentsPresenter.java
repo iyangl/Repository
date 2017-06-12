@@ -140,18 +140,4 @@ public class CommentsPresenter {
             }
         });
     }
-
-    public void replyComment(int newsId, String content, String share_to, int reply_to) {
-        iCommentsModel.replyComment(newsId, content, share_to, reply_to, new RequestImp<ReplyBean>() {
-            @Override
-            public void onSuccess(ReplyBean data) {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-        });
-    }
 }

@@ -4,7 +4,10 @@ import com.ly.example.myapplication2.api.ApiFactory;
 import com.ly.example.myapplication2.api.apibean.ReplyBean;
 import com.ly.example.myapplication2.mvp.contact.ReplyContact;
 import com.ly.example.myapplication2.rx.RxUtils;
+import com.ly.example.myapplication2.utils.GsonUtil;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import rx.Observable;
 import rx.Subscriber;
 
@@ -17,15 +20,16 @@ public class ReplyPresenter {
         this.view = view;
         model = new ReplyContact.Model() {
             @Override
-            public Observable<ReplyBean> replyComment(int newsId, String content, String share_to, int reply_to) {
-                return ApiFactory.getApi().replyComment(newsId, content, share_to, reply_to);
+            public Observable<ReplyBean> replyComment(int newsId, RequestBody reply) {
+                return ApiFactory.getApi().replyComment(newsId, reply);
             }
         };
     }
 
-    public void replyComment(int newsId, String content, String share_to, Integer reply_to) {
-
-        model.replyComment(newsId, content, share_to, reply_to)
+    public void replyComment(int newsId, ReplyBean replyBean) {
+        RequestBody reply = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
+                GsonUtil.GsonString(replyBean));
+        model.replyComment(newsId, reply)
                 .compose(RxUtils.<ReplyBean>rxSchedulerHelperByView(view))
                 .subscribe(new Subscriber<ReplyBean>() {
                     @Override

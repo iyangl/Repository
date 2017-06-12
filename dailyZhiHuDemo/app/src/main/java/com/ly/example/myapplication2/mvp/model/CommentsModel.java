@@ -169,29 +169,4 @@ public class CommentsModel implements ICommentsModel {
                     }
                 });
     }
-
-    @Override
-    public void replyComment(int newsId, String content, String share_to, int reply_to,
-                             final RequestImp<ReplyBean> requestImp) {
-        ApiFactory.getApi().replyComment(newsId, content, share_to, reply_to)
-                .compose(RxUtils.<ReplyBean>rxSchedulerHelper())
-                .subscribe(new Subscriber<ReplyBean>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        requestImp.onError(e);
-                    }
-
-                    @Override
-                    public void onNext(ReplyBean replyBean) {
-                        requestImp.onSuccess(replyBean);
-                    }
-                });
-
-    }
-
 }

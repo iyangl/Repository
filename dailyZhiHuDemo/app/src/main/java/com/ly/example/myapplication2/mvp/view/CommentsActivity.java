@@ -211,6 +211,7 @@ public class CommentsActivity extends BaseActivity implements ICommentsView {
 
     private void goToReplyActivity(CommentsBean.CommentBean commentBean) {
         Intent intent = new Intent(this, ReplyActivity.class);
+        intent.putExtra(Constant.Intent_Extra.NEWS_ID, newsId);
         if (commentBean != null) {
             intent.putExtra(Constant.Intent_Extra.REPLY_COMMENT, commentBean);
         }

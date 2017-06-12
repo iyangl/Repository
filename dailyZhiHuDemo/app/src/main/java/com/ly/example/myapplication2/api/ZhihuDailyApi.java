@@ -13,8 +13,13 @@ import com.ly.example.myapplication2.api.apibean.ThemeNewsBean;
 import com.ly.example.myapplication2.api.apibean.ThemesBean;
 import com.ly.example.myapplication2.api.apibean.VersionBean;
 
+import java.util.HashMap;
+
+import okhttp3.RequestBody;
+import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
+import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -253,11 +258,8 @@ public interface ZhihuDailyApi {
      * @param reply_to 回复的评论的id 可为null
      * @return {}
      */
-    @FormUrlEncoded
     @POST("4/news/{id}/comment")
-    Observable<ReplyBean> replyComment(@Path("id") int id, @Field("content") String content,
-                                       @Field("share_to") String share_to,
-                                       @Field("reply_to") int reply_to);
+    Observable<ReplyBean> replyComment(@Path("id") int id, @Body RequestBody reply);
 
     /**
      * 删除评论

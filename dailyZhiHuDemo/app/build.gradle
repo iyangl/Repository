@@ -104,5 +104,5 @@ dependencies {
 
 // 定义一个打包时间
 static def releaseTime() {
-    return new Date().format("MMddHHmm", TimeZone.getTimeZone("UTC"))
+    return new Date().format("yyyyMMdd", TimeZone.getTimeZone("UTC"))
 }

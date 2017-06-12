@@ -19,6 +19,4 @@ public interface ICommentsModel {
     void voteComment(int newsId, Boolean voted, RequestImp<ExtraBean> requestImp);
 
     void deleteComment(int commentId, RequestImp<ReplyBean> requestImp);
-
-    void replyComment(int newsId, String content, String share_to, int reply_to, RequestImp<ReplyBean> requestImp);
 }

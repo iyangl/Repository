@@ -79,7 +79,7 @@ public class DataBindingUtil {
         int reply_author_length = 0;
         StringBuilder content = new StringBuilder(commentBean.getContent());
         contentLength = content.length();
-        if (commentBean.getReply_to() != null) {
+        if (commentBean.getReply_to() != null && commentBean.getReply_to().getAuthor() != null) {
             content.append("\n").append("//").append(commentBean.getReply_to().getAuthor()).append(":");
             reply_author_length = commentBean.getReply_to().getAuthor().length() + 3;
             content.append(commentBean.getReply_to().getContent());

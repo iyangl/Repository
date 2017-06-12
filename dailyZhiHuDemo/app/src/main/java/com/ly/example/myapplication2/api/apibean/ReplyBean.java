@@ -4,7 +4,7 @@ public class ReplyBean {
 
     private String content;
     private String share_to;
-    private String reply_to;
+    private int reply_to;
 
     private ReplyCommentBean comment;
 
@@ -24,11 +24,11 @@ public class ReplyBean {
         this.share_to = share_to;
     }
 
-    public String getReply_to() {
+    public int getReply_to() {
         return reply_to;
     }
 
-    public void setReply_to(String reply_to) {
+    public void setReply_to(int reply_to) {
         this.reply_to = reply_to;
     }
 

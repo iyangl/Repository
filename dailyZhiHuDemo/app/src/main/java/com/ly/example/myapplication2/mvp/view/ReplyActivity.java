@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.ly.example.myapplication2.R;
 import com.ly.example.myapplication2.api.apibean.CommentsBean;
+import com.ly.example.myapplication2.api.apibean.ReplyBean;
 import com.ly.example.myapplication2.databinding.ActivityReplyBinding;
 import com.ly.example.myapplication2.mvp.contact.ReplyContact;
 import com.ly.example.myapplication2.mvp.presenter.ReplyPresenter;
@@ -84,6 +85,7 @@ public class ReplyActivity extends BaseActivity implements ReplyContact.View, Vi
     }
 
     private void replyComment() {
+        ReplyBean replyBean = new ReplyBean();
         StringBuffer share_to = null;
         if (binding.ivShareSina.isSelected()) {
             share_to = new StringBuffer();
@@ -98,12 +100,15 @@ public class ReplyActivity extends BaseActivity implements ReplyContact.View, Vi
                 share_to.append(getString(R.string.tencent));
             }
         }
+        if (share_to != null) {
+            replyBean.setShare_to(share_to.toString());
+        }
+        if (mCommentBean != null) {
+            replyBean.setReply_to(mCommentBean.getId());
+        }
+        replyBean.setContent(binding.etContent.getText().toString());
 
-        String content = binding.etContent.getText().toString();
-        String shareTo = share_to == null ? null : share_to.toString();
-        Integer reply_to = mCommentBean == null ? null : mCommentBean.getId();
-        replyPresenter.replyComment(newsId, content,
-                shareTo, reply_to);
+        replyPresenter.replyComment(newsId, replyBean);
     }
 
 
@@ -131,11 +136,9 @@ public class ReplyActivity extends BaseActivity implements ReplyContact.View, Vi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_share_sina:
-                Toast.makeText(ReplyActivity.this, "sina", Toast.LENGTH_SHORT).show();
                 binding.ivShareSina.setSelected(!binding.ivShareSina.isSelected());
                 break;
             case R.id.iv_share_tencent:
-                Toast.makeText(ReplyActivity.this, "tencent", Toast.LENGTH_SHORT).show();
                 binding.ivShareTencent.setSelected(!binding.ivShareTencent.isSelected());
                 break;
         }
