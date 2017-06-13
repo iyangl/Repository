@@ -22,6 +22,6 @@
         android:text="..."
         android:lines="1"
         android:textColor="@color/white"
-        android:textSize="@dimen/x11"/>
+        android:textSize="14sp"/>
 
 </LinearLayout>
