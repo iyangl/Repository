@@ -21,3 +21,7 @@
 ### GifImageView
 	一个逐帧解析的gif显示控件。优点：只有几个类，体积很小；缺点：逐帧解析，较耗费系统资源，且速度慢。
 [GifImageView](https://github.com/felipecsl/GifImageView "GifImageView")
+
+### ParseImageType
+	一个根据图片字节数组获取图片类型的方法
+[来源实验室](https://blog.kymjs.com/code/2015/10/18/01/ "来源实验室")
