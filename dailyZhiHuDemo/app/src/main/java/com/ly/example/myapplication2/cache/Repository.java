@@ -24,7 +24,8 @@ public class Repository {
     private ZhihuDailyApi api;
     private CacheProviders cacheProviders;
     private static Repository instance;
-    private static final String cacheDir = app.getInstance().getCacheDir().getAbsolutePath() + "DailyZhiHu/";
+    //缓存在data/data/包名/cache/DailyZhiHu/文件夹下，不会请求运行时权限
+    private static final String cacheDir = app.getInstance().getCacheDir().getAbsolutePath() + "/DailyZhiHu/";
 
     private Repository() {
         api = ApiFactory.getApi();
