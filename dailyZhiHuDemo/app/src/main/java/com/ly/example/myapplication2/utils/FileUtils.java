@@ -519,6 +519,11 @@ public class FileUtils {
                 : folder.mkdirs();
     }
 
+    public static File makeFile(String filePath) {
+        makeDirs(filePath);
+        return new File(filePath);
+    }
+
 
     /**
      * @param filePath 路径

@@ -5,10 +5,13 @@ import com.ly.example.myapplication2.api.apibean.CreativesListBean;
 import com.ly.example.myapplication2.api.apibean.NewsBean;
 import com.ly.example.myapplication2.api.apibean.ThemeNewsBean;
 import com.ly.example.myapplication2.api.apibean.ThemesBean;
+import com.ly.example.myapplication2.app;
+import com.ly.example.myapplication2.cache.Repository;
 import com.ly.example.myapplication2.mvp.RequestImp;
 import com.ly.example.myapplication2.mvp.model.imodel.IMainModel;
 import com.ly.example.myapplication2.utils.Constant;
 import com.ly.example.myapplication2.utils.GsonUtil;
+import com.ly.example.myapplication2.utils.NetWorkUtil;
 import com.ly.example.myapplication2.utils.SPUtil;
 
 import rx.Subscriber;
@@ -26,8 +29,8 @@ public class MainModel implements IMainModel {
     }
 
     @Override
-    public void loadNewsData(final RequestImp<NewsBean> requestImp) {
-        ApiFactory.getApi().lastNews()
+    public void loadNewsData(String cacheDate, final RequestImp<NewsBean> requestImp) {
+        Repository.getInstance().lastNews(cacheDate, NetWorkUtil.isNetWorkAvailable(app.getInstance()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<NewsBean>() {
@@ -52,7 +55,7 @@ public class MainModel implements IMainModel {
 
     @Override
     public void loadBeforeData(String before, final RequestImp<NewsBean> requestImp) {
-        ApiFactory.getApi().before(before)
+        Repository.getInstance().before(before, NetWorkUtil.isNetWorkAvailable(app.getInstance()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<NewsBean>() {

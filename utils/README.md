@@ -8,11 +8,11 @@
 
 ### Divider.java
 	一个封装的ItemDecoration，包括显示纯色divider、显示图片divider、divider的上下左右的间距、宽高设置
-[开源实验室](https://blog.kymjs.com/code/2016/07/10/01/ "开源实验室")
+[深入浅出 RecyclerView](https://blog.kymjs.com/code/2016/07/10/01/ "开源实验室")
 
 ### RecyclerItemClickListener.java
 	一个 RecyclerView 使用的 OnItemClickListener
-[开源实验室](https://blog.kymjs.com/code/2016/07/10/01/ "开源实验室")
+[深入浅出 RecyclerView](https://blog.kymjs.com/code/2016/07/10/01/ "开源实验室")
 
 ### android-gif-drawable
 	一个使了用jni的gif显示控件。优点：高效；缺点：使用jni，体积增大
@@ -24,4 +24,4 @@
 
 ### ParseImageType
 	一个根据图片字节数组获取图片类型的方法
-[来源实验室](https://blog.kymjs.com/code/2015/10/18/01/ "来源实验室")
+[支持gif的图片预览控件](https://blog.kymjs.com/code/2015/10/18/01/ "开源实验室")

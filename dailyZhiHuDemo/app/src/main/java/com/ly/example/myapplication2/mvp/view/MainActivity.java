@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements IMainView {
                 selectedThemePosition = positions[0] - 2;
                 if (positions[0] != positions[1]) {
                     if (positions[0] == 1) {
-                        mainPresenter.loadNewsData(true);
+                        mainPresenter.loadNewsData(StringFormat.getDateDaysBefore(0), true);
                         binding.toolbarMain.toolbar.setTitle(R.string.home);
                     } else {
                         mainPresenter.loadThemeNewsListData(
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements IMainView {
             @Override
             public void onRefresh() {
                 if (selectedThemePosition < 0) {
-                    mainPresenter.loadNewsData(true);
+                    mainPresenter.loadNewsData(StringFormat.getDateDaysBefore(0), true);
                     beforeDays = 0;
                 } else {
                     mainPresenter.loadThemeNewsListData(
@@ -145,12 +145,21 @@ public class MainActivity extends AppCompatActivity implements IMainView {
             }
         });
         binding.rvMain.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            int lastVisibleItemPosition;
+
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 changeTitleByScroll(recyclerView);
-                int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager())
+                lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager())
                         .findLastVisibleItemPosition();
-                if (lastVisibleItemPosition + 1 == newsListAdapter.getItemCount()) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (lastVisibleItemPosition + 1 == newsListAdapter.getItemCount()
+                        && newState == RecyclerView.SCROLL_STATE_IDLE) {
 
                     boolean isRefreshing = binding.srfMain.isRefreshing();
                     if (isRefreshing) {
@@ -169,7 +178,6 @@ public class MainActivity extends AppCompatActivity implements IMainView {
                         }
                     }
                 }
-                super.onScrolled(recyclerView, dx, dy);
             }
         });
     }
@@ -208,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements IMainView {
     private void initEvent() {
         initPrefetchLaunchImages(mainPresenter);
         mainPresenter.loadThemesData();
-        mainPresenter.loadNewsData(true);
+        mainPresenter.loadNewsData(StringFormat.getDateDaysBefore(0), true);
     }
 
     private void initPrefetchLaunchImages(MainPresenter mainPresenter) {

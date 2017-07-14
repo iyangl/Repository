@@ -89,6 +89,8 @@
 -keep class org.eclipse.mat.** { *; }
 -keep class com.squareup.leakcanary.** { *; }
 
+#-----------------------------rx_cache-----------------------------
+-dontwarn io.rx_cache.internal.**
 
 #-------------------------------------------------------------------------
 
