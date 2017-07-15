@@ -29,8 +29,13 @@ public class MainModel implements IMainModel {
     }
 
     @Override
-    public void loadNewsData(String cacheDate, final RequestImp<NewsBean> requestImp) {
-        Repository.getInstance().lastNews(cacheDate, NetWorkUtil.isNetWorkAvailable(app.getInstance()))
+    public void loadNewsData(String cacheDate,boolean update,  final RequestImp<NewsBean> requestImp) {
+        boolean isUpdate = false;
+        boolean netWorkAvailable = NetWorkUtil.isNetWorkAvailable(app.getInstance());
+        if (netWorkAvailable && update) {
+            isUpdate = true;
+        }
+        Repository.getInstance().lastNews(cacheDate, isUpdate)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<NewsBean>() {

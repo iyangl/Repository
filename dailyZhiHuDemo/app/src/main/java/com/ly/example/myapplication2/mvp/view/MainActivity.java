@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements IMainView {
                 selectedThemePosition = positions[0] - 2;
                 if (positions[0] != positions[1]) {
                     if (positions[0] == 1) {
-                        mainPresenter.loadNewsData(StringFormat.getDateDaysBefore(0), true);
+                        mainPresenter.loadNewsData(StringFormat.getDateDaysBefore(0), true, true);
                         binding.toolbarMain.toolbar.setTitle(R.string.home);
                     } else {
                         mainPresenter.loadThemeNewsListData(
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements IMainView {
             @Override
             public void onRefresh() {
                 if (selectedThemePosition < 0) {
-                    mainPresenter.loadNewsData(StringFormat.getDateDaysBefore(0), true);
+                    mainPresenter.loadNewsData(StringFormat.getDateDaysBefore(0), true, true);
                     beforeDays = 0;
                 } else {
                     mainPresenter.loadThemeNewsListData(
@@ -216,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements IMainView {
     private void initEvent() {
         initPrefetchLaunchImages(mainPresenter);
         mainPresenter.loadThemesData();
-        mainPresenter.loadNewsData(StringFormat.getDateDaysBefore(0), true);
+        mainPresenter.loadNewsData(StringFormat.getDateDaysBefore(0), false, true);
     }
 
     private void initPrefetchLaunchImages(MainPresenter mainPresenter) {

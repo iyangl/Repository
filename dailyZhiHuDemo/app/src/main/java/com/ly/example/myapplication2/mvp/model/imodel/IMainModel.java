@@ -10,7 +10,7 @@ public interface IMainModel {
 
     void savePrefetchLaunchImages(CreativesListBean creativesListBeanList);
 
-    void loadNewsData(String cacheDate, RequestImp<NewsBean> requestImp);
+    void loadNewsData(String cacheDate, boolean update, RequestImp<NewsBean> requestImp);
 
     void loadBeforeData(String before, RequestImp<NewsBean> requestImp);
 

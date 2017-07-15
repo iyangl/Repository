@@ -51,8 +51,8 @@ public class MainPresenter {
                 });
     }
 
-    public void loadNewsData(String cacheDate, final boolean isClear) {
-        iMainModel.loadNewsData(cacheDate, new RequestImp<NewsBean>() {
+    public void loadNewsData(String cacheDate,boolean isUpdate ,final boolean isClear) {
+        iMainModel.loadNewsData(cacheDate,isUpdate, new RequestImp<NewsBean>() {
             @Override
             public void onSuccess(NewsBean data) {
                 iMainView.loadNewsData(data, isClear);
