@@ -2,6 +2,8 @@ package com.ly.example.myapplication2.utils;
 
 import android.os.Environment;
 
+import com.ly.example.myapplication2.app;
+
 public class Constant {
 
     public static class Share_prf {
@@ -46,10 +48,14 @@ public class Constant {
                 + "/" + "DailyZhiHu/";
 
         /**
+         * 缓存目录
+         */
+        public static final String CACHE_DIR = app.getInstance().getCacheDir().getAbsolutePath();
+
+        /**
          * 存放css目录
          */
-        public static final String WEB_CACHE_DIR = PACK_CACHE + "web/";
-
+        public static final String WEB_CACHE_DIR = CACHE_DIR + "web/";
     }
 
     public static class FileType {

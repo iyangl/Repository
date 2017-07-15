@@ -3,7 +3,7 @@ package com.ly.example.myapplication2.cache;
 import com.ly.example.myapplication2.api.ApiFactory;
 import com.ly.example.myapplication2.api.ZhihuDailyApi;
 import com.ly.example.myapplication2.api.apibean.NewsBean;
-import com.ly.example.myapplication2.app;
+import com.ly.example.myapplication2.utils.Constant;
 import com.ly.example.myapplication2.utils.FileUtils;
 
 import io.rx_cache.DynamicKey;
@@ -25,7 +25,7 @@ public class Repository {
     private CacheProviders cacheProviders;
     private static Repository instance;
     //缓存在data/data/包名/cache/DailyZhiHu/文件夹下，不会请求运行时权限
-    private static final String cacheDir = app.getInstance().getCacheDir().getAbsolutePath() + "/DailyZhiHu/";
+    private static final String cacheDir = Constant.Storage.CACHE_DIR + "/DailyZhiHu/";
 
     private Repository() {
         api = ApiFactory.getApi();
