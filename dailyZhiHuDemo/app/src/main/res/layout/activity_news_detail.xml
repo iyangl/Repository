@@ -46,33 +46,42 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/x200"
-                        android:layout_alignBottom="@+id/tv_image_source"
+                        android:layout_alignBottom="@+id/rl_title"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:scaleType="centerCrop"
                         app:image="@{news.image}"/>
 
-                    <TextView
-                        android:id="@+id/tv_image_source"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentRight="true"
-                        android:paddingBottom="@dimen/x10"
-                        android:paddingRight="@dimen/x10"
-                        android:text="@{news.image_source}"
-                        android:textColor="@color/main_background"
-                        android:textSize="@dimen/x10"/>
-
-                    <TextView
+                    <RelativeLayout
+                        android:layout_marginTop="@dimen/x20"
+                        android:id="@+id/rl_title"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_above="@+id/tv_image_source"
-                        android:layout_marginLeft="@dimen/x20"
-                        android:layout_marginRight="@dimen/x20"
-                        android:text="@{news.title}"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/x20"/>
+                        android:layout_height="match_parent"
+                        android:background="@drawable/shape_news_detail_title_bg">
+
+                        <TextView
+                            android:id="@+id/tv_image_source"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentRight="true"
+                            android:paddingBottom="@dimen/x10"
+                            android:paddingRight="@dimen/x10"
+                            android:text="@{news.image_source}"
+                            android:textColor="@color/main_background"
+                            android:textSize="@dimen/x10"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_above="@+id/tv_image_source"
+                            android:layout_marginLeft="@dimen/x20"
+                            android:layout_marginRight="@dimen/x20"
+                            android:text="@{news.title}"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/x20"/>
+
+                    </RelativeLayout>
 
                 </RelativeLayout>
 

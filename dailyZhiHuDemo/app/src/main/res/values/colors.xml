@@ -22,4 +22,5 @@
     <color name="comments_date">#B6B6B6</color>
     <color name="comments_quote">#767676</color>
     <color name="comment_divided">#E0E0E0</color>
+    <color name="color_news_detail_title_back">#FF555555</color>
 </resources>
