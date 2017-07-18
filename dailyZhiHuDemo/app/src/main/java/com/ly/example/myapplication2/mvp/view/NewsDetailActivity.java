@@ -186,7 +186,7 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
         int totalScrollRange = appBarLayout.getTotalScrollRange();
         float maxPercent = 1 - (float) mToolbar.getHeight() / (float) totalScrollRange;
         float percent = Math.abs(verticalOffset) / (float) totalScrollRange;
-        if (Math.abs(percent - ALPHA_PERCENT) > ALPHA_PERCENT && percent < maxPercent) {
+        if (Math.abs(percent - 0.1) > ALPHA_PERCENT && percent < maxPercent) {
             ALPHA_PERCENT = 0.1;
             AlphaAnimation alphaAnimation;
             if (lastPercent <= percent) {
@@ -199,7 +199,7 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
             lastPercent = percent;
         }
         if (percent >= 1) {
-            ALPHA_PERCENT = 0.001;
+            ALPHA_PERCENT = 0.01;
             AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1);
             alphaAnimation.setFillAfter(true);
             mToolbar.startAnimation(alphaAnimation);
