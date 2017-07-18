@@ -237,9 +237,16 @@ public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAda
             dataLists.add(newsBean.getDate());
         }
         if (newsBean.getStories() != null && newsBean.getStories().size() > 0) {
-            dataLists.addAll(newsBean.getStories());
+            dataLists.addAll(addNewsWithDate(newsBean));
         }
         notifyDataSetChanged();
+    }
+
+    private List<StoriesBean> addNewsWithDate(NewsBean newsBean) {
+        for (StoriesBean storiesBean : newsBean.getStories()) {
+            storiesBean.setDate(newsBean.getDate());
+        }
+        return newsBean.getStories();
     }
 
     public void loadNewsData(ThemeNewsBean themeNewsBean, boolean isClear) {

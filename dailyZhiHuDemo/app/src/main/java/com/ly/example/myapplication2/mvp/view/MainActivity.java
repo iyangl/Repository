@@ -17,6 +17,7 @@ import com.ly.example.myapplication2.adapter.NewsListAdapter;
 import com.ly.example.myapplication2.adapter.OnItemClickListener;
 import com.ly.example.myapplication2.adapter.ThemesListAdapter;
 import com.ly.example.myapplication2.api.apibean.NewsBean;
+import com.ly.example.myapplication2.api.apibean.StoriesBean;
 import com.ly.example.myapplication2.api.apibean.ThemeNewsBean;
 import com.ly.example.myapplication2.api.apibean.ThemesBean;
 import com.ly.example.myapplication2.databinding.ActivityMainBinding;
@@ -199,12 +200,14 @@ public class MainActivity extends AppCompatActivity implements IMainView {
                     item = newsListAdapter.getItem(firstVisibleItemPosition + 1);
                     if (item instanceof String) {
                         item = StringFormat.getTomorrowDate((String) item);
+                        binding.toolbarMain.toolbar.setTitle(StringFormat.formatNewsDate((String) item));
                     }
                 } else {
                     item = newsListAdapter.getItem(firstVisibleItemPosition);
-                }
-                if (item instanceof String) {
-                    binding.toolbarMain.toolbar.setTitle(StringFormat.formatNewsDate((String) item));
+                    if (item instanceof StoriesBean) {
+                        binding.toolbarMain.toolbar.setTitle(
+                                StringFormat.formatNewsDate(((StoriesBean) item).getDate()));
+                    }
                 }
             } else {
                 binding.toolbarMain.toolbar.setTitle(R.string.home);
