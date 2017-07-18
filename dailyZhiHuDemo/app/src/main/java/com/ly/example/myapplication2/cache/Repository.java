@@ -1,7 +1,7 @@
 package com.ly.example.myapplication2.cache;
 
 import com.ly.example.myapplication2.api.ApiFactory;
-import com.ly.example.myapplication2.api.ZhihuDailyApi;
+import com.ly.example.myapplication2.api.ZhiHuDailyApi;
 import com.ly.example.myapplication2.api.apibean.NewsBean;
 import com.ly.example.myapplication2.utils.Constant;
 import com.ly.example.myapplication2.utils.FileUtils;
@@ -21,7 +21,7 @@ import rx.functions.Func1;
  */
 public class Repository {
 
-    private ZhihuDailyApi api;
+    private ZhiHuDailyApi api;
     private CacheProviders cacheProviders;
     private static Repository instance;
     //缓存在data/data/包名/cache/DailyZhiHu/文件夹下，不会请求运行时权限

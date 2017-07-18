@@ -7,7 +7,7 @@ keyStoreProperties.load(new FileInputStream(keyStorePropertiesFile))
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "25.0.3"
 
     signingConfigs {
         releaseConfig {
@@ -100,8 +100,13 @@ dependencies {
     compile 'com.github.hss01248:DialogUtil:1.1.5'
     //rxCache
     compile 'com.github.VictorAlbertos.RxCache:runtime:1.7.0-1.x'
-    //Jolyglot To use Gson
+    //Jolyglot To use Gson use with rxCache
     compile 'com.github.VictorAlbertos.Jolyglot:gson:0.0.3'
+    //mockito
+    testCompile "org.mockito:mockito-core:2.8.47"
+    //dagger2
+    compile 'com.google.dagger:dagger:2.7'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.7'
 }
 
 // 定义一个打包时间

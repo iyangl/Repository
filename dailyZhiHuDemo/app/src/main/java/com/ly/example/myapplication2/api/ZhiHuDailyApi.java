@@ -26,7 +26,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 import rx.Observable;
 
-public interface ZhihuDailyApi {
+public interface ZhiHuDailyApi {
 
     /**
      * URL: http://news-at.zhihu.com/api/7/prefetch-launch-images/1080*1920
