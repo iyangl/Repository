@@ -127,7 +127,7 @@ public class CommentsBean {
             this.likes = likes;
         }
 
-        public static class ReplyToBean {
+        public static class ReplyToBean implements Serializable{
 
             /**
              * 原消息的内容
