@@ -1,11 +1,18 @@
 package com.ly.example.myapplication2.mvp.presenter;
 
+import android.app.Activity;
+
 import com.ly.example.myapplication2.api.apibean.ExtraBean;
 import com.ly.example.myapplication2.api.apibean.NewsDetailBean;
 import com.ly.example.myapplication2.mvp.RequestImp;
 import com.ly.example.myapplication2.mvp.model.NewsDetailModel;
 import com.ly.example.myapplication2.mvp.model.imodel.INewsDetailModel;
 import com.ly.example.myapplication2.mvp.view.iview.INewsDetailView;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
 
 public class NewsDetailPresenter {
 
@@ -73,5 +80,17 @@ public class NewsDetailPresenter {
                 iNewsDetailView.onErrorLoad(e);
             }
         });
+    }
+
+    public void share(Activity context, String share_url, String title,
+                      String desc, UMShareListener umShareListener) {
+        UMWeb web = new UMWeb(share_url);
+        web.setTitle(title);//标题
+        web.setDescription(title);//描述
+        web.setThumb(new UMImage(context, desc));
+        new ShareAction(context).withMedia(web)
+                .setDisplayList(SHARE_MEDIA.SINA, SHARE_MEDIA.QQ, SHARE_MEDIA.WEIXIN,SHARE_MEDIA.TENCENT,
+                        SHARE_MEDIA.QZONE, SHARE_MEDIA.WEIXIN_CIRCLE)
+                .setCallback(umShareListener).open();
     }
 }

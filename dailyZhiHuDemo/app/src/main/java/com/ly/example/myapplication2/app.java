@@ -7,6 +7,9 @@ import android.os.StrictMode;
 
 import com.hss01248.dialog.MyActyManager;
 import com.squareup.leakcanary.LeakCanary;
+import com.umeng.socialize.Config;
+import com.umeng.socialize.PlatformConfig;
+import com.umeng.socialize.UMShareAPI;
 
 import timber.log.Timber;
 
@@ -17,17 +20,25 @@ public class app extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.
             // You should not init your app in this process.
             return;
         }
+        UMShareAPI.get(this);
         app = this;
         initTimber();
         enabledStrictMode();
         LeakCanary.install(this);
         registerCallbacks();
+        initUmengShare();
+    }
+
+    private void initUmengShare() {
+        PlatformConfig.setWeixin("wx8bf43ee1028621d6", "19ccf1cd971018d536b48df03b64231a");
+        PlatformConfig.setQQZone("100424468", "c7394704798a158208a74ab60104f0ba");
+        PlatformConfig.setSinaWeibo("3921700954", "04b48b094faeb16683c32669824ebdad", "http://sns.whalecloud.com");
+        Config.DEBUG = true;
     }
 
     private void registerCallbacks() {

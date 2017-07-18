@@ -24,4 +24,10 @@
 
 ### ParseImageType
 	一个根据图片字节数组获取图片类型的方法
-[支持gif的图片预览控件](https://blog.kymjs.com/code/2015/10/18/01/ "开源实验室")
+[支持gif的图片预览控件](https://blog.kymjs.com/code/2015/10/18/01/ "开源实验室")   
+
+### gradle生成时间,精确到分
+
+	static def releaseTime() {
+    	return new Date().format("yyMMddHHmm", TimeZone.getTimeZone("Asia/Shanghai"))
+	}

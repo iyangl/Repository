@@ -37,12 +37,17 @@ import com.ly.example.myapplication2.utils.StringFormat;
 import com.ly.example.myapplication2.utils.ToastUtil;
 import com.ly.example.myapplication2.widgets.BadgeActionProvider;
 import com.ly.example.myapplication2.widgets.CustomWebView;
+import com.tbruyelle.rxpermissions.RxPermissions;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.util.ArrayList;
 
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import timber.log.Timber;
 
 import static com.ly.example.myapplication2.utils.Constant.Intent_Extra.NEWS_ID;
 
@@ -59,6 +64,7 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
     private Subscription subscription;
     private WebCacheBean mWebCache;
     private ExtraBean extraBean;
+    private RxPermissions rxPermissions;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,7 +78,7 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
         } else {
             initWebCache();
         }
-
+        rxPermissions = new RxPermissions(this);
         initWebView();
         initEvent();
         setAppbarAlphaListener();
@@ -204,12 +210,16 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
             alphaAnimation.setFillAfter(true);
             mToolbar.startAnimation(alphaAnimation);
         }
-        if(percent == 0) {
+        if (percent == 0) {
             AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1);
             alphaAnimation.setFillAfter(true);
             mToolbar.startAnimation(alphaAnimation);
         }
     }
+
+    private String share_url;
+    private String share_title;
+    private String share_desc;
 
     @Override
     public void loadNewsDetailSuccess(NewsDetailBean newsDetailBean) {
@@ -220,6 +230,10 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
         mWebCache.setHtmlData(newsDetailBean.getBody());
 
         mWebView.loadWebViewData(newsDetailBean);
+
+        share_url = newsDetailBean.getShare_url();
+        share_desc = newsDetailBean.getImages().get(0);
+        share_title = newsDetailBean.getTitle();
     }
 
     @Override
@@ -248,11 +262,34 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.item_toolbar_news_share:
-                ToastUtil.showSuccessMsg(R.string.share);
+                mNewsDetailPresenter.share(NewsDetailActivity.this, share_url, share_title,
+                        share_desc, umShareListener);
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private UMShareListener umShareListener = new UMShareListener() {
+        @Override
+        public void onStart(SHARE_MEDIA share_media) {
+            Timber.d("onStart SHARE_MEDIA: %s", share_media.toString());
+        }
+
+        @Override
+        public void onResult(SHARE_MEDIA share_media) {
+            Timber.d("onResult SHARE_MEDIA: %s", share_media.toString());
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+            Timber.d("onError SHARE_MEDIA: %s, %s", share_media.toString(), throwable.getMessage());
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA share_media) {
+            Timber.d("onCancel SHARE_MEDIA: %s", share_media.toString());
+        }
+    };
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -372,6 +409,14 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
             context.startActivity(intent);
             System.out.println(img);
         }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //QQ与新浪分享
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
