@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:expandableTextView="http://schemas.android.com/tools">
 
     <data>
 
@@ -76,18 +77,36 @@
                 </RelativeLayout>
 
                 <TextView
-                    android:textSize="@dimen/x14"
-                    android:textColor="@color/black"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/x5"
                     android:paddingTop="@dimen/x5"
-                    app:comments="@{comment}"/>
+                    android:text="@{comment.content}"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/x14"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{StringFormat.formatCommentDate(comment.time)}"/>
+                <RelativeLayout
+                    android:layout_marginTop="@dimen/x5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.ly.example.myapplication2.widgets.ExpandTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:comments="@{comment}"
+                        app:contentTextSize="@dimen/x14"
+                        app:expandHint="展开"
+                        app:foldHint="收起"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:paddingBottom="@dimen/x2"
+                        android:paddingTop="@dimen/x2"
+                        android:text="@{StringFormat.formatCommentDate(comment.time)}"/>
+
+                </RelativeLayout>
 
             </LinearLayout>
 

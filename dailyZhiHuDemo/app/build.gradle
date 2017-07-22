@@ -35,24 +35,28 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.releaseConfig
-
-            applicationVariants.all {
-                variant ->
-                    variant.outputs.each { output ->
-                        def outputFile = output.outputFile
-                        if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                            def fileName = "DailyZhiHu${releaseTime()}_v${defaultConfig.versionName}_vc${defaultConfig.versionCode}.apk"
-                            //控制输出的APK的存放路径
-                            if (project.hasProperty('OUT_PUT_DIR_PARA')) {
-                                File output_dir1 = file("${OUT_PUT_DIR_PARA}");
-                                output.outputFile = new File(output_dir1, fileName)
-                            } else {
-                                output.outputFile = new File(outputFile.parent, fileName)
-                            }
-                        }
-                    }
-            }
         }
+    }
+    applicationVariants.all {
+        variant ->
+            variant.outputs.each { output ->
+                def outputFile = output.outputFile
+                if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                    if (variant.buildType.name == 'release') {
+                        def fileName = "DailyZhiHu${releaseTime()}_v${defaultConfig.versionName}_vc${defaultConfig.versionCode}.apk"
+                        //控制输出的APK的存放路径
+                        if (project.hasProperty('OUT_PUT_DIR_PARA')) {
+                            File output_dir1 = file("${OUT_PUT_DIR_PARA}");
+                            output.outputFile = new File(output_dir1, fileName)
+                        } else {
+                            output.outputFile = new File(outputFile.parent, fileName)
+                        }
+                    } else if (variant.buildType.name == 'debug'){
+                        def fileName = "DailyZhiHu${releaseTime()}_v${defaultConfig.versionName}_vc${defaultConfig.versionCode}_debug.apk"
+                        output.outputFile = new File(outputFile.parent, fileName)
+                    }
+                }
+            }
     }
 
     //ADD THESE LINES:

@@ -186,7 +186,6 @@ public class NewsListAdapter extends BaseRecyclerViewAdapter<Object, NewsListAda
         }
 
         public void bind(Object date) {
-            Timber.i("NewsDateViewHolder bind: %s", date);
             if (!(date instanceof String)) {
                 return;
             }
