@@ -21,6 +21,8 @@ import com.ly.example.myapplication2.widgets.ImageLoader;
 
 import java.util.List;
 
+import timber.log.Timber;
+
 public class DataBindingUtil {
 
     @BindingAdapter("image")
@@ -75,6 +77,7 @@ public class DataBindingUtil {
 
     @BindingAdapter("comments")
     public static void comments(ExpandTextView view, CommentsBean.CommentBean commentBean) {
+        Timber.d("DataBindingUtil mRoot: %s", view.toString());
         StringBuffer content = new StringBuffer();
         int reply_author_length;
         if (commentBean.getReply_to() != null && commentBean.getReply_to().getAuthor() != null) {

@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -50,6 +51,9 @@ public class CommentsActivity extends BaseActivity implements ICommentsView {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_comments);
         extraBean = (ExtraBean) getIntent().getSerializableExtra(Constant.Intent_Extra.NEWS_STORY_EXTRA);
+        if (extraBean == null) {
+            finish();
+        }
         newsId = getIntent().getIntExtra(Constant.Intent_Extra.NEWS_ID, 0);
         Timber.i("extra : %s", extraBean);
 
@@ -156,6 +160,8 @@ public class CommentsActivity extends BaseActivity implements ICommentsView {
                 LinearLayoutManager.VERTICAL, false));
         binding.commentRecycler.addItemDecoration(
                 new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        //关闭更新某条item时闪烁动画
+        ((DefaultItemAnimator)binding.commentRecycler.getItemAnimator()).setSupportsChangeAnimations(false);
         commentsAdapter = new CommentsAdapter(extraBean.getLong_comments(), extraBean.getShort_comments());
         binding.commentRecycler.setAdapter(commentsAdapter);
         mLinearLayoutManager = (LinearLayoutManager) binding.commentRecycler

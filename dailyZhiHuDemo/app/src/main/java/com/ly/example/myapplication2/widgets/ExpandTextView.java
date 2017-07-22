@@ -22,6 +22,8 @@ import android.widget.TextView;
 import com.ly.example.myapplication2.R;
 import com.ly.example.myapplication2.utils.CommonUtils;
 
+import timber.log.Timber;
+
 /**
  * Author   :hymanme
  * Email    :hymanme@163.com
@@ -42,6 +44,7 @@ public class ExpandTextView extends LinearLayout implements View.OnClickListener
     public static final int DEFAULT_ANIMATION_DURATION = 0;
 
     private Context mContext;
+    private ExpandTextView mRoot;
     //标题
     private String title;
     //内容文字
@@ -119,7 +122,13 @@ public class ExpandTextView extends LinearLayout implements View.OnClickListener
      * 初始化
      */
     private void init() {
-        View.inflate(mContext, R.layout.expand_text_view, this);
+        if (mRoot != null) {
+            Timber.d("mRoot: %s", mRoot.toString());
+            whetherNeedShowMore(getContent());
+            return;
+        }
+        mRoot = (ExpandTextView) View.inflate(mContext, R.layout.expand_text_view, this);
+        Timber.d("mRoot: %s", mRoot.toString());
         mTitleView = (TextView) findViewById(R.id.tv_title);
         mContentView = (TextView) findViewById(R.id.tv_content);
         mHintView = (TextView) findViewById(R.id.tv_more_hint);
@@ -164,11 +173,27 @@ public class ExpandTextView extends LinearLayout implements View.OnClickListener
     public void setContent(@Nullable CharSequence content) {
         this.content = content;
         mContentView.setText(content);
-        if (getMinMeasureHeight() == getMaxMeasureHeight()) {
-            mShowMore.setVisibility(INVISIBLE);
-        } else {
-            mShowMore.setVisibility(VISIBLE);
-        }
+        whetherNeedShowMore(content);
+    }
+
+    private void whetherNeedShowMore(final CharSequence content) {
+        mContentView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                int minMeasureHeight = getMinMeasureHeight();
+                int maxMeasureHeight = getMaxMeasureHeight();
+                if (minMeasureHeight == maxMeasureHeight) {
+                    mShowMore.setVisibility(INVISIBLE);
+                    Timber.d("INVISIBLE whetherNeedShowMore: %s \n minMeasureHeight: %d maxMeasureHeight: %d",
+                            content, minMeasureHeight, maxMeasureHeight);
+                } else {
+                    mShowMore.setVisibility(VISIBLE);
+                    Timber.d("VISIBLE whetherNeedShowMore: %s \n minMeasureHeight: %d maxMeasureHeight: %d",
+                            content, minMeasureHeight, maxMeasureHeight);
+                }
+            }
+        },40);
+
     }
 
     public String getFoldHint() {
