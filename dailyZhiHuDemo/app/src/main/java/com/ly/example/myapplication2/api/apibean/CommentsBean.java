@@ -55,6 +55,16 @@ public class CommentsBean {
          */
         private Boolean own;
 
+        private boolean isExpand;
+
+        public boolean isExpand() {
+            return isExpand;
+        }
+
+        public void setExpand(boolean expand) {
+            isExpand = expand;
+        }
+
         public Boolean getOwn() {
             return own;
         }

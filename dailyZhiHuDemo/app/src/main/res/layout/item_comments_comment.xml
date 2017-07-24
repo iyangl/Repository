@@ -90,6 +90,7 @@
                     android:layout_height="wrap_content">
 
                     <com.ly.example.myapplication2.widgets.ExpandTextView
+                        android:id="@+id/expand"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:comments="@{comment}"

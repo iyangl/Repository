@@ -92,6 +92,7 @@ public class DataBindingUtil {
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             view.setContent(ss);
             view.setVisibility(View.VISIBLE);
+            view.setExpandState(commentBean.isExpand());
         } else {
             view.setVisibility(View.GONE);
         }

@@ -4,24 +4,12 @@
        android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:focusable="false"
-        android:singleLine="true"
-        android:clickable="false"
-        android:textColor="?android:textColorSecondary"
-        android:textSize="16sp"
-        android:visibility="gone"/>
-
-    <TextView
         android:id="@+id/tv_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clickable="false"
         android:ellipsize="end"
         android:focusable="false"
-        android:clickable="false"
         android:textColor="?android:textColorPrimary"
         android:textIsSelectable="true"
         android:textSize="14sp"/>
@@ -49,11 +37,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:background="@drawable/shape_comment_expand_state_bg"
+                android:focusable="false"
                 android:paddingBottom="@dimen/x2"
                 android:paddingLeft="@dimen/x5"
                 android:paddingRight="@dimen/x5"
                 android:paddingTop="@dimen/x2"
-                android:background="@drawable/shape_comment_expand_state_bg"
                 android:textColor="@color/white"
                 android:textSize="12sp"/>
         </RelativeLayout>

@@ -9,6 +9,7 @@ import com.ly.example.myapplication2.databinding.ItemCommentEmptyBinding;
 import com.ly.example.myapplication2.databinding.ItemCommentsCommentBinding;
 import com.ly.example.myapplication2.databinding.ItemCommentsCountBinding;
 import com.ly.example.myapplication2.utils.CommonUtils;
+import com.ly.example.myapplication2.widgets.OnReadMoreClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ public class CommentsAdapter extends BaseRecyclerViewAdapter<CommentsBean.Commen
     private static int shortCommentsCount;
 
     private OnItemClickListener<CommentsBean.CommentBean> onItemClickListener;
+
 
     private int mDefaultClickPosition;
 
@@ -51,7 +53,27 @@ public class CommentsAdapter extends BaseRecyclerViewAdapter<CommentsBean.Commen
             case COMMENTS_COMMENT:
                 View commentView = View.inflate(parent.getContext(), R.layout.item_comments_comment, null);
                 commentView.setOnClickListener(this);
-                return new CommentViewHolder(commentView);
+                CommentViewHolder commentViewHolder = new CommentViewHolder(commentView);
+                commentViewHolder.onReadMoreHolderListener = new CommentViewHolder.OnReadMoreHolderListener() {
+                    @Override
+                    public void onExpand(CommentsBean.CommentBean commentBean) {
+                        if (longComments.contains(commentBean)) {
+                            longComments.get(longComments.indexOf(commentBean)).setExpand(true);
+                        } else if (shortComments.contains(commentBean)) {
+                            shortComments.get(shortComments.indexOf(commentBean)).setExpand(true);
+                        }
+                    }
+
+                    @Override
+                    public void onFold(CommentsBean.CommentBean commentBean) {
+                        if (longComments.contains(commentBean)) {
+                            longComments.get(longComments.indexOf(commentBean)).setExpand(false);
+                        } else if (shortComments.contains(commentBean)) {
+                            shortComments.get(shortComments.indexOf(commentBean)).setExpand(false);
+                        }
+                    }
+                };
+                return commentViewHolder;
             case COMMENTS_EMPTY:
                 View emptyView = View.inflate(parent.getContext(), R.layout.item_comment_empty, null);
                 return new EmptyViewHolder(emptyView);
@@ -220,17 +242,42 @@ public class CommentsAdapter extends BaseRecyclerViewAdapter<CommentsBean.Commen
     ///////////////////////////////////////////////////////////////////////////
     public static class CommentViewHolder extends BaseRecyclerViewHolder
             <ItemCommentsCommentBinding, CommentsBean.CommentBean> {
+        public OnReadMoreHolderListener onReadMoreHolderListener;
 
         public CommentViewHolder(View itemView) {
             super(itemView);
         }
 
         @Override
-        public void bind(CommentsBean.CommentBean commentBean) {
+        public void bind(final CommentsBean.CommentBean commentBean) {
             binding.setComment(commentBean);
             binding.setLikes(String.valueOf(commentBean.getLikes()));
             binding.setVoted(commentBean.getVoted());
+            binding.expand.setOnReadMoreListener(new OnReadMoreClickListener() {
+                @Override
+                public void onExpand() {
+                    if (onReadMoreHolderListener != null) {
+                        onReadMoreHolderListener.onExpand(commentBean);
+                    }
+                }
+
+                @Override
+                public void onFold() {
+                    if (onReadMoreHolderListener != null) {
+                        onReadMoreHolderListener.onFold(commentBean);
+                    }
+                }
+            });
             super.bind(commentBean);
+        }
+
+        ///////////////////////////////////////////////////////////////////////////
+        // OnReadMoreHolderListener
+        ///////////////////////////////////////////////////////////////////////////
+        public interface OnReadMoreHolderListener {
+            void onExpand(CommentsBean.CommentBean commentBean);
+
+            void onFold(CommentsBean.CommentBean commentBean);
         }
     }
 

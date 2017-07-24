@@ -6,8 +6,6 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.ColorInt;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -72,7 +70,6 @@ public class ExpandTextView extends LinearLayout implements View.OnClickListener
     //展开和折叠动画持续时间
     private int animationDuration;
 
-    private TextView mTitleView;
     private TextView mContentView;
     private TextView mHintView;
     private ImageView mIndicateImage;
@@ -122,22 +119,11 @@ public class ExpandTextView extends LinearLayout implements View.OnClickListener
      * 初始化
      */
     private void init() {
-        if (mRoot != null) {
-            Timber.d("mRoot: %s", mRoot.toString());
-            whetherNeedShowMore(getContent());
-            return;
-        }
-        mRoot = (ExpandTextView) View.inflate(mContext, R.layout.expand_text_view, this);
-        Timber.d("mRoot: %s", mRoot.toString());
-        mTitleView = (TextView) findViewById(R.id.tv_title);
+        View.inflate(mContext, R.layout.expand_text_view, this);
         mContentView = (TextView) findViewById(R.id.tv_content);
         mHintView = (TextView) findViewById(R.id.tv_more_hint);
         mIndicateImage = (ImageView) findViewById(R.id.iv_arrow_more);
         mShowMore = (RelativeLayout) findViewById(R.id.rl_show_more);
-
-        mTitleView.setText(title);
-        mTitleView.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleTextSize);
-        mTitleView.setTextColor(titleTextColor);
 
         mContentView.setText(content);
         mContentView.setTextSize(TypedValue.COMPLEX_UNIT_PX, contentTextSize);
@@ -163,7 +149,6 @@ public class ExpandTextView extends LinearLayout implements View.OnClickListener
 
     public void setTitle(String title) {
         this.title = title;
-        mTitleView.setText(title);
     }
 
     public CharSequence getContent() {
@@ -173,10 +158,10 @@ public class ExpandTextView extends LinearLayout implements View.OnClickListener
     public void setContent(@Nullable CharSequence content) {
         this.content = content;
         mContentView.setText(content);
-        whetherNeedShowMore(content);
+        mContentView.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
     }
 
-    private void whetherNeedShowMore(final CharSequence content) {
+    private void whetherNeedShowMore() {
         mContentView.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -184,147 +169,11 @@ public class ExpandTextView extends LinearLayout implements View.OnClickListener
                 int maxMeasureHeight = getMaxMeasureHeight();
                 if (minMeasureHeight == maxMeasureHeight) {
                     mShowMore.setVisibility(INVISIBLE);
-                    Timber.d("INVISIBLE whetherNeedShowMore: %s \n minMeasureHeight: %d maxMeasureHeight: %d",
-                            content, minMeasureHeight, maxMeasureHeight);
                 } else {
                     mShowMore.setVisibility(VISIBLE);
-                    Timber.d("VISIBLE whetherNeedShowMore: %s \n minMeasureHeight: %d maxMeasureHeight: %d",
-                            content, minMeasureHeight, maxMeasureHeight);
                 }
             }
-        },40);
-
-    }
-
-    public String getFoldHint() {
-        return foldHint;
-    }
-
-    public void setFoldHint(String foldHint) {
-        this.foldHint = foldHint;
-    }
-
-    public String getExpandHint() {
-        return expandHint;
-    }
-
-    public void setExpandHint(String expandHint) {
-        this.expandHint = expandHint;
-    }
-
-    public int getTitleTextColor() {
-        return titleTextColor;
-    }
-
-    public void setTitleTextColor(@ColorInt int titleTextColor) {
-        this.titleTextColor = titleTextColor;
-        mTitleView.setTextColor(titleTextColor);
-    }
-
-    public int getContentTextColor() {
-        return contentTextColor;
-    }
-
-    public void setContentTextColor(@ColorInt int contentTextColor) {
-        this.contentTextColor = contentTextColor;
-        mContentView.setTextColor(contentTextColor);
-    }
-
-    public int getHintTextColor() {
-        return hintTextColor;
-    }
-
-    public void setHintTextColor(@ColorInt int hintTextColor) {
-        this.hintTextColor = hintTextColor;
-        mHintView.setTextColor(hintTextColor);
-    }
-
-    public Drawable getIndicateImage() {
-        return indicateImage;
-    }
-
-    public void setIndicateImage(@DrawableRes Drawable indicateImage) {
-        this.indicateImage = indicateImage;
-        mIndicateImage.setImageDrawable(indicateImage);
-    }
-
-    public void setIndicateImage(@DrawableRes int indicateImageRes) {
-        this.indicateImage = getResources().getDrawable(indicateImageRes);
-        mIndicateImage.setImageDrawable(this.indicateImage);
-    }
-
-    public int getMinVisibleLines() {
-        return minVisibleLines;
-    }
-
-    public void setMinVisibleLines(int minVisibleLines) {
-        this.minVisibleLines = minVisibleLines;
-        copy = null;
-        ViewGroup.LayoutParams layoutParams = mContentView.getLayoutParams();
-        layoutParams.height = getMinMeasureHeight();
-        mContentView.setLayoutParams(layoutParams);
-    }
-
-    public float getTitleTextSize() {
-        return titleTextSize;
-    }
-
-    /**
-     * 设置字体大小
-     *
-     * @param titleTextSize sp为单位
-     */
-    public void setTitleTextSize(float titleTextSize) {
-        this.titleTextSize = CommonUtils.sp2px(mContext, titleTextSize);
-        mTitleView.setTextSize(titleTextSize);
-    }
-
-    public float getContentTextSize() {
-        return contentTextSize;
-    }
-
-    /**
-     * 设置字体大小
-     *
-     * @param contentTextSize sp为单位
-     */
-    public void setContentTextSize(float contentTextSize) {
-        this.contentTextSize = CommonUtils.sp2px(mContext, contentTextSize);
-        mContentView.setTextSize(contentTextSize);
-        copy = null;
-        ViewGroup.LayoutParams layoutParams = mContentView.getLayoutParams();
-        layoutParams.height = getMinMeasureHeight();
-        mContentView.setLayoutParams(layoutParams);
-    }
-
-    public float getHintTextSize() {
-        return hintTextSize;
-    }
-
-    /**
-     * 设置字体大小
-     *
-     * @param hintTextSize sp为单位
-     */
-    public void setHintTextSize(float hintTextSize) {
-        this.hintTextSize = CommonUtils.sp2px(mContext, hintTextSize);
-        mHintView.setTextSize(hintTextSize);
-    }
-
-    public View getTitleView() {
-        return mTitleView;
-    }
-
-    public int getAnimationDuration() {
-        return animationDuration;
-    }
-
-    public void setAnimationDuration(int animationDuration) {
-        this.animationDuration = animationDuration;
-    }
-
-    public OnReadMoreClickListener getReadMoreListener() {
-        return mListener;
+        }, 40);
     }
 
     public void setOnReadMoreListener(OnReadMoreClickListener mListener) {
@@ -347,6 +196,7 @@ public class ExpandTextView extends LinearLayout implements View.OnClickListener
         int width = mContentView.getMeasuredWidth();
         int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY);
         int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(3000, View.MeasureSpec.AT_MOST);
+        Timber.d("getMaxMeasureHeight: %d", heightMeasureSpec);
         mContentView.measure(widthMeasureSpec, heightMeasureSpec);
         return mContentView.getMeasuredHeight();
     }
@@ -368,6 +218,30 @@ public class ExpandTextView extends LinearLayout implements View.OnClickListener
         copy.setLayoutParams(mContentView.getLayoutParams());
         copy.measure(widthMeasureSpec, heightMeasureSpec);
         return copy.getMeasuredHeight();
+    }
+
+    public void setExpandState(boolean isExpand) {
+        flag = isExpand;
+        mContentView.post(new Runnable() {
+            @Override
+            public void run() {
+                if (flag) {
+                    mHintView.setText(foldHint);
+                    ViewGroup.LayoutParams layoutParams = mContentView.getLayoutParams();
+                    layoutParams.height = getMaxMeasureHeight();
+                    Timber.d("content: %s \ngetMaxMeasureHeight: %d", content, layoutParams.height);
+//                    mContentView.setLayoutParams(layoutParams);
+                    mContentView.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                } else {
+                    mHintView.setText(expandHint);
+                    ViewGroup.LayoutParams layoutParams = mContentView.getLayoutParams();
+                    layoutParams.height = getMinMeasureHeight();
+                    Timber.d("content: %s \ngetMaxMeasureHeight: %d", content, layoutParams.height);
+                    mContentView.setLayoutParams(layoutParams);
+                }
+                whetherNeedShowMore();
+            }
+        });
     }
 
     /**
