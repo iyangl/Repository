@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'me.tatarka.retrolambda'
 
 def keyStorePropertiesFile = rootProject.file("keystore.properties")
 def keyStoreProperties = new Properties()
@@ -62,6 +63,11 @@ android {
     //ADD THESE LINES:
     packagingOptions {
         exclude 'LICENSE.txt'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 

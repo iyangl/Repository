@@ -26,6 +26,7 @@ public class SplashActivity extends AppCompatActivity implements ISplashView {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_splash);
 
+        //接口失效，懒得找图片就白屏吧
         SplashPresenter splashPresenter = new SplashPresenter(this);
         splashPresenter.prefetchLaunchImages();
     }
@@ -34,14 +35,11 @@ public class SplashActivity extends AppCompatActivity implements ISplashView {
     public void toMainActivity(final Long seconds, final boolean needUpdate) {
         Timber.tag(TAG).i("toMainActivity  seconds: %d  needUpdate: %b", seconds, needUpdate);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                intent.putExtra(Constant.Intent_Extra.NEED_PREFETCH_IMAGES, needUpdate);
-                startActivity(intent);
-                finish();
-            }
+        new Handler().postDelayed(() -> {
+            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+            intent.putExtra(Constant.Intent_Extra.NEED_PREFETCH_IMAGES, needUpdate);
+            startActivity(intent);
+            finish();
         }, seconds);
     }
 

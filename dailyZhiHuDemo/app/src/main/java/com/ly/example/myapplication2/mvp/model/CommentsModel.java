@@ -18,7 +18,7 @@ public class CommentsModel implements ICommentsModel {
     @Override
     public void loadLongComments(int newsId, final RequestImp2<CommentsBean> requestImp) {
         Subscription subscription = ApiFactory.getApi().longComments(newsId)
-                .compose(RxUtils.<CommentsBean>rxSchedulerHelper(requestImp))
+                .compose(RxUtils.rxSchedulerHelper(requestImp))
                 .subscribe(new Subscriber<CommentsBean>() {
                     @Override
                     public void onCompleted() {
@@ -41,7 +41,7 @@ public class CommentsModel implements ICommentsModel {
     @Override
     public void loadMoreLongComments(int newsId, int lastCommentId, final RequestImp<CommentsBean> requestImp) {
         ApiFactory.getApi().longCommentsBefore(newsId, lastCommentId)
-                .compose(RxUtils.<CommentsBean>rxSchedulerHelper())
+                .compose(RxUtils.rxSchedulerHelper())
                 .subscribe(new Subscriber<CommentsBean>() {
                     @Override
                     public void onCompleted() {
@@ -63,7 +63,7 @@ public class CommentsModel implements ICommentsModel {
     @Override
     public void loadShortComments(int newsId, final RequestImp2<CommentsBean> requestImp) {
         Subscription subscription = ApiFactory.getApi().shortComments(newsId)
-                .compose(RxUtils.<CommentsBean>rxSchedulerHelper(requestImp))
+                .compose(RxUtils.rxSchedulerHelper(requestImp))
                 .subscribe(new Subscriber<CommentsBean>() {
                     @Override
                     public void onCompleted() {
@@ -86,7 +86,7 @@ public class CommentsModel implements ICommentsModel {
     @Override
     public void loadMoreShortComments(int newsId, int lastCommentId, final RequestImp<CommentsBean> requestImp) {
         ApiFactory.getApi().shortCommentsBefore(newsId, lastCommentId)
-                .compose(RxUtils.<CommentsBean>rxSchedulerHelper())
+                .compose(RxUtils.rxSchedulerHelper())
                 .subscribe(new Subscriber<CommentsBean>() {
                     @Override
                     public void onCompleted() {
@@ -109,7 +109,7 @@ public class CommentsModel implements ICommentsModel {
     public void voteComment(int newsId, Boolean voted, final RequestImp<ExtraBean> requestImp) {
         if (voted) {
             ApiFactory.getApi().voteComment(newsId)
-                    .compose(RxUtils.<ExtraBean>rxSchedulerHelper())
+                    .compose(RxUtils.rxSchedulerHelper())
                     .subscribe(new Subscriber<ExtraBean>() {
                         @Override
                         public void onCompleted() {
@@ -128,7 +128,7 @@ public class CommentsModel implements ICommentsModel {
                     });
         } else {
             ApiFactory.getApi().voteComment(newsId, null)
-                    .compose(RxUtils.<ExtraBean>rxSchedulerHelper())
+                    .compose(RxUtils.rxSchedulerHelper())
                     .subscribe(new Subscriber<ExtraBean>() {
                         @Override
                         public void onCompleted() {
@@ -151,7 +151,7 @@ public class CommentsModel implements ICommentsModel {
     @Override
     public void deleteComment(int commentId, final RequestImp<ReplyBean> requestImp) {
         ApiFactory.getApi().deleteComment(commentId)
-                .compose(RxUtils.<ReplyBean>rxSchedulerHelper())
+                .compose(RxUtils.rxSchedulerHelper())
                 .subscribe(new Subscriber<ReplyBean>() {
                     @Override
                     public void onCompleted() {

@@ -1,11 +1,7 @@
 package com.ly.example.myapplication2.api;
 
-import java.io.IOException;
-
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -30,12 +26,7 @@ public class ServiceGenerator {
     private static OkHttpClient setLoggingClient() {
         addHeaderInterceptor();
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor(
-                new HttpLoggingInterceptor.Logger() {
-                    @Override
-                    public void log(String message) {
-                        Timber.d("Retrofit ---> %s", message);
-                    }
-                });
+                message -> Timber.d("Retrofit ---> %s", message));
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         builder.addInterceptor(httpLoggingInterceptor);
         return builder.build();
@@ -43,19 +34,16 @@ public class ServiceGenerator {
 
     private static void addHeaderInterceptor() {
         builder.interceptors().clear();
-        builder.addInterceptor(new Interceptor() {
-            @Override
-            public Response intercept(Interceptor.Chain chain) throws IOException {
-                Request original = chain.request();
+        builder.addInterceptor(chain -> {
+            Request original = chain.request();
 
-                Request.Builder requestBuilder = original.newBuilder()
-                        .header("Authorization", Authorization)
-                        .header("Accept", "application/json")
-                        .method(original.method(), original.body());
+            Request.Builder requestBuilder = original.newBuilder()
+                    .header("Authorization", Authorization)
+                    .header("Accept", "application/json")
+                    .method(original.method(), original.body());
 
-                Request request = requestBuilder.build();
-                return chain.proceed(request);
-            }
+            Request request = requestBuilder.build();
+            return chain.proceed(request);
         });
     }
 

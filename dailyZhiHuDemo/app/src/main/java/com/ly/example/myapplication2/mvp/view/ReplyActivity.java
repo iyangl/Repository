@@ -4,9 +4,7 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -57,25 +55,17 @@ public class ReplyActivity extends BaseActivity implements ReplyContact.View, Vi
         binding.commentToolbar.toolbar.setTitleTextColor(Color.WHITE);
         binding.commentToolbar.toolbar.setNavigationIcon(R.drawable.back_alpha);
         binding.commentToolbar.toolbar.inflateMenu(R.menu.toolbar_comment_publish);
-        binding.commentToolbar.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.comment_publish) {
-                    if (TextUtils.isEmpty(binding.etContent.getText().toString().trim())) {
-                        Toast.makeText(ReplyActivity.this, R.string.content_cannot_null, Toast.LENGTH_SHORT).show();
-                        return true;
-                    }
-                    replyComment();
+        binding.commentToolbar.toolbar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.comment_publish) {
+                if (TextUtils.isEmpty(binding.etContent.getText().toString().trim())) {
+                    Toast.makeText(ReplyActivity.this, R.string.content_cannot_null, Toast.LENGTH_SHORT).show();
+                    return true;
                 }
-                return true;
+                replyComment();
             }
+            return true;
         });
-        binding.commentToolbar.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        binding.commentToolbar.toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
     private void initData() {

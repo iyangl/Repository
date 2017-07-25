@@ -158,9 +158,11 @@ public class ExpandTextView extends LinearLayout implements View.OnClickListener
     public void setContent(@Nullable CharSequence content) {
         this.content = content;
         mContentView.setText(content);
-        mContentView.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
     }
 
+    /**
+     * 引用回复为2行时，隐藏展开状态按钮（存在bug）
+     */
     private void whetherNeedShowMore() {
         mContentView.postDelayed(new Runnable() {
             @Override
@@ -227,10 +229,11 @@ public class ExpandTextView extends LinearLayout implements View.OnClickListener
             public void run() {
                 if (flag) {
                     mHintView.setText(foldHint);
-                    ViewGroup.LayoutParams layoutParams = mContentView.getLayoutParams();
+                    /*ViewGroup.LayoutParams layoutParams = mContentView.getLayoutParams();
                     layoutParams.height = getMaxMeasureHeight();
                     Timber.d("content: %s \ngetMaxMeasureHeight: %d", content, layoutParams.height);
-//                    mContentView.setLayoutParams(layoutParams);
+                    mContentView.setLayoutParams(layoutParams);*/
+                    //展开状态设置高度自适应，使用上面的方法会导致测量不准确，高度为设置最大值3000的问题
                     mContentView.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
                 } else {
                     mHintView.setText(expandHint);

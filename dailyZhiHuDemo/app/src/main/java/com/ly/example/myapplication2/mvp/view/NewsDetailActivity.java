@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
@@ -167,23 +166,13 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
                 mToolbar.getPaddingRight() + CommonUtils.getDimension(R.dimen.x15)
                 , mToolbar.getPaddingBottom());
         mToolbar.setNavigationIcon(R.drawable.back_alpha);
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NewsDetailActivity.this.finish();
-            }
-        });
+        mToolbar.setNavigationOnClickListener(v -> NewsDetailActivity.this.finish());
     }
 
     private float lastPercent = 0;
 
     public void setAppbarAlphaListener() {
-        binding.appbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                setAlphaAnimationWithScroll(appBarLayout, verticalOffset);
-            }
-        });
+        binding.appbar.addOnOffsetChangedListener(this::setAlphaAnimationWithScroll);
     }
 
     private double ALPHA_PERCENT = 0.1;

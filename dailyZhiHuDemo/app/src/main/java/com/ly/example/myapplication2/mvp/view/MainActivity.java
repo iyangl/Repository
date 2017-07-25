@@ -3,18 +3,15 @@ package com.ly.example.myapplication2.mvp.view;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
-import android.view.View;
 import android.widget.Toast;
 
 import com.ly.example.myapplication2.R;
 import com.ly.example.myapplication2.adapter.NewsListAdapter;
-import com.ly.example.myapplication2.adapter.OnItemClickListener;
 import com.ly.example.myapplication2.adapter.ThemesListAdapter;
 import com.ly.example.myapplication2.api.apibean.NewsBean;
 import com.ly.example.myapplication2.api.apibean.StoriesBean;
@@ -66,23 +63,20 @@ public class MainActivity extends AppCompatActivity implements IMainView {
         binding.rvMainThemes.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         themesListAdapter = new ThemesListAdapter();
         binding.rvMainThemes.setAdapter(themesListAdapter);
-        themesListAdapter.setOnItemClickListener(new OnItemClickListener<Integer>() {
-            @Override
-            public void onClick(View view, Integer... positions) {
-                selectedThemePosition = positions[0] - 2;
-                if (positions[0] != positions[1]) {
-                    if (positions[0] == 1) {
-                        mainPresenter.loadNewsData(StringFormat.getDateDaysBefore(0), true, true);
-                        binding.toolbarMain.toolbar.setTitle(R.string.home);
-                    } else {
-                        mainPresenter.loadThemeNewsListData(
-                                themesListAdapter.getItem(selectedThemePosition).getId(), true);
-                        binding.toolbarMain.toolbar.setTitle(
-                                themesListAdapter.getItem(selectedThemePosition).getName());
-                    }
+        themesListAdapter.setOnItemClickListener((view, positions) -> {
+            selectedThemePosition = positions[0] - 2;
+            if (positions[0] != positions[1]) {
+                if (positions[0] == 1) {
+                    mainPresenter.loadNewsData(StringFormat.getDateDaysBefore(0), true, true);
+                    binding.toolbarMain.toolbar.setTitle(R.string.home);
+                } else {
+                    mainPresenter.loadThemeNewsListData(
+                            themesListAdapter.getItem(selectedThemePosition).getId(), true);
+                    binding.toolbarMain.toolbar.setTitle(
+                            themesListAdapter.getItem(selectedThemePosition).getName());
                 }
-                binding.dlMain.closeDrawer(Gravity.START);
             }
+            binding.dlMain.closeDrawer(Gravity.START);
         });
     }
 
@@ -119,16 +113,13 @@ public class MainActivity extends AppCompatActivity implements IMainView {
         binding.srfMain.setColorSchemeResources(android.R.color.holo_blue_light,
                 android.R.color.holo_red_light, android.R.color.holo_orange_light,
                 android.R.color.holo_green_light);
-        binding.srfMain.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (selectedThemePosition < 0) {
-                    mainPresenter.loadNewsData(StringFormat.getDateDaysBefore(0), true, true);
-                    beforeDays = 0;
-                } else {
-                    mainPresenter.loadThemeNewsListData(
-                            themesListAdapter.getItem(selectedThemePosition).getId(), true);
-                }
+        binding.srfMain.setOnRefreshListener(() -> {
+            if (selectedThemePosition < 0) {
+                mainPresenter.loadNewsData(StringFormat.getDateDaysBefore(0), true, true);
+                beforeDays = 0;
+            } else {
+                mainPresenter.loadThemeNewsListData(
+                        themesListAdapter.getItem(selectedThemePosition).getId(), true);
             }
         });
     }
@@ -137,13 +128,10 @@ public class MainActivity extends AppCompatActivity implements IMainView {
         binding.rvMain.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         newsListAdapter = new NewsListAdapter();
         binding.rvMain.setAdapter(newsListAdapter);
-        newsListAdapter.setOnItemClickListener(new OnItemClickListener<Integer>() {
-            @Override
-            public void onClick(View view, Integer... positions) {
-                Intent intent = new Intent(MainActivity.this, NewsDetailActivity.class);
-                intent.putExtra(Constant.Intent_Extra.NEWS_ID, positions[0]);
-                startActivity(intent);
-            }
+        newsListAdapter.setOnItemClickListener((view, positions) -> {
+            Intent intent = new Intent(MainActivity.this, NewsDetailActivity.class);
+            intent.putExtra(Constant.Intent_Extra.NEWS_ID, positions[0]);
+            startActivity(intent);
         });
         binding.rvMain.addOnScrollListener(new RecyclerView.OnScrollListener() {
             int lastVisibleItemPosition;
@@ -188,14 +176,14 @@ public class MainActivity extends AppCompatActivity implements IMainView {
     /**
      * 随着滑动更新toolbar标题为当前News日期
      *
-     * @param recyclerView
+     * @param recyclerView recyclerView
      */
     private void changeTitleByScroll(RecyclerView recyclerView) {
         if (selectedThemePosition < 0) {
             int firstVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager())
                     .findFirstVisibleItemPosition();
             if (firstVisibleItemPosition > 0) {
-                Object item = null;
+                Object item;
                 if (lastVisibleItemPosition > firstVisibleItemPosition) {
                     item = newsListAdapter.getItem(firstVisibleItemPosition + 1);
                     if (item instanceof String) {

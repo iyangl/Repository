@@ -10,7 +10,6 @@ import com.ly.example.myapplication2.mvp.model.imodel.INewsDetailModel;
 
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 
 
@@ -19,13 +18,10 @@ public class NewsDetailModel implements INewsDetailModel {
     @Override
     public void loadNewsDetail(int newsId, final RequestImp<NewsDetailBean> requestImp) {
         ApiFactory.getApi().newsDetail(newsId)
-                .doOnSubscribe(new Action0() {
-                    @Override
-                    public void call() {
-                        //延迟请求是因为customProvider类对象需要延迟获取，
-                        //网速好时，返回值会在获取到对象之前返回，造成NPE
-                        SystemClock.sleep(500);
-                    }
+                .doOnSubscribe(() -> {
+                    //延迟请求是因为customProvider类对象需要延迟获取，
+                    //网速好时，返回值会在获取到对象之前返回，造成NPE
+                    SystemClock.sleep(500);
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -52,13 +48,10 @@ public class NewsDetailModel implements INewsDetailModel {
     @Override
     public void loadStoryExtra(int newsId, final RequestImp<ExtraBean> requestImp) {
         ApiFactory.getApi().storyExtra(newsId)
-                .doOnSubscribe(new Action0() {
-                    @Override
-                    public void call() {
-                        //延迟请求是因为customProvider类对象需要延迟获取，
-                        //网速好时，返回值会在获取到对象之前返回，造成NPE
-                        SystemClock.sleep(500);
-                    }
+                .doOnSubscribe(() -> {
+                    //延迟请求是因为customProvider类对象需要延迟获取，
+                    //网速好时，返回值会在获取到对象之前返回，造成NPE
+                    SystemClock.sleep(500);
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

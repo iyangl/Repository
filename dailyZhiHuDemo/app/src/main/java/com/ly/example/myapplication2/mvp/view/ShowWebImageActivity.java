@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.ly.example.myapplication2.R;
@@ -32,30 +31,19 @@ public class ShowWebImageActivity extends AppCompatActivity {
         toolbar = binding.imageToolbar.toolbar;
         toolbar.setBackgroundColor(CommonUtils.getColor(R.color.black));
         toolbar.setNavigationIcon(R.drawable.back_alpha);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ShowWebImageActivity.this.finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> ShowWebImageActivity.this.finish());
 
         toolbar.inflateMenu(R.menu.toolbar_web_image_menu);
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                downImages(url);
-                return false;
-            }
+        toolbar.setOnMenuItemClickListener(item -> {
+            downImages(url);
+            return false;
         });
 
-        binding.llWebImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (toolbar.getVisibility() == View.GONE) {
-                    toolbar.setVisibility(View.VISIBLE);
-                } else {
-                    toolbar.setVisibility(View.GONE);
-                }
+        binding.llWebImage.setOnClickListener(v -> {
+            if (toolbar.getVisibility() == View.GONE) {
+                toolbar.setVisibility(View.VISIBLE);
+            } else {
+                toolbar.setVisibility(View.GONE);
             }
         });
     }

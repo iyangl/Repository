@@ -9,16 +9,12 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
-import android.view.View;
 
 import com.hss01248.dialog.StyledDialog;
 import com.hss01248.dialog.interfaces.MyDialogListener;
 import com.hss01248.dialog.interfaces.MyItemDialogListener;
 import com.ly.example.myapplication2.R;
 import com.ly.example.myapplication2.adapter.CommentsAdapter;
-import com.ly.example.myapplication2.adapter.OnItemClickListener;
 import com.ly.example.myapplication2.api.apibean.CommentsBean;
 import com.ly.example.myapplication2.api.apibean.ExtraBean;
 import com.ly.example.myapplication2.databinding.ActivityCommentsBinding;
@@ -75,25 +71,22 @@ public class CommentsActivity extends BaseActivity implements ICommentsView {
     private boolean shouldSmooth;
 
     private void initOnClick() {
-        commentsAdapter.setOnItemClickListener(new OnItemClickListener<CommentsBean.CommentBean>() {
-            @Override
-            public void onClick(View view, final CommentsBean.CommentBean... positions) {
-                if (positions[0] == null) {
-                    //打开关闭短评
-                    isUnFold = !view.isSelected();
-                    view.setSelected(isUnFold);
-                    if (isUnFold) {
-                        commentsPresenter.loadShortComments(newsId);
-                        shouldSmooth = true;
-                    } else {
-                        //取消可能存在的正在进行的网络请求
-                        clearAllSubscriptions();
-                        commentsAdapter.clearShortComments();
-                        binding.commentRecycler.smoothScrollToPosition(0);
-                    }
+        commentsAdapter.setOnItemClickListener((view, positions) -> {
+            if (positions[0] == null) {
+                //打开关闭短评
+                isUnFold = !view.isSelected();
+                view.setSelected(isUnFold);
+                if (isUnFold) {
+                    commentsPresenter.loadShortComments(newsId);
+                    shouldSmooth = true;
                 } else {
-                    showCommentDialog(positions[0]);
+                    //取消可能存在的正在进行的网络请求
+                    clearAllSubscriptions();
+                    commentsAdapter.clearShortComments();
+                    binding.commentRecycler.smoothScrollToPosition(0);
                 }
+            } else {
+                showCommentDialog(positions[0]);
             }
         });
     }
@@ -160,7 +153,7 @@ public class CommentsActivity extends BaseActivity implements ICommentsView {
                 LinearLayoutManager.VERTICAL, false));
         binding.commentRecycler.addItemDecoration(
                 new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        //关闭更新某条item时闪烁动画
+        //关闭更新某条item时闪烁动画，不关闭会导致更新某条item时，所复用的view改变
         ((DefaultItemAnimator)binding.commentRecycler.getItemAnimator()).setSupportsChangeAnimations(false);
         commentsAdapter = new CommentsAdapter(extraBean.getLong_comments(), extraBean.getShort_comments());
         binding.commentRecycler.setAdapter(commentsAdapter);
@@ -200,19 +193,11 @@ public class CommentsActivity extends BaseActivity implements ICommentsView {
         binding.commentToolbar.toolbar.setTitleTextColor(Color.WHITE);
         binding.commentToolbar.toolbar.setNavigationIcon(R.drawable.back_alpha);
         binding.commentToolbar.toolbar.inflateMenu(R.menu.toolbar_comments);
-        binding.commentToolbar.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                goToReplyActivity(null);
-                return true;
-            }
+        binding.commentToolbar.toolbar.setOnMenuItemClickListener(item -> {
+            goToReplyActivity(null);
+            return true;
         });
-        binding.commentToolbar.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        binding.commentToolbar.toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
     private void goToReplyActivity(CommentsBean.CommentBean commentBean) {

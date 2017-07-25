@@ -38,7 +38,7 @@ public class Repository {
         if (instance == null) {
             synchronized (Repository.class) {
                 if (instance == null) {
-                    return new Repository();
+                    return instance = new Repository();
                 }
             }
         }
@@ -47,12 +47,12 @@ public class Repository {
 
     public Observable<NewsBean> lastNews(String date, boolean isUpdate) {
         return cacheProviders.lastNews(api.lastNews(), new DynamicKey(date), new EvictDynamicKey(isUpdate))
-                .map(new CacheFunc1<NewsBean>());
+                .map(new CacheFunc1<>());
     }
 
     public Observable<NewsBean> before(String date, boolean isUpdate) {
         return cacheProviders.before(api.before(date), new DynamicKey(date), new EvictDynamicKey(isUpdate))
-                .map(new CacheFunc1<NewsBean>());
+                .map(new CacheFunc1<>());
     }
 
     private class CacheFunc1<T> implements Func1<Reply<T>, T> {

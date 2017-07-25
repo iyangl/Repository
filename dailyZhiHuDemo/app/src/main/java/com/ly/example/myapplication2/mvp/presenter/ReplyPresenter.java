@@ -8,7 +8,6 @@ import com.ly.example.myapplication2.utils.GsonUtil;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
-import rx.Observable;
 import rx.Subscriber;
 
 public class ReplyPresenter {
@@ -18,19 +17,14 @@ public class ReplyPresenter {
 
     public ReplyPresenter(ReplyContact.View view) {
         this.view = view;
-        model = new ReplyContact.Model() {
-            @Override
-            public Observable<ReplyBean> replyComment(int newsId, RequestBody reply) {
-                return ApiFactory.getApi().replyComment(newsId, reply);
-            }
-        };
+        model = (newsId, reply) -> ApiFactory.getApi().replyComment(newsId, reply);
     }
 
     public void replyComment(int newsId, ReplyBean replyBean) {
         RequestBody reply = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
                 GsonUtil.GsonString(replyBean));
         model.replyComment(newsId, reply)
-                .compose(RxUtils.<ReplyBean>rxSchedulerHelperByView(view))
+                .compose(RxUtils.rxSchedulerHelperByView(view))
                 .subscribe(new Subscriber<ReplyBean>() {
                     @Override
                     public void onCompleted() {

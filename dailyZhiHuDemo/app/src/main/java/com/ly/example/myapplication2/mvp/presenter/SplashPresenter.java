@@ -25,7 +25,7 @@ public class SplashPresenter {
     public void prefetchLaunchImages() {
         Timber.tag(TAG).i("prefetchLaunchImages");
         String imageUrl = "";
-        boolean needUpdate = false;
+        boolean needUpdate = true;
         Long seconds = 0L;
         CreativesListBean creativesListBean = iSplashModel.hasLaunchImages();
         if (creativesListBean != null) {
