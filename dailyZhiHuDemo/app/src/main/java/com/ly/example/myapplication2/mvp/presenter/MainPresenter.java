@@ -1,5 +1,7 @@
 package com.ly.example.myapplication2.mvp.presenter;
 
+import android.content.Context;
+
 import com.ly.example.myapplication2.api.ApiFactory;
 import com.ly.example.myapplication2.api.apibean.CreativesListBean;
 import com.ly.example.myapplication2.api.apibean.NewsBean;
@@ -9,6 +11,13 @@ import com.ly.example.myapplication2.mvp.RequestImp;
 import com.ly.example.myapplication2.mvp.model.MainModel;
 import com.ly.example.myapplication2.mvp.model.imodel.IMainModel;
 import com.ly.example.myapplication2.mvp.view.iview.IMainView;
+import com.ly.example.myapplication2.utils.Constant;
+import com.ly.example.myapplication2.utils.FileUtils;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
@@ -51,8 +60,8 @@ public class MainPresenter {
                 });
     }
 
-    public void loadNewsData(String cacheDate,boolean isUpdate ,final boolean isClear) {
-        iMainModel.loadNewsData(cacheDate,isUpdate, new RequestImp<NewsBean>() {
+    public void loadNewsData(String cacheDate, boolean isUpdate, final boolean isClear) {
+        iMainModel.loadNewsData(cacheDate, isUpdate, new RequestImp<NewsBean>() {
             @Override
             public void onSuccess(NewsBean data) {
                 iMainView.loadNewsData(data, isClear);
@@ -126,4 +135,49 @@ public class MainPresenter {
             }
         });
     }
+
+    public void loadDefaultImg(Context context) {
+        File file = new File(Constant.Storage.WEB_CACHE_DIR + Constant.Storage.DEFAULT_IMG);
+        if (file.exists()) {
+            return;
+        } else {
+            FileUtils.makeDirs(file.getAbsolutePath());
+        }
+        //从asserts文件夹下读取默认图片到WEB_CACHE_DIR下
+        InputStream inputStream = null;
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(file);
+            inputStream = context.getAssets().open(Constant.Storage.DEFAULT_IMG);
+            if (inputStream != null) {
+                if (!file.exists()) {
+                    FileUtils.makeDirs(file.getAbsolutePath());
+                }
+                byte[] buffer = new byte[1024];
+                int byteCount;
+                while ((byteCount = inputStream.read(buffer)) > 0) {
+                    fos.write(buffer, 0, byteCount);
+                }
+                fos.flush();//刷新缓冲区
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
 }

@@ -56,6 +56,11 @@ public class Constant {
          * 存放css目录
          */
         public static final String WEB_CACHE_DIR = CACHE_DIR + "web/";
+
+        /**
+         * 默认img图片
+         */
+        public static final String DEFAULT_IMG = "loading_image_default.png";
     }
 
     public static class FileType {

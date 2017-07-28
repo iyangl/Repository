@@ -1,5 +1,10 @@
 package com.ly.example.myapplication2.utils;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import java.util.List;
 
 public class HtmlUtil {
@@ -21,6 +26,7 @@ public class HtmlUtil {
 
     /**
      * 根据css链接生成Link标签
+     *
      * @param url String
      * @return String
      */
@@ -30,6 +36,7 @@ public class HtmlUtil {
 
     /**
      * 根据多个css链接生成Link标签
+     *
      * @param urls List<String>
      * @return String
      */
@@ -75,5 +82,19 @@ public class HtmlUtil {
         final String css = HtmlUtil.createCssTag(cssList);
         final String js = HtmlUtil.createJsTag(jsList);
         return css.concat(HIDE_HEADER_STYLE).concat(html).concat(js);
+    }
+
+    /**
+     * @param html content
+     * @return 将真实图片的src替换为默认图片
+     */
+    public static String getDefaultImgContent(String html) {
+        Document doc = Jsoup.parse(html);
+        Elements elements = doc.getElementsByTag("img");
+        for (Element element : elements) {
+            element.attr("alt", element.attr("src"));
+            element.attr("src", Constant.Storage.DEFAULT_IMG);
+        }
+        return doc.toString();
     }
 }

@@ -208,6 +208,7 @@ public class MainActivity extends AppCompatActivity implements IMainView {
         initPrefetchLaunchImages(mainPresenter);
         mainPresenter.loadThemesData();
         mainPresenter.loadNewsData(StringFormat.getDateDaysBefore(0), false, true);
+        mainPresenter.loadDefaultImg(this);
     }
 
     private void initPrefetchLaunchImages(MainPresenter mainPresenter) {

@@ -139,6 +139,7 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
                 String htmlData = mWebCache.getHtmlData();
                 htmlData = HtmlUtil.createCssTag(mWebCache.getCssLinks()) + htmlData;
                 htmlData = htmlData + HtmlUtil.createJsTag(mWebCache.getJsLinks());
+                htmlData = HtmlUtil.getDefaultImgContent(htmlData);
                 mWebView.loadDataWithBaseURL("file:///" + Constant.Storage.WEB_CACHE_DIR
                         , htmlData, "text/html; charset=UTF-8", null, null);
             }
@@ -152,7 +153,7 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDefaultTextEncodingName("UTF-8");
         //先阻塞加载图片
-        webSettings.setBlockNetworkImage(true);
+        webSettings.setBlockNetworkImage(false);
         // 添加js交互接口类，并起别名 imagelistner
         mWebView.addJavascriptInterface(new JSInterface(this), "imagelistner");
         mWebView.setWebViewClient(new MyWebViewClient());
@@ -366,6 +367,19 @@ public class NewsDetailActivity extends AppCompatActivity implements INewsDetail
 
     // 注入js函数监听
     private void addImageClickListner() {
+        //网页内容加载完成之后，将真实图片的值替换回src
+        mWebView.loadUrl("javascript:(function(){" +
+                "var objs = document.getElementsByTagName(\"img\"); " +
+                "for(var i=0;i<objs.length;i++)  " +
+                "{"
+                + "     if(objs[i].src.indexOf(\"loading_image_default.png\")<0) {"
+                + "     } else {"
+                + "         objs[i].src = objs[i].alt;"
+                + "     }" +
+                "}" +
+                "})()");
+
+
         // 这段js函数的功能就是，遍历所有的img几点，并添加onclick函数，函数的功能是在图片点击的时候调用本地java接口并传递url过去
         mWebView.loadUrl("javascript:(function(){" +
                 "var objs = document.getElementsByTagName(\"img\"); " +
