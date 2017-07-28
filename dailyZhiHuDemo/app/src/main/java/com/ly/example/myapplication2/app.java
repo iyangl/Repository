@@ -7,6 +7,7 @@ import android.os.StrictMode;
 
 import com.hss01248.dialog.MyActyManager;
 import com.squareup.leakcanary.LeakCanary;
+import com.tencent.bugly.crashreport.CrashReport;
 import com.umeng.socialize.Config;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
@@ -28,10 +29,15 @@ public class app extends Application {
         UMShareAPI.get(this);
         app = this;
         initTimber();
-        enabledStrictMode();
+//        enabledStrictMode();
         LeakCanary.install(this);
         registerCallbacks();
         initUmengShare();
+        initBugly();
+    }
+
+    private void initBugly() {
+        CrashReport.initCrashReport(getApplicationContext(), "c1fd350530", true);
     }
 
     private void initUmengShare() {
