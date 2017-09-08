@@ -31,3 +31,6 @@
 	static def releaseTime() {
     	return new Date().format("yyMMddHHmm", TimeZone.getTimeZone("Asia/Shanghai"))
 	}
+
+### AutoRefreshToken
+    自动刷新token
